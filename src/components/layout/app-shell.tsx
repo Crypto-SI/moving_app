@@ -5,8 +5,6 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
   Banknote,
-  ChevronDown,
-  ClipboardCheck,
   Download,
   FileText,
   HeartPulse,
@@ -26,15 +24,13 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { navItems } from "@/lib/navigation";
-import { useTimelineTasks, useRelocation } from "@/lib/data-hooks";
+import { useRelocation } from "@/lib/data-hooks";
 import { useMockDataToggle, MockDataProvider } from "@/lib/data-context";
 import { useTheme, ThemeProvider } from "@/lib/theme-context";
 import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { Toggle } from "@/components/ui/toggle";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -46,7 +42,6 @@ const iconMap = {
   "/dashboard": LayoutDashboard,
   "/family-members": Users,
   "/documents": FileText,
-  "/moving-timeline": ClipboardCheck,
   "/shipping": ShipWheel,
   "/housing": Home,
   "/household-inventory": Package,
@@ -172,20 +167,12 @@ function SettingsSection({ onInvite }: { onInvite: () => void }) {
 function AppShellInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [summaryOpen, setSummaryOpen] = useState(false);
   const [editingDates, setEditingDates] = useState(false);
   const { useMockData, setUseMockData } = useMockDataToggle();
   const current = navItems.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
-  const { data: timelineTasks } = useTimelineTasks();
   const { relocation, updateRelocation } = useRelocation();
   const moveDate = relocation?.move_date || "";
   const [editMoveDate, setEditMoveDate] = useState(moveDate);
-  const urgentTasks = timelineTasks.filter((task) => task.priority === "urgent" || task.priority === "high").slice(0, 3);
-  const overdueCount = timelineTasks.filter((task) => new Date(task.due_date) < new Date() && task.status !== "done").length;
-  const progress = useMemo(() => {
-    if (timelineTasks.length === 0) return 0;
-    return Math.round((timelineTasks.filter((task) => task.status === "done").length / timelineTasks.length) * 100);
-  }, [timelineTasks]);
 
   const handleSaveDates = async () => {
     await updateRelocation({ move_date: editMoveDate });
@@ -310,105 +297,62 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             </div>
 
             <div className="app-card overflow-hidden rounded-[28px] px-4 py-3 md:px-6">
-              <button
-                type="button"
+              <div
                 className="flex w-full flex-col gap-3 text-left sm:flex-row sm:items-center sm:justify-between"
-                aria-expanded={summaryOpen}
-                aria-controls="move-summary-panel"
-                onClick={() => setSummaryOpen((value) => !value)}
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <span className="text-sm font-semibold text-slate-700">Move date countdown</span>
                     {moveDate && <span className="text-sm text-slate-500">{getDaysRemaining(moveDate)} days left</span>}
                   </div>
-                  <div className="mt-2 w-full max-w-[360px]">
-                    <Progress value={progress} />
-                  </div>
                 </div>
                 <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Badge tone="accent">{progress}% complete</Badge>
-                    <Badge tone={overdueCount > 0 ? "danger" : "success"}>{overdueCount} overdue</Badge>
-                  </div>
-                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/85 text-slate-600 transition hover:bg-white">
-                    <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 ease-out", summaryOpen && "rotate-180")} />
+                  <span className="text-sm text-slate-500">
+                    {moveDate ? formatDateShort(moveDate) : "—"}
                   </span>
-                </div>
-              </button>
-
-              <div
-                id="move-summary-panel"
-                className={cn(
-                  "grid transition-[grid-template-rows,opacity] duration-500 ease-out",
-                  summaryOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
-                )}
-              >
-                <div className="min-h-0 overflow-hidden">
-                  <div className="grid gap-4 pt-4 xl:grid-cols-[1.2fr,1fr,1fr,1fr]">
-                    <div>
-                      <p className="text-sm text-slate-600">Overall progress is {progress}% with housing mostly settled and documents still driving urgency.</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-slate-700">Next urgent tasks</p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {urgentTasks.map((task) => (
-                          <Badge key={task.id} tone="warning">{task.title}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-slate-700">Overdue items</p>
-                      <p className="mt-2 text-3xl font-semibold text-rose-700">{overdueCount}</p>
-                      <p className="text-sm text-slate-500">Nothing slips past the move summary bar.</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-slate-700">Move target</p>
-                      {editingDates ? (
-                        <div className="mt-2 space-y-2">
-                          <div>
-                            <label className="text-xs text-slate-500">Move date</label>
-                            <input
-                              type="date"
-                              value={editMoveDate}
-                              onChange={(e) => setEditMoveDate(e.target.value)}
-                              className="w-full rounded-xl border border-white/70 bg-white/85 px-3 py-2 text-sm text-slate-700 outline-none focus:border-teal-300"
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            <button
-                              type="button"
-                              onClick={handleSaveDates}
-                              className="rounded-xl bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-teal-700"
-                            >
-                              Save
-                            </button>
-                            <button
-                              type="button"
-                              onClick={handleCancelEditing}
-                              className="rounded-xl border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-white"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="mt-2">
-                          <p className="text-3xl font-semibold">{moveDate ? formatDateShort(moveDate) : "—"}</p>
-                          <button
-                            type="button"
-                            onClick={handleStartEditing}
-                            className="mt-1 text-xs text-teal-600 underline decoration-teal-300 underline-offset-2 hover:text-teal-700"
-                          >
-                            Edit dates
-                          </button>
-                          <p className="mt-1 text-sm text-slate-500">Accra arrival with school onboarding already scheduled.</p>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+                  {editingDates ? null : (
+                    <button
+                      type="button"
+                      onClick={handleStartEditing}
+                      className="text-xs text-teal-600 underline decoration-teal-300 underline-offset-2 hover:text-teal-700"
+                    >
+                      Edit
+                    </button>
+                  )}
                 </div>
               </div>
+
+              {editingDates && (
+                <div className="pt-4">
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-xs text-slate-500">Move date</label>
+                      <input
+                        type="date"
+                        value={editMoveDate}
+                        onChange={(e) => setEditMoveDate(e.target.value)}
+                        className="w-full rounded-xl border border-white/70 bg-white/85 px-3 py-2 text-sm text-slate-700 outline-none focus:border-teal-300"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        type="button"
+                        onClick={handleSaveDates}
+                        className="rounded-xl bg-teal-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-teal-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelEditing}
+                        className="rounded-xl border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-white"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

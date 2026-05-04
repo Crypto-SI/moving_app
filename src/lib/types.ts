@@ -5,7 +5,6 @@ export type DocumentStatus =
   | "approved"
   | "expired";
 
-export type TaskStatus = "not started" | "in progress" | "blocked" | "done";
 export type Priority = "low" | "medium" | "high" | "urgent";
 export type InventoryStatus = "present" | "required" | "will purchase in country";
 export type ShippingLeg = "first-leg" | "boat-leg" | "final-leg";
@@ -15,6 +14,18 @@ export interface ShippingLegQuote {
   amount: number;
   route: string;
   notes: string;
+}
+
+export interface ShippingContainer {
+  id: string;
+  shipping_quote_id: string;
+  container_label: string;
+  tracking_number: string;
+  container_type: string;
+}
+
+export interface ShippingContainerWithLegs extends ShippingContainer {
+  leg_quotes: ShippingLegQuote[];
 }
 
 export interface FamilyMember {
@@ -39,17 +50,6 @@ export interface RelocationDocument {
   notes: string;
 }
 
-export interface TimelineTask {
-  id: string;
-  title: string;
-  category: string;
-  due_date: string;
-  status: TaskStatus;
-  priority: Priority;
-  assigned_family_member_id: string | null;
-  notes: string;
-}
-
 export interface ShippingQuote {
   id: string;
   company_name: string;
@@ -61,6 +61,7 @@ export interface ShippingQuote {
   estimated_delivery_date: string;
   shipment_type: string;
   leg_quotes: ShippingLegQuote[];
+  containers: ShippingContainerWithLegs[];
   included_services: string[];
   insurance_included: boolean;
   notes: string;

@@ -7,7 +7,6 @@ import { getMissingDocumentTypes } from "@/lib/document-requirements";
 import {
   familyMembers as mockFamilyMembers,
   documents as mockDocuments,
-  timelineTasks as mockTimelineTasks,
   shippingQuotes as mockShippingQuotes,
   housingOptions as mockHousingOptions,
   inventoryRooms as mockInventoryRooms,
@@ -31,10 +30,10 @@ import type {
   Relocation,
   RelocationDocument,
   SchoolEntry,
+  ShippingContainerWithLegs,
   ShippingLeg as ShippingLegType,
   ShippingLegQuote,
   ShippingQuote,
-  TimelineTask,
 } from "@/lib/types";
 
 interface DataResult<T> {
@@ -99,13 +98,17 @@ export function useDocuments(): DataResult<RelocationDocument> {
   return useDataFetcher<RelocationDocument>("moving_documents", mockDocuments, "created_at");
 }
 
-export function useTimelineTasks(): DataResult<TimelineTask> {
-  return useDataFetcher<TimelineTask>("moving_timeline_tasks", mockTimelineTasks, "due_date");
-}
-
 interface ShippingQuoteWithLegs {
   quote: ShippingQuote;
   legs: { leg: string; amount: number; route: string; notes: string }[];
+}
+
+interface RawContainer {
+  id: string;
+  shipping_quote_id: string;
+  container_label: string;
+  tracking_number: string;
+  container_type: string;
 }
 
 export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLegs: ShippingQuoteWithLegs[] } {
@@ -141,13 +144,15 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
       return;
     }
 
-    const [quotesRes, legsRes] = await Promise.all([
+    const [quotesRes, legsRes, containersRes] = await Promise.all([
       supabase.from("moving_shipping_quotes").select("*").eq("user_id", user.id).order("created_at"),
       supabase.from("moving_shipping_leg_quotes").select("*").eq("user_id", user.id).order("created_at"),
+      supabase.from("moving_shipping_containers").select("*").eq("user_id", user.id).order("created_at"),
     ]);
 
     const quotes = quotesRes.data ?? [];
     const legs = legsRes.data ?? [];
+    const containers = containersRes.data ?? [];
 
     const built: ShippingQuoteWithLegs[] = quotes.map((q) => ({
       quote: { ...q, leg_quotes: [] },
@@ -161,11 +166,33 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
         })),
     }));
 
+    const enrichedQuotes = quotes.map((q: Record<string, unknown>) => {
+      const quoteId = (q as { id: string }).id;
+      const quoteLegs = built.find((b) => b.quote.id === quoteId)?.legs ?? [];
+
+      const quoteContainers: ShippingContainerWithLegs[] = containers
+        .filter((c: RawContainer) => c.shipping_quote_id === quoteId)
+        .map((c: RawContainer): ShippingContainerWithLegs => ({
+          id: c.id,
+          shipping_quote_id: c.shipping_quote_id,
+          container_label: c.container_label,
+          tracking_number: c.tracking_number,
+          container_type: c.container_type,
+          leg_quotes: legs
+            .filter((l: { container_id: string | null }) => l.container_id === c.id)
+            .map((l: { leg: string; amount: number; route: string; notes: string }): ShippingLegQuote => ({
+              leg: l.leg as ShippingLegType,
+              amount: l.amount,
+              route: l.route,
+              notes: l.notes,
+            })),
+        }));
+
+      return { ...q, leg_quotes: quoteLegs, containers: quoteContainers } as ShippingQuote;
+    });
+
     if (mounted.current) {
-      setData(quotes.map((q: Record<string, unknown>) => {
-        const quoteLegs = built.find((b) => b.quote.id === (q as { id: string }).id)?.legs ?? [];
-        return { ...q, leg_quotes: quoteLegs } as ShippingQuote;
-      }));
+      setData(enrichedQuotes);
       setQuotesWithLegs(built);
       setLoading(false);
     }

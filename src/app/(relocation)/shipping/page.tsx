@@ -1,10 +1,12 @@
 "use client";
 
+import { useCallback } from "react";
 import { PageHeader } from "@/components/layout/page-header";
+import { AddShippingQuoteModal } from "@/components/sections/add-shipping-quote-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useShippingQuotes } from "@/lib/data-hooks";
-import { ShippingLeg, ShippingQuote } from "@/lib/types";
+import { ShippingLeg, ShippingQuote, ShippingContainerWithLegs } from "@/lib/types";
 import { cn, formatCurrency, formatDate } from "@/lib/utils";
 
 const shippingLegs: Array<{ id: ShippingLeg; label: string; route: string }> = [
@@ -13,7 +15,14 @@ const shippingLegs: Array<{ id: ShippingLeg; label: string; route: string }> = [
   { id: "final-leg", label: "Final leg", route: "Tema port to residence" },
 ];
 
+function getContainerTotal(container: ShippingContainerWithLegs) {
+  return container.leg_quotes.reduce((total, lq) => total + lq.amount, 0);
+}
+
 function getQuoteTotal(quote: ShippingQuote) {
+  if (quote.containers && quote.containers.length > 0) {
+    return quote.containers.reduce((total, c) => total + getContainerTotal(c), 0);
+  }
   return quote.leg_quotes.reduce((total, legQuote) => total + legQuote.amount, 0);
 }
 
@@ -59,8 +68,54 @@ function buildPreferredBlocks(shippingQuotes: ShippingQuote[]) {
   }, []);
 }
 
+function ContainerBreakdown({ containers, currency }: { containers: ShippingContainerWithLegs[]; currency: string }) {
+  if (!containers || containers.length === 0) return null;
+
+  return (
+    <div className="mt-3 space-y-3">
+      {containers.map((container) => (
+        <div key={container.id} className="rounded-xl border border-slate-100 bg-white/60 p-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <p className="text-sm font-semibold text-slate-900">{container.container_label}</p>
+              <p className="text-xs text-slate-500">{container.container_type}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {container.tracking_number && (
+                <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600">
+                  {container.tracking_number}
+                </span>
+              )}
+              <span className="text-sm font-semibold text-slate-900">
+                {formatCurrency(getContainerTotal(container), currency)}
+              </span>
+            </div>
+          </div>
+          {container.leg_quotes.length > 0 && (
+            <div className="mt-2 grid gap-1.5">
+              {container.leg_quotes.map((lq) => (
+                <div key={lq.leg} className="flex items-center justify-between text-xs">
+                  <span className="text-slate-600">
+                    {shippingLegs.find((sl) => sl.id === lq.leg)?.label ?? lq.leg}
+                  </span>
+                  <span className="font-medium text-slate-900">{formatCurrency(lq.amount, currency)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ShippingPage() {
-  const { data: shippingQuotes } = useShippingQuotes();
+  const { data: shippingQuotes, refresh } = useShippingQuotes();
+
+  const handleRefresh = useCallback(() => {
+    refresh();
+  }, [refresh]);
+
   const preferredBlocks = shippingQuotes.length > 0 ? buildPreferredBlocks(shippingQuotes) : [];
 
   return (
@@ -68,7 +123,7 @@ export default function ShippingPage() {
       <PageHeader
         title="Shipping"
         description="Quotes are split by first leg, boat leg, and final leg so every shipper offer maps to the exact section of the journey it covers."
-        actionLabel="Add quote"
+        actions={<AddShippingQuoteModal onSuccess={handleRefresh} />}
       />
 
       <Card>
@@ -127,25 +182,30 @@ export default function ShippingPage() {
             <p className="mt-2 text-sm text-slate-500">
               {quote.shipment_type} - Collects {formatDate(quote.collection_date)}
             </p>
-            <div className="mt-4 grid gap-2">
-              {shippingLegs.map((leg) => {
-                const legQuote = getLegQuote(quote, leg.id);
 
-                return (
-                  <div key={leg.id} className="flex flex-col gap-2 rounded-2xl border border-slate-200/80 bg-white/70 px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3">
-                    <div className="min-w-0">
-                      <p className="font-medium text-slate-900">{leg.label}</p>
-                      <p className="text-xs text-slate-500">{leg.route}</p>
+            {quote.containers && quote.containers.length > 0 ? (
+              <ContainerBreakdown containers={quote.containers} currency={quote.currency} />
+            ) : (
+              <div className="mt-4 grid gap-2">
+                {shippingLegs.map((leg) => {
+                  const legQuote = getLegQuote(quote, leg.id);
+
+                  return (
+                    <div key={leg.id} className="flex flex-col gap-2 rounded-2xl border border-slate-200/80 bg-white/70 px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                      <div className="min-w-0">
+                        <p className="font-medium text-slate-900">{leg.label}</p>
+                        <p className="text-xs text-slate-500">{leg.route}</p>
+                      </div>
+                      {legQuote ? (
+                        <span className="break-words font-semibold text-slate-900">{formatCurrency(legQuote.amount, quote.currency)}</span>
+                      ) : (
+                        <Badge>Not quoted</Badge>
+                      )}
                     </div>
-                    {legQuote ? (
-                      <span className="break-words font-semibold text-slate-900">{formatCurrency(legQuote.amount, quote.currency)}</span>
-                    ) : (
-                      <Badge>Not quoted</Badge>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
             <p className="mt-4 text-sm text-slate-600">{quote.notes}</p>
           </Card>
         ))}
@@ -160,6 +220,24 @@ export default function ShippingPage() {
                 <p className="font-semibold text-slate-900">{quote.company_name}</p>
                 <p className="text-sm font-semibold text-slate-900">{formatCurrency(getQuoteTotal(quote), quote.currency)}</p>
               </div>
+              {(quote.containers && quote.containers.length > 0 ? quote.containers : []).map((container) => (
+                <div key={container.id} className="mt-3 rounded-xl bg-slate-50/80 p-3">
+                  <p className="text-xs font-semibold text-slate-700">{container.container_label} ({container.container_type})</p>
+                  {container.tracking_number && (
+                    <p className="text-xs text-slate-500">Tracking: {container.tracking_number}</p>
+                  )}
+                  <div className="mt-2 grid gap-1 text-xs text-slate-600">
+                    {container.leg_quotes.map((lq) => (
+                      <p key={lq.leg}>
+                        <span className="font-medium text-slate-900">
+                          {shippingLegs.find((sl) => sl.id === lq.leg)?.label ?? lq.leg}:
+                        </span>{" "}
+                        {formatCurrency(lq.amount, quote.currency)} - {lq.route}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
               <div className="mt-3 grid gap-2 text-sm text-slate-600">
                 {shippingLegs.map((leg) => {
                   const legQuote = getLegQuote(quote, leg.id);
@@ -183,6 +261,7 @@ export default function ShippingPage() {
               <tr>
                 <th className="px-3 py-3 font-medium">Company</th>
                 <th className="px-3 py-3 font-medium">Contact</th>
+                <th className="px-3 py-3 font-medium">Containers</th>
                 {shippingLegs.map((leg) => (
                   <th key={leg.id} className="px-3 py-3 font-medium">{leg.label}</th>
                 ))}
@@ -196,6 +275,20 @@ export default function ShippingPage() {
                 <tr key={quote.id} className="border-t border-white/70 align-top">
                   <td className="px-3 py-4 font-semibold text-slate-900">{quote.company_name}</td>
                   <td className="px-3 py-4 text-slate-600">{quote.contact_name}<br />{quote.email}<br />{quote.phone}</td>
+                  <td className="px-3 py-4">
+                    {(quote.containers ?? []).map((c) => (
+                      <div key={c.id} className="mb-1 last:mb-0">
+                        <p className="text-xs font-medium text-slate-900">{c.container_label}</p>
+                        <p className="text-xs text-slate-500">{c.container_type}</p>
+                        {c.tracking_number && (
+                          <p className="text-xs text-teal-600">{c.tracking_number}</p>
+                        )}
+                      </div>
+                    ))}
+                    {(!quote.containers || quote.containers.length === 0) && (
+                      <span className="text-xs text-slate-400">-</span>
+                    )}
+                  </td>
                   {shippingLegs.map((leg) => {
                     const legQuote = getLegQuote(quote, leg.id);
 

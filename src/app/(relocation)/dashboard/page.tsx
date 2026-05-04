@@ -13,7 +13,6 @@ import {
   useHousingOptions,
   useSchoolEntries,
   useShippingQuotes,
-  useTimelineTasks,
   mockRecentActivity,
 } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
@@ -21,7 +20,6 @@ import { formatCurrency } from "@/lib/utils";
 export default function DashboardPage() {
   const { data: familyMembers } = useFamilyMembers();
   const { data: documents } = useDocuments();
-  const { data: timelineTasks } = useTimelineTasks();
   const { data: shippingQuotes } = useShippingQuotes();
   const { data: housingOptions } = useHousingOptions();
   const { data: schoolEntries } = useSchoolEntries();
@@ -31,7 +29,6 @@ export default function DashboardPage() {
   const stats = [
     { label: "Total family members", value: familyMembers.length.toString() },
     { label: "Documents completed", value: documents.filter((item) => item.status === "approved" || item.status === "received").length.toString() },
-    { label: "Tasks due soon", value: timelineTasks.filter((task) => task.status !== "done").slice(0, 3).length.toString() },
     { label: "Shipping quotes collected", value: shippingQuotes.length.toString() },
     { label: "Housing options saved", value: housingOptions.length.toString() },
     { label: "Yearly school cost total", value: formatCurrency(schoolEntries.reduce((total, item) => total + item.fee_per_year, 0), "USD") },
@@ -41,7 +38,6 @@ export default function DashboardPage() {
 
   const quickLinks = [
     { href: "/documents", label: "Finish document pack" },
-    { href: "/moving-timeline", label: "Review critical path" },
     { href: "/shipping", label: "Compare shipping quotes" },
     { href: "/housing", label: "Check housing shortlist" },
   ];

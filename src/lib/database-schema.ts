@@ -12,16 +12,16 @@ export const databaseTableSchemas = [
     columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "family_member_id uuid references moving_family_members(id) on delete cascade", "document_type text not null", "status text not null default 'not started'", "issue_date date", "expiry_date date", "reference_number text not null default ''", "original_available boolean not null default false", "copy_available boolean not null default false", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "moving_timeline_tasks",
-    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "title text not null", "category text not null", "due_date date", "status text not null default 'not started'", "priority text not null default 'medium'", "assigned_family_member_id uuid references moving_family_members(id) on delete set null", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
-  },
-  {
     table: "moving_shipping_quotes",
     columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "company_name text not null", "contact_name text not null default ''", "phone text not null default ''", "email text not null default ''", "currency text not null default 'GBP'", "collection_date date", "estimated_delivery_date date", "shipment_type text not null default ''", "included_services text[] not null default '{}'", "insurance_included boolean not null default false", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
+    table: "moving_shipping_containers",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "shipping_quote_id uuid not null references moving_shipping_quotes(id) on delete cascade", "container_label text not null default ''", "tracking_number text not null default ''", "container_type text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
+  },
+  {
     table: "moving_shipping_leg_quotes",
-    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "shipping_quote_id uuid not null references moving_shipping_quotes(id) on delete cascade", "leg text not null", "amount numeric not null default 0", "route text not null default ''", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "shipping_quote_id uuid not null references moving_shipping_quotes(id) on delete cascade", "container_id uuid references moving_shipping_containers(id) on delete cascade", "leg text not null", "amount numeric not null default 0", "route text not null default ''", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
     table: "moving_housing_options",

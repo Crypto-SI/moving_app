@@ -22,7 +22,7 @@ export default function FamilyMembersPage() {
     <div className="space-y-6">
       <PageHeader
         title="Family Members"
-        description="Each member acts as a central record that can later connect directly to documents, schooling, healthcare, and assigned timeline tasks."
+        description="Each member acts as a central record that can later connect directly to documents, schooling, healthcare, and budget items."
         actions={
           <AddFamilyMemberModal onSuccess={refreshFamilyMembers} />
         }

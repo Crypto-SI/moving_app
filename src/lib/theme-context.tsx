@@ -23,12 +23,7 @@ const ThemeContext = createContext<ThemeContextValue>({
 });
 
 const STORAGE_KEY = "relocategh-theme";
-
-function getSystemPreference(): "light" | "dark" {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
+const MEDIA_QUERY = "(prefers-color-scheme: dark)";
 
 function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement;
@@ -52,6 +47,20 @@ function getServerSnapshot(): Theme {
   return "system";
 }
 
+function subscribeToMediaQuery(callback: () => void) {
+  const mq = window.matchMedia(MEDIA_QUERY);
+  mq.addEventListener("change", callback);
+  return () => mq.removeEventListener("change", callback);
+}
+
+function getMediaSnapshot(): "light" | "dark" {
+  return window.matchMedia(MEDIA_QUERY).matches ? "dark" : "light";
+}
+
+function getMediaServerSnapshot(): "light" | "dark" {
+  return "light";
+}
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useSyncExternalStore(
     subscribeToStorage,
@@ -59,24 +68,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     getServerSnapshot,
   );
 
-  const resolved = theme === "system" ? getSystemPreference() : theme;
+  const systemPreference = useSyncExternalStore(
+    subscribeToMediaQuery,
+    getMediaSnapshot,
+    getMediaServerSnapshot,
+  );
+
+  const resolved = theme === "system" ? systemPreference : theme;
 
   useEffect(() => {
     applyTheme(resolved);
   }, [resolved]);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const current =
-        (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "system";
-      if (current === "system") {
-        applyTheme(getSystemPreference());
-      }
-    };
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   const setTheme = useCallback((t: Theme) => {
     localStorage.setItem(STORAGE_KEY, t);

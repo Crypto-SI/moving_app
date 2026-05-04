@@ -9,8 +9,8 @@ import {
   Relocation,
   RelocationDocument,
   SchoolEntry,
+  ShippingContainerWithLegs,
   ShippingQuote,
-  TimelineTask,
 } from "@/lib/types";
 
 export const moveDate = "2026-08-18";
@@ -38,17 +38,6 @@ export const documents: RelocationDocument[] = [
   { id: "doc-6", family_member_id: "fm-3", document_type: "visa", status: "approved", issue_date: "2026-02-18", expiry_date: "2027-02-18", reference_number: "VIS-771240", original_available: true, copy_available: true, notes: "Approval letter emailed and archived." },
 ];
 
-export const timelineTasks: TimelineTask[] = [
-  { id: "task-1", title: "Renew Daniel's passport", category: "Documents", due_date: "2026-04-22", status: "in progress", priority: "urgent", assigned_family_member_id: "fm-2", notes: "Priority because visa cannot be finalised without updated passport number." },
-  { id: "task-2", title: "Shortlist Accra housing options", category: "Housing", due_date: "2026-04-24", status: "in progress", priority: "high", assigned_family_member_id: "fm-1", notes: "Compare East Legon, Cantonments, and Airport Residential." },
-  { id: "task-3", title: "Collect final shipping quote", category: "Shipping", due_date: "2026-04-27", status: "not started", priority: "medium", assigned_family_member_id: "fm-1", notes: "Need one more door-to-door quote with customs handling." },
-  { id: "task-4", title: "Submit school applications", category: "Schooling", due_date: "2026-05-03", status: "blocked", priority: "high", assigned_family_member_id: "fm-3", notes: "Waiting on final proof of address and immunisation history." },
-  { id: "task-5", title: "Book family flights", category: "Travel", due_date: "2026-05-18", status: "not started", priority: "medium", assigned_family_member_id: "fm-2", notes: "Target overnight route arriving before school open day." },
-  { id: "task-6", title: "Arrange healthcare onboarding", category: "Healthcare", due_date: "2026-06-01", status: "not started", priority: "medium", assigned_family_member_id: "fm-4", notes: "Confirm paediatrician and family GP registration requirements." },
-  { id: "task-7", title: "Final packing complete", category: "Packing", due_date: "2026-08-10", status: "not started", priority: "high", assigned_family_member_id: null, notes: "Separate carry-on essentials from shipped items." },
-  { id: "task-8", title: "Housing secured", category: "Housing", due_date: "2026-05-30", status: "done", priority: "high", assigned_family_member_id: "fm-1", notes: "Deposit pending release after contract signature." },
-];
-
 export const shippingQuotes: ShippingQuote[] = [
   {
     id: "ship-1",
@@ -64,6 +53,20 @@ export const shippingQuotes: ShippingQuote[] = [
       { leg: "first-leg", amount: 980, route: "Home to UK port", notes: "Packing crew and inland collection." },
       { leg: "boat-leg", amount: 1850, route: "UK port to Tema port", notes: "Shared container, port handling, customs support." },
       { leg: "final-leg", amount: 720, route: "Tema port to Accra residence", notes: "Residence delivery and unpacking room placement." },
+    ],
+    containers: [
+      {
+        id: "cont-1",
+        shipping_quote_id: "ship-1",
+        container_label: "Container 1",
+        tracking_number: "GC-2026-4821",
+        container_type: "20ft Container",
+        leg_quotes: [
+          { leg: "first-leg", amount: 980, route: "Home to UK port", notes: "Packing crew and inland collection." },
+          { leg: "boat-leg", amount: 1850, route: "UK port to Tema port", notes: "Shared container, port handling, customs support." },
+          { leg: "final-leg", amount: 720, route: "Tema port to Accra residence", notes: "Residence delivery and unpacking room placement." },
+        ],
+      } satisfies ShippingContainerWithLegs,
     ],
     included_services: ["Packing materials", "Customs support", "Delivery to residence"],
     insurance_included: true,
@@ -83,6 +86,19 @@ export const shippingQuotes: ShippingQuote[] = [
       { leg: "boat-leg", amount: 1620, route: "UK port to Tema port", notes: "Container loading, sailing, and port coordination." },
       { leg: "final-leg", amount: 690, route: "Tema port to Accra residence", notes: "Local customs runner and truck delivery." },
     ],
+    containers: [
+      {
+        id: "cont-2",
+        shipping_quote_id: "ship-2",
+        container_label: "Container 1",
+        tracking_number: "APL-2026-1190",
+        container_type: "40ft Container",
+        leg_quotes: [
+          { leg: "boat-leg", amount: 1620, route: "UK port to Tema port", notes: "Container loading, sailing, and port coordination." },
+          { leg: "final-leg", amount: 690, route: "Tema port to Accra residence", notes: "Local customs runner and truck delivery." },
+        ],
+      } satisfies ShippingContainerWithLegs,
+    ],
     included_services: ["Container loading", "Port coordination"],
     insurance_included: false,
     notes: "Lowest boat leg. Needs separate collection support before port handoff.",
@@ -100,6 +116,30 @@ export const shippingQuotes: ShippingQuote[] = [
     leg_quotes: [
       { leg: "first-leg", amount: 860, route: "Home to UK port", notes: "Survey visit, packing crew, and inventory labels." },
       { leg: "boat-leg", amount: 1760, route: "UK port to Tema port", notes: "Dedicated crate space with customs paperwork." },
+    ],
+    containers: [
+      {
+        id: "cont-3",
+        shipping_quote_id: "ship-3",
+        container_label: "Container 1",
+        tracking_number: "HFR-2026-7745",
+        container_type: "20ft Container",
+        leg_quotes: [
+          { leg: "first-leg", amount: 860, route: "Home to UK port", notes: "Survey visit, packing crew, and inventory labels." },
+          { leg: "boat-leg", amount: 1760, route: "UK port to Tema port", notes: "Dedicated crate space with customs paperwork." },
+        ],
+      } satisfies ShippingContainerWithLegs,
+      {
+        id: "cont-4",
+        shipping_quote_id: "ship-3",
+        container_label: "Container 2",
+        tracking_number: "HFR-2026-7746",
+        container_type: "Box",
+        leg_quotes: [
+          { leg: "first-leg", amount: 200, route: "Home to UK port", notes: "Small box collection." },
+          { leg: "boat-leg", amount: 350, route: "UK port to Tema port", notes: "Shared crate space." },
+        ],
+      } satisfies ShippingContainerWithLegs,
     ],
     included_services: ["Survey visit", "Packing crew", "Storage for 14 days"],
     insurance_included: true,
@@ -172,7 +212,6 @@ export const recentActivity = [
 
 export const quickLinks = [
   { href: "/documents", label: "Finish document pack" },
-  { href: "/moving-timeline", label: "Review critical path" },
   { href: "/shipping", label: "Compare shipping quotes" },
   { href: "/housing", label: "Check housing shortlist" },
 ];
