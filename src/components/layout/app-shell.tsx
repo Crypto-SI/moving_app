@@ -7,27 +7,40 @@ import {
   Banknote,
   ChevronDown,
   ClipboardCheck,
+  Download,
   FileText,
   HeartPulse,
   Home,
   LayoutDashboard,
   Menu,
+  Monitor,
+  Moon,
   NotebookPen,
   Package,
   School,
+  Settings,
+  Share2,
   ShipWheel,
+  Sun,
+  UserPlus,
   Users,
   X,
 } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { navItems } from "@/lib/navigation";
 import { useTimelineTasks, useRelocation } from "@/lib/data-hooks";
 import { useMockDataToggle, MockDataProvider } from "@/lib/data-context";
+import { useTheme, ThemeProvider } from "@/lib/theme-context";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Toggle } from "@/components/ui/toggle";
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
 
 const iconMap = {
   "/dashboard": LayoutDashboard,
@@ -54,6 +67,106 @@ function formatDateShort(value: string) {
     day: "numeric",
     month: "short",
   }).format(new Date(value));
+}
+
+function SettingsSection({ onInvite }: { onInvite: () => void }) {
+  const { theme, setTheme, resolved } = useTheme();
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [isStandalone] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(display-mode: standalone)").matches
+      : false,
+  );
+  const [showIosHint, setShowIosHint] = useState(false);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
+  const handleInstall = useCallback(async () => {
+    const isIOS =
+      /iPad|iPhone|iPod/.test(navigator.userAgent) &&
+      !(window as unknown as { MSStream?: unknown }).MSStream;
+    if (isIOS && !installPrompt) {
+      setShowIosHint(true);
+      return;
+    }
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    setInstallPrompt(null);
+  }, [installPrompt]);
+
+  const themeIcon =
+    theme === "dark" ? Moon : theme === "light" ? Sun : Monitor;
+  const ThemeIcon = themeIcon;
+
+  const cycleTheme = useCallback(() => {
+    const next =
+      theme === "light" ? "dark" : theme === "dark" ? "system" : "light";
+    setTheme(next);
+  }, [theme, setTheme]);
+
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300">
+        <Settings className="h-4 w-4" />
+        <span className="font-medium text-slate-400">Settings</span>
+      </div>
+
+      <button
+        type="button"
+        onClick={cycleTheme}
+        className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/8 hover:text-white"
+      >
+        <ThemeIcon className="h-4 w-4" />
+        <span className="flex-1 text-left">
+          {theme === "system"
+            ? `System (${resolved})`
+            : theme === "dark"
+              ? "Dark"
+              : "Light"}
+        </span>
+        <span className="text-xs text-slate-500">Theme</span>
+      </button>
+
+      <button
+        type="button"
+        onClick={onInvite}
+        className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/8 hover:text-white"
+      >
+        <UserPlus className="h-4 w-4" />
+        <span>Invite</span>
+      </button>
+
+      <button
+        type="button"
+        onClick={handleInstall}
+        className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/8 hover:text-white"
+      >
+        <Download className="h-4 w-4" />
+        <span>{isStandalone ? "App installed" : "Download app"}</span>
+      </button>
+
+      {showIosHint && (
+        <p className="px-4 py-2 text-xs text-slate-400">
+          Tap the share icon (<Share2 className="inline h-3 w-3" />) then
+          &quot;Add to Home Screen&quot; to install.
+        </p>
+      )}
+    </div>
+  );
 }
 
 function AppShellInner({ children }: { children: React.ReactNode }) {
@@ -89,9 +202,20 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
     setEditingDates(false);
   };
 
+  const handleInvite = useCallback(async () => {
+    const url = window.location.href;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "RelocateGH", url });
+      } catch {}
+    } else {
+      await navigator.clipboard.writeText(url);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen overflow-x-hidden text-slate-900">
-      <aside className="fixed inset-y-4 left-4 z-40 hidden w-[288px] rounded-[32px] border border-white/60 bg-slate-950/92 p-5 text-white shadow-2xl lg:block">
+      <aside className="fixed inset-y-4 left-4 z-40 hidden w-[288px] overflow-y-auto rounded-[32px] border border-white/60 bg-slate-950/92 p-5 text-white shadow-2xl lg:block">
         <div className="mb-8 flex items-center gap-3">
           <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={44} height={44} className="rounded-2xl object-contain" />
           <div>
@@ -123,6 +247,9 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           <p className="mt-2 font-serif text-3xl">Accra, Ghana</p>
           <p className="mt-2 text-sm text-slate-600">Shared structure is ready for future Supabase tables, row CRUD, and mobile parity.</p>
         </div>
+        <div className="mt-6 border-t border-white/10 pt-4">
+          <SettingsSection onInvite={handleInvite} />
+        </div>
       </aside>
 
       {open ? (
@@ -151,6 +278,9 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                 );
               })}
             </nav>
+            <div className="mt-6 border-t border-white/10 pt-4">
+              <SettingsSection onInvite={handleInvite} />
+            </div>
           </div>
         </div>
       ) : null}
@@ -291,8 +421,10 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <MockDataProvider>
-      <AppShellInner>{children}</AppShellInner>
-    </MockDataProvider>
+    <ThemeProvider>
+      <MockDataProvider>
+        <AppShellInner>{children}</AppShellInner>
+      </MockDataProvider>
+    </ThemeProvider>
   );
 }

@@ -14,6 +14,32 @@
   --success: #166534;
   --warning: #a16207;
   --danger: #b91c1c;
+  --sidebar-bg: rgba(2, 6, 23, 0.92);
+  --header-bg: rgba(244, 239, 231, 0.78);
+  --input-bg: rgba(255, 255, 255, 0.85);
+  --input-border: rgba(255, 255, 255, 0.7);
+  --badge-muted-bg: rgba(107, 114, 128, 0.12);
+}
+
+html.dark {
+  --background: #0f1117;
+  --foreground: #e2e8f0;
+  --surface: #1a1d2e;
+  --surface-strong: #1e2235;
+  --muted: #94a3b8;
+  --border: rgba(148, 163, 184, 0.12);
+  --card-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+  --accent: #2dd4bf;
+  --accent-soft: rgba(45, 212, 191, 0.12);
+  --accent-warm: #e8a06c;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --danger: #f87171;
+  --sidebar-bg: rgba(2, 6, 23, 0.96);
+  --header-bg: rgba(15, 17, 23, 0.82);
+  --input-bg: rgba(30, 34, 53, 0.85);
+  --input-border: rgba(148, 163, 184, 0.2);
+  --badge-muted-bg: rgba(148, 163, 184, 0.15);
 }
 
 @theme inline {
@@ -39,6 +65,13 @@ body {
     linear-gradient(180deg, #f7f3ed 0%, #f4efe7 40%, #f7f4ee 100%);
   color: var(--foreground);
   font-family: var(--font-manrope), sans-serif;
+}
+
+html.dark body {
+  background:
+    radial-gradient(circle at top left, rgba(45, 212, 191, 0.06), transparent 30%),
+    radial-gradient(circle at top right, rgba(232, 160, 108, 0.06), transparent 24%),
+    linear-gradient(180deg, #0f1117 0%, #131622 40%, #0f1117 100%);
 }
 
 img,
@@ -69,6 +102,10 @@ textarea {
   border: 1px solid var(--border);
   box-shadow: var(--card-shadow);
   backdrop-filter: blur(18px);
+}
+
+html.dark .app-card {
+  background: linear-gradient(180deg, rgba(30, 34, 53, 0.92), rgba(26, 29, 46, 0.88));
 }
 
 .soft-ring {
