@@ -16,6 +16,7 @@ const cormorant = Cormorant_Garamond({
 export const metadata: Metadata = {
   title: "RelocateGH",
   description: "Family relocation planner prototype for organising a move to Ghana.",
+  icons: { icon: "/Relocateghlogo.png" },
 };
 
 export default function RootLayout({

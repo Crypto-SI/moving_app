@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import {
-  BadgeCent,
   Banknote,
   ChevronDown,
   ClipboardCheck,
@@ -93,9 +93,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen overflow-x-hidden text-slate-900">
       <aside className="fixed inset-y-4 left-4 z-40 hidden w-[288px] rounded-[32px] border border-white/60 bg-slate-950/92 p-5 text-white shadow-2xl lg:block">
         <div className="mb-8 flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-teal-500/20 text-teal-200">
-            <BadgeCent className="h-5 w-5" />
-          </div>
+          <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={44} height={44} className="rounded-2xl object-contain" />
           <div>
             <p className="text-lg font-semibold">RelocateGH</p>
             <p className="text-sm text-slate-400">Family move command centre</p>
@@ -131,9 +129,12 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
         <div className="fixed inset-0 z-50 bg-slate-950/45 lg:hidden" onClick={() => setOpen(false)}>
           <div className="h-full w-[86%] max-w-[320px] overflow-y-auto border-r border-white/20 bg-slate-950 p-5 text-white" onClick={(event) => event.stopPropagation()}>
             <div className="mb-6 flex items-center justify-between">
-              <div>
-                <p className="text-lg font-semibold">RelocateGH</p>
-                <p className="text-sm text-slate-400">Prototype menu</p>
+              <div className="flex items-center gap-3">
+                <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={36} height={36} className="rounded-xl object-contain" />
+                <div>
+                  <p className="text-lg font-semibold">RelocateGH</p>
+                  <p className="text-sm text-slate-400">Prototype menu</p>
+                </div>
               </div>
               <button className="rounded-full p-2 hover:bg-white/10" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" />

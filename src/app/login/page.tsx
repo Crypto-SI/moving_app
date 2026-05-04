@@ -1,6 +1,7 @@
 "use client";
 
-import { Loader2, MapPin, ArrowRight } from "lucide-react";
+import { Loader2, ArrowRight } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
 
@@ -54,7 +55,7 @@ export default function LoginPage() {
       <div className="w-full max-w-[420px] space-y-8">
         <div className="text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500/20 to-amber-500/20">
-            <MapPin className="h-8 w-8 text-teal-700" />
+            <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={64} height={64} className="rounded-[16px] object-contain" />
           </div>
           <h1 className="font-serif text-4xl font-bold tracking-tight text-slate-900">
             RelocateGH
