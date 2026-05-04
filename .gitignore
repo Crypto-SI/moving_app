@@ -22,7 +22,17 @@
 
 # misc
 .DS_Store
+.codex
 *.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cert
+*.jks
+*.kdbx
+.envrc
+.direnv/
 
 # debug
 npm-debug.log*

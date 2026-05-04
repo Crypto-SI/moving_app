@@ -42,9 +42,61 @@ export const timelineTasks: TimelineTask[] = [
 ];
 
 export const shippingQuotes: ShippingQuote[] = [
-  { id: "ship-1", company_name: "Gold Coast Movers", contact_name: "Naana Botchway", phone: "+233 20 555 0114", email: "naana@goldcoastmovers.com", quote_amount: 4200, currency: "GBP", collection_date: "2026-06-12", estimated_delivery_date: "2026-07-10", shipment_type: "Door-to-door", included_services: ["Packing materials", "Customs support", "Delivery to residence"], insurance_included: true, notes: "Best value with full customs handling included." },
-  { id: "ship-2", company_name: "Atlantic Port Logistics", contact_name: "Chris Appiah", phone: "+233 24 111 9021", email: "chris@atlanticportlogistics.com", quote_amount: 3500, currency: "GBP", collection_date: "2026-06-14", estimated_delivery_date: "2026-07-16", shipment_type: "Port-only", included_services: ["Container loading", "Port coordination"], insurance_included: false, notes: "Lower base price but customs and local delivery cost extra." },
-  { id: "ship-3", company_name: "Heritage Family Relocations", contact_name: "Esi Owusu", phone: "+233 55 908 2210", email: "esi@heritagerelocations.com", quote_amount: 4680, currency: "GBP", collection_date: "2026-06-10", estimated_delivery_date: "2026-07-08", shipment_type: "Door-to-door", included_services: ["Survey visit", "Packing crew", "Storage for 14 days"], insurance_included: true, notes: "Premium option with temporary storage buffer." },
+  {
+    id: "ship-1",
+    company_name: "Gold Coast Movers",
+    contact_name: "Naana Botchway",
+    phone: "+233 20 555 0114",
+    email: "naana@goldcoastmovers.com",
+    currency: "GBP",
+    collection_date: "2026-06-12",
+    estimated_delivery_date: "2026-07-10",
+    shipment_type: "Door-to-door",
+    leg_quotes: [
+      { leg: "first-leg", amount: 980, route: "Home to UK port", notes: "Packing crew and inland collection." },
+      { leg: "boat-leg", amount: 1850, route: "UK port to Tema port", notes: "Shared container, port handling, customs support." },
+      { leg: "final-leg", amount: 720, route: "Tema port to Accra residence", notes: "Residence delivery and unpacking room placement." },
+    ],
+    included_services: ["Packing materials", "Customs support", "Delivery to residence"],
+    insurance_included: true,
+    notes: "Strong combined quote. Best fit when one shipper owns every handoff.",
+  },
+  {
+    id: "ship-2",
+    company_name: "Atlantic Port Logistics",
+    contact_name: "Chris Appiah",
+    phone: "+233 24 111 9021",
+    email: "chris@atlanticportlogistics.com",
+    currency: "GBP",
+    collection_date: "2026-06-14",
+    estimated_delivery_date: "2026-07-16",
+    shipment_type: "Port-only",
+    leg_quotes: [
+      { leg: "boat-leg", amount: 1620, route: "UK port to Tema port", notes: "Container loading, sailing, and port coordination." },
+      { leg: "final-leg", amount: 690, route: "Tema port to Accra residence", notes: "Local customs runner and truck delivery." },
+    ],
+    included_services: ["Container loading", "Port coordination"],
+    insurance_included: false,
+    notes: "Lowest boat leg. Needs separate collection support before port handoff.",
+  },
+  {
+    id: "ship-3",
+    company_name: "Heritage Family Relocations",
+    contact_name: "Esi Owusu",
+    phone: "+233 55 908 2210",
+    email: "esi@heritagerelocations.com",
+    currency: "GBP",
+    collection_date: "2026-06-10",
+    estimated_delivery_date: "2026-07-08",
+    shipment_type: "Origin plus sea freight",
+    leg_quotes: [
+      { leg: "first-leg", amount: 860, route: "Home to UK port", notes: "Survey visit, packing crew, and inventory labels." },
+      { leg: "boat-leg", amount: 1760, route: "UK port to Tema port", notes: "Dedicated crate space with customs paperwork." },
+    ],
+    included_services: ["Survey visit", "Packing crew", "Storage for 14 days"],
+    insurance_included: true,
+    notes: "Preferred for the first leg. Useful if final delivery is handled locally.",
+  },
 ];
 
 export const housingOptions: HousingOption[] = [

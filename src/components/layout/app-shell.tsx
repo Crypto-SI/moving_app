@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import {
   BadgeCent,
   Banknote,
+  ChevronDown,
   ClipboardCheck,
   FileText,
   HeartPulse,
@@ -20,11 +21,13 @@ import {
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { navItems } from "@/lib/navigation";
-import { moveDate, timelineTasks } from "@/lib/mock-data";
+import { useTimelineTasks, useMoveDate } from "@/lib/data-hooks";
+import { useMockDataToggle, MockDataProvider } from "@/lib/data-context";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Toggle } from "@/components/ui/toggle";
 
 const iconMap = {
   "/dashboard": LayoutDashboard,
@@ -40,19 +43,26 @@ const iconMap = {
   "/miscellaneous-notes": NotebookPen,
 } as const;
 
-function getDaysRemaining() {
-  const now = new Date("2026-04-14");
-  const diff = new Date(moveDate).getTime() - now.getTime();
+function getDaysRemaining(targetDate: string) {
+  const now = new Date();
+  const diff = new Date(targetDate).getTime() - now.getTime();
   return Math.ceil(diff / (1000 * 60 * 60 * 24));
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+function AppShellInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const { useMockData, setUseMockData } = useMockDataToggle();
   const current = navItems.find((item) => pathname === item.href || pathname.startsWith(`${item.href}/`));
+  const { data: timelineTasks } = useTimelineTasks();
+  const moveDate = useMoveDate();
   const urgentTasks = timelineTasks.filter((task) => task.priority === "urgent" || task.priority === "high").slice(0, 3);
-  const overdueCount = timelineTasks.filter((task) => new Date(task.due_date) < new Date("2026-04-14") && task.status !== "done").length;
-  const progress = useMemo(() => Math.round((timelineTasks.filter((task) => task.status === "done").length / timelineTasks.length) * 100), []);
+  const overdueCount = timelineTasks.filter((task) => new Date(task.due_date) < new Date() && task.status !== "done").length;
+  const progress = useMemo(() => {
+    if (timelineTasks.length === 0) return 0;
+    return Math.round((timelineTasks.filter((task) => task.status === "done").length / timelineTasks.length) * 100);
+  }, [timelineTasks]);
 
   return (
     <div className="min-h-screen text-slate-900">
@@ -133,38 +143,75 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-3 md:justify-end">
-                <Badge tone="accent">Mock data</Badge>
+                <Toggle
+                  checked={useMockData}
+                  onChange={setUseMockData}
+                  labelOn="Demo data"
+                  labelOff="Live data"
+                />
                 <Button variant="secondary" className="w-full sm:w-auto">Invite adviser</Button>
               </div>
             </div>
 
-            <div className="app-card rounded-[28px] px-4 py-4 md:px-6">
-              <div className="grid gap-4 xl:grid-cols-[1.2fr,1fr,1fr,1fr]">
-                <div>
-                  <div className="mb-2 flex items-center justify-between">
+            <div className="app-card overflow-hidden rounded-[28px] px-4 py-3 md:px-6">
+              <button
+                type="button"
+                className="flex w-full flex-col gap-3 text-left sm:flex-row sm:items-center sm:justify-between"
+                aria-expanded={summaryOpen}
+                aria-controls="move-summary-panel"
+                onClick={() => setSummaryOpen((value) => !value)}
+              >
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                     <span className="text-sm font-semibold text-slate-700">Move date countdown</span>
-                    <span className="text-sm text-slate-500">{getDaysRemaining()} days left</span>
+                    <span className="text-sm text-slate-500">{getDaysRemaining(moveDate)} days left</span>
                   </div>
-                  <Progress value={progress} />
-                  <p className="mt-3 text-sm text-slate-600">Overall progress is {progress}% with housing mostly settled and documents still driving urgency.</p>
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700">Next urgent tasks</p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {urgentTasks.map((task) => (
-                      <Badge key={task.id} tone="warning">{task.title}</Badge>
-                    ))}
+                  <div className="mt-2 w-full max-w-[360px]">
+                    <Progress value={progress} />
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700">Overdue items</p>
-                  <p className="mt-2 text-3xl font-semibold text-rose-700">{overdueCount}</p>
-                  <p className="text-sm text-slate-500">Nothing slips past the move summary bar.</p>
+                <div className="flex items-center justify-between gap-3 sm:justify-end">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge tone="accent">{progress}% complete</Badge>
+                    <Badge tone={overdueCount > 0 ? "danger" : "success"}>{overdueCount} overdue</Badge>
+                  </div>
+                  <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/70 bg-white/85 text-slate-600 transition hover:bg-white">
+                    <ChevronDown className={cn("h-4 w-4 transition-transform duration-300 ease-out", summaryOpen && "rotate-180")} />
+                  </span>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold text-slate-700">Move target</p>
-                  <p className="mt-2 text-3xl font-semibold">18 Aug</p>
-                  <p className="text-sm text-slate-500">Accra arrival with school onboarding already scheduled.</p>
+              </button>
+
+              <div
+                id="move-summary-panel"
+                className={cn(
+                  "grid transition-[grid-template-rows,opacity] duration-500 ease-out",
+                  summaryOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+                )}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="grid gap-4 pt-4 xl:grid-cols-[1.2fr,1fr,1fr,1fr]">
+                    <div>
+                      <p className="text-sm text-slate-600">Overall progress is {progress}% with housing mostly settled and documents still driving urgency.</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-700">Next urgent tasks</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {urgentTasks.map((task) => (
+                          <Badge key={task.id} tone="warning">{task.title}</Badge>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-700">Overdue items</p>
+                      <p className="mt-2 text-3xl font-semibold text-rose-700">{overdueCount}</p>
+                      <p className="text-sm text-slate-500">Nothing slips past the move summary bar.</p>
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-slate-700">Move target</p>
+                      <p className="mt-2 text-3xl font-semibold">18 Aug</p>
+                      <p className="text-sm text-slate-500">Accra arrival with school onboarding already scheduled.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -174,5 +221,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       </main>
     </div>
+  );
+}
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  return (
+    <MockDataProvider>
+      <AppShellInner>{children}</AppShellInner>
+    </MockDataProvider>
   );
 }

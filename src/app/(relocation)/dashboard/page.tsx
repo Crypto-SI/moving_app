@@ -1,23 +1,51 @@
+"use client";
+
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
 import { SchemaPanel } from "@/components/sections/schema-panel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
-import { budgetItems, documents, familyMembers, healthcareEntries, housingOptions, quickLinks, recentActivity, schoolEntries, shippingQuotes, timelineTasks } from "@/lib/mock-data";
+import {
+  useBudgetItems,
+  useDocuments,
+  useFamilyMembers,
+  useHealthcareEntries,
+  useHousingOptions,
+  useSchoolEntries,
+  useShippingQuotes,
+  useTimelineTasks,
+  mockRecentActivity,
+} from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 
-const stats = [
-  { label: "Total family members", value: familyMembers.length.toString() },
-  { label: "Documents completed", value: documents.filter((item) => item.status === "approved" || item.status === "received").length.toString() },
-  { label: "Tasks due soon", value: timelineTasks.filter((task) => task.status !== "done").slice(0, 3).length.toString() },
-  { label: "Shipping quotes collected", value: shippingQuotes.length.toString() },
-  { label: "Housing options saved", value: housingOptions.length.toString() },
-  { label: "Yearly school cost total", value: formatCurrency(schoolEntries.reduce((total, item) => total + item.fee_per_year, 0), "USD") },
-  { label: "Healthcare providers added", value: healthcareEntries.length.toString() },
-  { label: "Current moving budget total", value: formatCurrency(budgetItems.reduce((total, item) => total + item.planned_cost, 0), "GBP") },
-];
-
 export default function DashboardPage() {
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: documents } = useDocuments();
+  const { data: timelineTasks } = useTimelineTasks();
+  const { data: shippingQuotes } = useShippingQuotes();
+  const { data: housingOptions } = useHousingOptions();
+  const { data: schoolEntries } = useSchoolEntries();
+  const { data: healthcareEntries } = useHealthcareEntries();
+  const { data: budgetItems } = useBudgetItems();
+
+  const stats = [
+    { label: "Total family members", value: familyMembers.length.toString() },
+    { label: "Documents completed", value: documents.filter((item) => item.status === "approved" || item.status === "received").length.toString() },
+    { label: "Tasks due soon", value: timelineTasks.filter((task) => task.status !== "done").slice(0, 3).length.toString() },
+    { label: "Shipping quotes collected", value: shippingQuotes.length.toString() },
+    { label: "Housing options saved", value: housingOptions.length.toString() },
+    { label: "Yearly school cost total", value: formatCurrency(schoolEntries.reduce((total, item) => total + item.fee_per_year, 0), "USD") },
+    { label: "Healthcare providers added", value: healthcareEntries.length.toString() },
+    { label: "Current moving budget total", value: formatCurrency(budgetItems.reduce((total, item) => total + item.planned_cost, 0), "GBP") },
+  ];
+
+  const quickLinks = [
+    { href: "/documents", label: "Finish document pack" },
+    { href: "/moving-timeline", label: "Review critical path" },
+    { href: "/shipping", label: "Compare shipping quotes" },
+    { href: "/housing", label: "Check housing shortlist" },
+  ];
+
   return (
     <div className="space-y-6">
       <PageHeader title="Dashboard" description="A calm overview of the family move, with the critical path, cost signals, and next decisions surfaced immediately." actionLabel="Create task" />
@@ -35,7 +63,7 @@ export default function DashboardPage() {
         <Card>
           <CardTitle title="Recent activity" subtitle="Mock updates that make the dashboard feel live and operational." />
           <div className="space-y-4">
-            {recentActivity.map((activity) => (
+            {mockRecentActivity.map((activity) => (
               <div key={activity.id} className="rounded-3xl border border-white/70 bg-white/75 p-4">
                 <div className="flex items-center justify-between gap-3">
                   <p className="font-semibold text-slate-900">{activity.title}</p>

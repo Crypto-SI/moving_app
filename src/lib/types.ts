@@ -8,6 +8,14 @@ export type DocumentStatus =
 export type TaskStatus = "not started" | "in progress" | "blocked" | "done";
 export type Priority = "low" | "medium" | "high" | "urgent";
 export type InventoryStatus = "present" | "required" | "will purchase in country";
+export type ShippingLeg = "first-leg" | "boat-leg" | "final-leg";
+
+export interface ShippingLegQuote {
+  leg: ShippingLeg;
+  amount: number;
+  route: string;
+  notes: string;
+}
 
 export interface FamilyMember {
   id: string;
@@ -47,11 +55,11 @@ export interface ShippingQuote {
   contact_name: string;
   phone: string;
   email: string;
-  quote_amount: number;
   currency: string;
   collection_date: string;
   estimated_delivery_date: string;
   shipment_type: string;
+  leg_quotes: ShippingLegQuote[];
   included_services: string[];
   insurance_included: boolean;
   notes: string;

@@ -1,16 +1,19 @@
+"use client";
+
 import { notFound } from "next/navigation";
+import { useParams } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
-import { documents, familyMembers, healthcareEntries } from "@/lib/mock-data";
+import { useDocuments, useFamilyMembers, useHealthcareEntries } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 
-export default async function FamilyMemberProfilePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
+export default function FamilyMemberProfilePage() {
+  const { id } = useParams<{ id: string }>();
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: documents } = useDocuments();
+  const { data: healthcareEntries } = useHealthcareEntries();
+
   const member = familyMembers.find((item) => item.id === id);
 
   if (!member) {

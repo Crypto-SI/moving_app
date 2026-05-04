@@ -1,9 +1,14 @@
+"use client";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardTitle } from "@/components/ui/card";
-import { familyMembers, healthcareEntries } from "@/lib/mock-data";
+import { useFamilyMembers, useHealthcareEntries } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 
 export default function HealthcarePage() {
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: healthcareEntries } = useHealthcareEntries();
+
   return (
     <div className="space-y-6">
       <PageHeader title="Healthcare" description="Per-person healthcare relationships are organised to make family coverage visible at a glance." actionLabel="Add provider" />

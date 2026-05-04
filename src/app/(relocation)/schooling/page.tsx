@@ -1,10 +1,15 @@
+"use client";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
-import { familyMembers, schoolEntries } from "@/lib/mock-data";
+import { useFamilyMembers, useSchoolEntries } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 
 export default function SchoolingPage() {
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: schoolEntries } = useSchoolEntries();
+
   return (
     <div className="space-y-6">
       <PageHeader title="Schooling" description="Entries are grouped by child so application progress, yearly cost, and school-fit notes stay easy for parents to review quickly." actionLabel="Add school option" />

@@ -1,12 +1,17 @@
+"use client";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { PlaceholderModal } from "@/components/sections/placeholder-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { documents, familyMembers } from "@/lib/mock-data";
+import { useDocuments, useFamilyMembers } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 
 export default function DocumentsPage() {
+  const { data: documents } = useDocuments();
+  const { data: familyMembers } = useFamilyMembers();
+
   return (
     <div className="space-y-6">
       <PageHeader

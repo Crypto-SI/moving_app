@@ -1,9 +1,12 @@
+"use client";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardTitle } from "@/components/ui/card";
-import { budgetItems } from "@/lib/mock-data";
+import { useBudgetItems } from "@/lib/data-hooks";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function BudgetPage() {
+  const { data: budgetItems } = useBudgetItems();
   const totalPlanned = budgetItems.reduce((total, item) => total + item.planned_cost, 0);
   const totalActual = budgetItems.reduce((total, item) => total + item.actual_cost, 0);
 

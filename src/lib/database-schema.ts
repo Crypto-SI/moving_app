@@ -1,46 +1,50 @@
 export const databaseTableSchemas = [
   {
-    table: "relocategh_family_members",
-    columns: ["id uuid primary key", "full_name text", "relationship text", "date_of_birth date", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_family_members",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "full_name text not null", "relationship text not null", "date_of_birth date", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_documents",
-    columns: ["id uuid primary key", "family_member_id uuid references relocategh_family_members(id)", "document_type text", "status text", "issue_date date", "expiry_date date", "reference_number text", "original_available boolean", "copy_available boolean", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_documents",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "family_member_id uuid references moving_family_members(id) on delete cascade", "document_type text not null", "status text not null default 'not started'", "issue_date date", "expiry_date date", "reference_number text not null default ''", "original_available boolean not null default false", "copy_available boolean not null default false", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_timeline_tasks",
-    columns: ["id uuid primary key", "title text", "category text", "due_date date", "status text", "priority text", "assigned_family_member_id uuid references relocategh_family_members(id)", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_timeline_tasks",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "title text not null", "category text not null", "due_date date", "status text not null default 'not started'", "priority text not null default 'medium'", "assigned_family_member_id uuid references moving_family_members(id) on delete set null", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_shipping_quotes",
-    columns: ["id uuid primary key", "company_name text", "contact_name text", "phone text", "email text", "quote_amount numeric", "currency text", "collection_date date", "estimated_delivery_date date", "shipment_type text", "included_services text[]", "insurance_included boolean", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_shipping_quotes",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "company_name text not null", "contact_name text not null default ''", "phone text not null default ''", "email text not null default ''", "currency text not null default 'GBP'", "collection_date date", "estimated_delivery_date date", "shipment_type text not null default ''", "included_services text[] not null default '{}'", "insurance_included boolean not null default false", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_housing_options",
-    columns: ["id uuid primary key", "property_title text", "rent numeric", "currency text", "location text", "postcode text", "number_of_rooms integer", "advert_link text", "landlord_or_agent_name text", "contact_details text", "deposit_amount numeric", "furnished_status text", "distance_to_school text", "distance_to_hospital text", "viewed boolean", "shortlisted boolean", "decision_status text", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_shipping_leg_quotes",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "shipping_quote_id uuid not null references moving_shipping_quotes(id) on delete cascade", "leg text not null", "amount numeric not null default 0", "route text not null default ''", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_inventory_rooms",
-    columns: ["id uuid primary key", "room_name text", "sort_order integer", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_housing_options",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "property_title text not null", "rent numeric not null default 0", "currency text not null default 'USD'", "location text not null default ''", "postcode text not null default ''", "number_of_rooms integer not null default 0", "advert_link text not null default ''", "landlord_or_agent_name text not null default ''", "contact_details text not null default ''", "deposit_amount numeric not null default 0", "furnished_status text not null default ''", "distance_to_school text not null default ''", "distance_to_hospital text not null default ''", "viewed boolean not null default false", "shortlisted boolean not null default false", "decision_status text not null default 'under review'", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_inventory_items",
-    columns: ["id uuid primary key", "room_id uuid references relocategh_inventory_rooms(id)", "item_name text", "quantity integer", "status text", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_inventory_rooms",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "room_name text not null", "sort_order integer not null default 0", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_school_entries",
-    columns: ["id uuid primary key", "family_member_id uuid references relocategh_family_members(id)", "school_name text", "address text", "contact_name text", "contact_details text", "fee_per_year numeric", "application_status text", "year_group text", "distance_from_home text", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_inventory_items",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "room_id uuid not null references moving_inventory_rooms(id) on delete cascade", "item_name text not null", "quantity integer not null default 1", "status text not null default 'present'", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_healthcare_entries",
-    columns: ["id uuid primary key", "family_member_id uuid references relocategh_family_members(id)", "doctor_name text", "address text", "fee numeric", "contact_details text", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_school_entries",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "family_member_id uuid references moving_family_members(id) on delete cascade", "school_name text not null", "address text not null default ''", "contact_name text not null default ''", "contact_details text not null default ''", "fee_per_year numeric not null default 0", "application_status text not null default 'not started'", "year_group text not null default ''", "distance_from_home text not null default ''", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_budget_items",
-    columns: ["id uuid primary key", "category text", "item_name text", "planned_cost numeric", "actual_cost numeric", "currency text", "status text", "due_date date", "notes text", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_healthcare_entries",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "family_member_id uuid references moving_family_members(id) on delete cascade", "doctor_name text not null", "address text not null default ''", "fee numeric not null default 0", "contact_details text not null default ''", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
   {
-    table: "relocategh_misc_notes",
-    columns: ["id uuid primary key", "title text", "category text", "note_body text", "priority text", "linked_family_member_id uuid references relocategh_family_members(id)", "linked_section text", "date_added date", "created_at timestamptz", "updated_at timestamptz"],
+    table: "moving_budget_items",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "category text not null", "item_name text not null", "planned_cost numeric not null default 0", "actual_cost numeric not null default 0", "currency text not null default 'GBP'", "status text not null default 'planned'", "due_date date", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
+  },
+  {
+    table: "moving_misc_notes",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "title text not null", "category text not null default ''", "note_body text not null default ''", "priority text not null default 'medium'", "linked_family_member_id uuid references moving_family_members(id) on delete set null", "linked_section text not null default ''", "date_added date", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },
 ] as const;

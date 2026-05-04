@@ -1,11 +1,15 @@
+"use client";
+
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
-import { housingOptions } from "@/lib/mock-data";
+import { useHousingOptions } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 
 export default function HousingPage() {
+  const { data: housingOptions } = useHousingOptions();
+
   return (
     <div className="space-y-6">
       <PageHeader title="Housing" description="Comparison views balance practical family criteria with a cleaner premium dashboard layout." actionLabel="Add property" />

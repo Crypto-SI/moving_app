@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { familyMembers, timelineTasks } from "@/lib/mock-data";
+import { useFamilyMembers, useTimelineTasks } from "@/lib/data-hooks";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
@@ -11,6 +11,8 @@ const columns = ["not started", "in progress", "blocked", "done"] as const;
 
 export function TimelineBoard() {
   const [mode, setMode] = useState<(typeof modes)[number]>("List");
+  const { data: timelineTasks } = useTimelineTasks();
+  const { data: familyMembers } = useFamilyMembers();
 
   return (
     <div className="space-y-6">

@@ -1,11 +1,16 @@
+"use client";
+
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { familyMembers, miscNotes } from "@/lib/mock-data";
+import { useFamilyMembers, useMiscNotes } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 
 export default function MiscellaneousNotesPage() {
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: miscNotes } = useMiscNotes();
+
   return (
     <div className="space-y-6">
       <PageHeader title="Miscellaneous Notes" description="Structured notes keep relocation context useful instead of becoming a single unscannable text dump." actionLabel="Add note" />

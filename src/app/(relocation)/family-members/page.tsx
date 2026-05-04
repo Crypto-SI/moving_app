@@ -1,12 +1,18 @@
+"use client";
+
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
 import { PlaceholderModal } from "@/components/sections/placeholder-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
-import { familyMembers, healthcareEntries, documents } from "@/lib/mock-data";
+import { useFamilyMembers, useHealthcareEntries, useDocuments } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 
 export default function FamilyMembersPage() {
+  const { data: familyMembers } = useFamilyMembers();
+  const { data: healthcareEntries } = useHealthcareEntries();
+  const { data: documents } = useDocuments();
+
   return (
     <div className="space-y-6">
       <PageHeader
