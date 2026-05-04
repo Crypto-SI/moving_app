@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMockDataToggle } from "@/lib/data-context";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
+import { getMissingDocumentTypes } from "@/lib/document-requirements";
 import {
   familyMembers as mockFamilyMembers,
   documents as mockDocuments,
@@ -39,6 +40,7 @@ import type {
 interface DataResult<T> {
   data: T[];
   loading: boolean;
+  refresh: () => void;
 }
 
 function useDataFetcher<T>(tableName: string, mockData: T[], orderBy: string = "created_at"): DataResult<T> {
@@ -86,7 +88,7 @@ function useDataFetcher<T>(tableName: string, mockData: T[], orderBy: string = "
     };
   }, [fetchData]);
 
-  return { data, loading };
+  return { data, loading, refresh: fetchData };
 }
 
 export function useFamilyMembers(): DataResult<FamilyMember> {
@@ -177,7 +179,7 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
     };
   }, [fetchData]);
 
-  return { data, loading, quotesWithLegs };
+  return { data, loading, quotesWithLegs, refresh: fetchData };
 }
 
 export function useHousingOptions(): DataResult<HousingOption> {
@@ -305,3 +307,38 @@ export function useRelocation(): RelocationResult {
 }
 
 export { mockRecentActivity, mockMoveDate };
+
+export async function ensureDocuments(
+  familyMembers: FamilyMember[],
+  existingDocs: RelocationDocument[],
+): Promise<void> {
+  const supabase = createBrowserClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const inserts: {
+    user_id: string;
+    family_member_id: string;
+    document_type: string;
+    status: string;
+  }[] = [];
+
+  for (const member of familyMembers) {
+    const memberDocs = existingDocs.filter((d) => d.family_member_id === member.id);
+    const missing = getMissingDocumentTypes(member.relationship, memberDocs);
+    for (const docType of missing) {
+      inserts.push({
+        user_id: user.id,
+        family_member_id: member.id,
+        document_type: docType,
+        status: "not started",
+      });
+    }
+  }
+
+  if (inserts.length > 0) {
+    await supabase.from("moving_documents").insert(inserts);
+  }
+}

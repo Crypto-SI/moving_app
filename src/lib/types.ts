@@ -23,12 +23,13 @@ export interface FamilyMember {
   relationship: string;
   date_of_birth: string;
   notes: string;
+  profile_photo_url: string | null;
 }
 
 export interface RelocationDocument {
   id: string;
   family_member_id: string;
-  document_type: "birth certificate" | "CRB document" | "passport" | "visa";
+  document_type: "birth certificate" | "DBS certificate" | "passport" | "visa";
   status: DocumentStatus;
   issue_date: string;
   expiry_date: string;

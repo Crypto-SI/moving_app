@@ -1,17 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import { User } from "lucide-react";
+import { useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
-import { PlaceholderModal } from "@/components/sections/placeholder-modal";
+import { AddFamilyMemberModal } from "@/components/sections/add-family-member-modal";
+import { FamilyMemberPhotoModal } from "@/components/sections/family-member-photo-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useFamilyMembers, useHealthcareEntries, useDocuments } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
+import type { FamilyMember } from "@/lib/types";
 
 export default function FamilyMembersPage() {
-  const { data: familyMembers } = useFamilyMembers();
+  const { data: familyMembers, refresh: refreshFamilyMembers } = useFamilyMembers();
   const { data: healthcareEntries } = useHealthcareEntries();
   const { data: documents } = useDocuments();
+  const [selectedMember, setSelectedMember] = useState<FamilyMember | null>(null);
 
   return (
     <div className="space-y-6">
@@ -19,11 +24,7 @@ export default function FamilyMembersPage() {
         title="Family Members"
         description="Each member acts as a central record that can later connect directly to documents, schooling, healthcare, and assigned timeline tasks."
         actions={
-          <PlaceholderModal
-            title="Add family member"
-            description="This modal stands in for the future create-member flow. It will later map to inserts on `relocategh_family_members` and related linking tables."
-            actionLabel="Add family member"
-          />
+          <AddFamilyMemberModal onSuccess={refreshFamilyMembers} />
         }
       />
 
@@ -33,9 +34,28 @@ export default function FamilyMembersPage() {
           {familyMembers.map((member) => (
             <Link key={member.id} href={`/family-members/${member.id}`} className="rounded-[28px] border border-white/70 bg-white/80 p-5 transition hover:-translate-y-1 hover:bg-white">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h3 className="text-xl font-semibold text-slate-900">{member.full_name}</h3>
-                  <p className="mt-1 text-sm text-slate-500">{member.relationship} • Born {formatDate(member.date_of_birth)}</p>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedMember(member); }}
+                    className="shrink-0 cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-teal-400"
+                  >
+                    {member.profile_photo_url ? (
+                      <img
+                        src={member.profile_photo_url}
+                        alt={member.full_name}
+                        className="h-12 w-12 rounded-full object-cover border-2 border-white/70"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100">
+                        <User className="h-6 w-6 text-slate-400" strokeWidth={1.5} />
+                      </div>
+                    )}
+                  </button>
+                  <div>
+                    <h3 className="text-xl font-semibold text-slate-900">{member.full_name}</h3>
+                    <p className="mt-1 text-sm text-slate-500">{member.relationship}{member.date_of_birth ? ` • Born ${formatDate(member.date_of_birth)}` : ""}</p>
+                  </div>
                 </div>
                 <Badge tone="accent">{documents.filter((doc) => doc.family_member_id === member.id).length} docs</Badge>
               </div>
@@ -48,6 +68,15 @@ export default function FamilyMembersPage() {
           ))}
         </div>
       </Card>
+
+      {selectedMember ? (
+        <FamilyMemberPhotoModal
+          member={selectedMember}
+          onClose={() => setSelectedMember(null)}
+          onUpdated={refreshFamilyMembers}
+          onDeleted={refreshFamilyMembers}
+        />
+      ) : null}
     </div>
   );
 }

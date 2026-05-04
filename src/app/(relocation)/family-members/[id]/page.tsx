@@ -29,7 +29,20 @@ export default function FamilyMemberProfilePage() {
 
       <section className="grid gap-6 xl:grid-cols-[0.85fr,1.15fr]">
         <Card>
-          <CardTitle title="Profile summary" subtitle="A future anchor for linked records across the app." />
+          <CardTitle title="Profile summary" subtitle="Personal details and photo." />
+          <div className="flex items-center gap-4 mb-4">
+            {member.profile_photo_url ? (
+              <img
+                src={member.profile_photo_url}
+                alt={member.full_name}
+                className="h-20 w-20 rounded-full object-cover border-2 border-white/70"
+              />
+            ) : (
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-teal-50 text-teal-600 text-2xl font-semibold">
+                {member.full_name.charAt(0)}
+              </div>
+            )}
+          </div>
           <div className="space-y-3 text-sm text-slate-600">
             <p><span className="font-semibold text-slate-900">Relationship:</span> {member.relationship}</p>
             <p><span className="font-semibold text-slate-900">Date of birth:</span> {formatDate(member.date_of_birth)}</p>
@@ -38,17 +51,21 @@ export default function FamilyMemberProfilePage() {
         </Card>
 
         <Card>
-          <CardTitle title="Linked documents" subtitle="Current placeholder relationship to future `relocategh_documents` rows." />
+          <CardTitle title="Linked documents" subtitle="Document readiness for this family member." />
           <div className="space-y-3">
             {memberDocuments.map((item) => (
               <div key={item.id} className="rounded-3xl border border-white/70 bg-white/75 p-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="font-semibold text-slate-900">{item.document_type}</p>
-                  <Badge tone={item.status === "approved" ? "success" : item.status === "expired" ? "danger" : "accent"}>{item.status}</Badge>
+                  <p className="font-semibold text-slate-900 capitalize">{item.document_type}</p>
+                  <Badge tone={item.status === "approved" ? "success" : item.status === "expired" ? "danger" : item.status === "in progress" ? "warning" : "accent"}>{item.status}</Badge>
                 </div>
                 <p className="mt-2 text-sm text-slate-600">Issue {formatDate(item.issue_date)} • Expiry {formatDate(item.expiry_date)} • Ref {item.reference_number}</p>
+                <p className="mt-1 text-sm text-slate-500">Original: {item.original_available ? "Yes" : "No"} • Copy: {item.copy_available ? "Yes" : "No"}</p>
               </div>
             ))}
+            {memberDocuments.length === 0 && (
+              <p className="text-sm text-slate-500">No documents tracked yet. Visit the Documents page to auto-generate required documents.</p>
+            )}
           </div>
         </Card>
       </section>

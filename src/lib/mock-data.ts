@@ -23,17 +23,17 @@ export const relocation: Relocation = {
 };
 
 export const familyMembers: FamilyMember[] = [
-  { id: "fm-1", full_name: "Ama Mensah", relationship: "Parent", date_of_birth: "1987-03-12", notes: "Primary applicant. Leads housing and shipping decisions." },
-  { id: "fm-2", full_name: "Daniel Mensah", relationship: "Parent", date_of_birth: "1985-11-04", notes: "Tracks budget, visa submissions, and flights." },
-  { id: "fm-3", full_name: "Sena Mensah", relationship: "Child", date_of_birth: "2013-06-22", notes: "Prefers schools with strong arts and science clubs." },
-  { id: "fm-4", full_name: "Kojo Mensah", relationship: "Child", date_of_birth: "2017-09-03", notes: "Needs paediatric healthcare setup within first week after arrival." },
+  { id: "fm-1", full_name: "Ama Mensah", relationship: "Parent", date_of_birth: "1987-03-12", notes: "Primary applicant. Leads housing and shipping decisions.", profile_photo_url: null },
+  { id: "fm-2", full_name: "Daniel Mensah", relationship: "Parent", date_of_birth: "1985-11-04", notes: "Tracks budget, visa submissions, and flights.", profile_photo_url: null },
+  { id: "fm-3", full_name: "Sena Mensah", relationship: "Child", date_of_birth: "2013-06-22", notes: "Prefers schools with strong arts and science clubs.", profile_photo_url: null },
+  { id: "fm-4", full_name: "Kojo Mensah", relationship: "Child", date_of_birth: "2017-09-03", notes: "Needs paediatric healthcare setup within first week after arrival.", profile_photo_url: null },
 ];
 
 export const documents: RelocationDocument[] = [
   { id: "doc-1", family_member_id: "fm-1", document_type: "passport", status: "approved", issue_date: "2024-06-14", expiry_date: "2034-06-13", reference_number: "UKP-842190", original_available: true, copy_available: true, notes: "Digital scan stored in secure folder." },
   { id: "doc-2", family_member_id: "fm-2", document_type: "visa", status: "in progress", issue_date: "2026-03-02", expiry_date: "2027-03-02", reference_number: "VIS-447102", original_available: false, copy_available: true, notes: "Awaiting embassy appointment confirmation." },
   { id: "doc-3", family_member_id: "fm-3", document_type: "birth certificate", status: "received", issue_date: "2013-06-30", expiry_date: "2035-06-30", reference_number: "BRC-2013-992", original_available: true, copy_available: true, notes: "Certified copy ordered for school admissions." },
-  { id: "doc-4", family_member_id: "fm-4", document_type: "CRB document", status: "not started", issue_date: "2026-04-20", expiry_date: "2027-04-20", reference_number: "CRB-TBD", original_available: false, copy_available: false, notes: "Required for volunteer school support role." },
+  { id: "doc-4", family_member_id: "fm-4", document_type: "DBS certificate", status: "not started", issue_date: "2026-04-20", expiry_date: "2027-04-20", reference_number: "DBS-TBD", original_available: false, copy_available: false, notes: "Required for volunteer school support role." },
   { id: "doc-5", family_member_id: "fm-2", document_type: "passport", status: "expired", issue_date: "2015-01-08", expiry_date: "2025-01-07", reference_number: "UKP-104281", original_available: true, copy_available: true, notes: "Renewal booked for next week." },
   { id: "doc-6", family_member_id: "fm-3", document_type: "visa", status: "approved", issue_date: "2026-02-18", expiry_date: "2027-02-18", reference_number: "VIS-771240", original_available: true, copy_available: true, notes: "Approval letter emailed and archived." },
 ];

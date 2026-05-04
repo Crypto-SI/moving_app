@@ -20,7 +20,7 @@ export function PageHeader({
         <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{description}</p>
       </div>
       <div className="w-full md:w-auto">
-        {actions ?? <Button className="w-full md:w-auto">{actionLabel}</Button>}
+        {actions === undefined ? <Button className="w-full md:w-auto">{actionLabel}</Button> : actions}
       </div>
     </div>
   );
