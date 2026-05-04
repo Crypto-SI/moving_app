@@ -17,6 +17,7 @@ import {
   miscNotes as mockMiscNotes,
   recentActivity as mockRecentActivity,
   moveDate as mockMoveDate,
+  relocation as mockRelocation,
 } from "@/lib/mock-data";
 import type {
   BudgetItem,
@@ -26,6 +27,7 @@ import type {
   InventoryItem,
   InventoryRoom,
   MiscNote,
+  Relocation,
   RelocationDocument,
   SchoolEntry,
   ShippingLeg as ShippingLegType,
@@ -207,38 +209,99 @@ export function useMiscNotes(): DataResult<MiscNote> {
 }
 
 export function useMoveDate(): string {
-  const { useMockData } = useMockDataToggle();
-  const [moveDate, setMoveDate] = useState(useMockData ? mockMoveDate : "");
+  const { relocation } = useRelocation();
+  return relocation?.move_date || mockMoveDate;
+}
 
-  useEffect(() => {
+interface RelocationResult {
+  relocation: Relocation | null;
+  loading: boolean;
+  updateRelocation: (updates: Partial<Pick<Relocation, "move_date" | "destination" | "notes">>) => Promise<void>;
+}
+
+export function useRelocation(): RelocationResult {
+  const { useMockData } = useMockDataToggle();
+  const [relocation, setRelocation] = useState<Relocation | null>(useMockData ? mockRelocation : null);
+  const [loading, setLoading] = useState(!useMockData);
+  const mounted = useRef(true);
+
+  const fetchRelocation = useCallback(async () => {
     if (useMockData) {
-      setMoveDate(mockMoveDate);
+      setRelocation(mockRelocation);
+      setLoading(false);
       return;
     }
 
-    const fetchMoveDate = async () => {
+    setLoading(true);
+    const supabase = createBrowserClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (!user) {
+      setRelocation(null);
+      setLoading(false);
+      return;
+    }
+
+    const { data } = await supabase
+      .from("moving_relocations")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (mounted.current) {
+      setRelocation(data as Relocation | null);
+      setLoading(false);
+    }
+  }, [useMockData]);
+
+  useEffect(() => {
+    mounted.current = true;
+    fetchRelocation();
+    return () => {
+      mounted.current = false;
+    };
+  }, [fetchRelocation]);
+
+  const updateRelocation = useCallback(
+    async (updates: Partial<Pick<Relocation, "move_date" | "destination" | "notes">>) => {
+      if (useMockData) {
+        setRelocation((prev) => (prev ? { ...prev, ...updates } : { id: "reloc-1", move_date: "", destination: "Accra, Ghana", notes: "", ...updates }));
+        return;
+      }
+
       const supabase = createBrowserClient();
       const {
         data: { user },
       } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data } = await supabase
-        .from("moving_timeline_tasks")
-        .select("due_date")
-        .eq("user_id", user.id)
-        .order("due_date", { ascending: false })
-        .limit(1);
-
-      if (data && data.length > 0) {
-        setMoveDate(data[0].due_date);
+      const existing = relocation;
+      if (existing?.id) {
+        const { data } = await supabase
+          .from("moving_relocations")
+          .update(updates)
+          .eq("id", existing.id)
+          .select()
+          .single();
+        if (mounted.current && data) {
+          setRelocation(data as Relocation);
+        }
+      } else {
+        const { data } = await supabase
+          .from("moving_relocations")
+          .insert({ user_id: user.id, ...updates })
+          .select()
+          .single();
+        if (mounted.current && data) {
+          setRelocation(data as Relocation);
+        }
       }
-    };
+    },
+    [useMockData, relocation],
+  );
 
-    fetchMoveDate();
-  }, [useMockData]);
-
-  return moveDate || mockMoveDate;
+  return { relocation, loading, updateRelocation };
 }
 
 export { mockRecentActivity, mockMoveDate };

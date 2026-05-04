@@ -24,9 +24,9 @@ export default function HousingPage() {
               </div>
               <Badge tone={home.decision_status === "accepted" ? "success" : home.shortlisted ? "accent" : "neutral"}>{home.decision_status}</Badge>
             </div>
-            <p className="mt-4 font-serif text-4xl font-semibold">{formatCurrency(home.rent, home.currency)}</p>
+            <p className="mt-4 break-words font-serif text-3xl font-semibold sm:text-4xl">{formatCurrency(home.rent, home.currency)}</p>
             <p className="mt-2 text-sm text-slate-500">{home.number_of_rooms} rooms • {home.furnished_status}</p>
-            <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-slate-600">
+            <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
               <div className="rounded-2xl bg-white/70 p-3">School: {home.distance_to_school}</div>
               <div className="rounded-2xl bg-white/70 p-3">Hospital: {home.distance_to_hospital}</div>
             </div>

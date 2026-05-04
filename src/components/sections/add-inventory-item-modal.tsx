@@ -84,10 +84,10 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
         Add inventory item
       </Button>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4" onClick={() => setOpen(false)}>
-          <Card className="w-full max-w-lg p-6" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/50 px-3 py-4 sm:items-center sm:px-4" onClick={() => setOpen(false)}>
+          <Card className="w-full max-w-lg p-4 sm:p-6" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Add inventory item</p>
                 <h3 className="mt-2 text-2xl font-semibold text-slate-900">New item</h3>
               </div>
@@ -118,7 +118,7 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
                 <Input value={form.item_name} onChange={(e) => update("item_name", e.target.value)} placeholder="e.g. Standing desk" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-sm font-medium text-slate-700">Quantity</label>
                   <Input type="number" min={1} value={form.quantity} onChange={(e) => update("quantity", Math.max(1, Number(e.target.value)))} />
@@ -152,7 +152,7 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
 
               {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 
-              <div className="flex justify-end gap-3 pt-2">
+              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
                 <Button variant="secondary" type="button" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>

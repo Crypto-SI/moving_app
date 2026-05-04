@@ -147,3 +147,10 @@ export interface MiscNote {
   linked_section: string;
   date_added: string;
 }
+
+export interface Relocation {
+  id: string;
+  move_date: string;
+  destination: string;
+  notes: string;
+}

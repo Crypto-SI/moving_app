@@ -6,6 +6,7 @@ import {
   InventoryItem,
   InventoryRoom,
   MiscNote,
+  Relocation,
   RelocationDocument,
   SchoolEntry,
   ShippingQuote,
@@ -13,6 +14,13 @@ import {
 } from "@/lib/types";
 
 export const moveDate = "2026-08-18";
+
+export const relocation: Relocation = {
+  id: "reloc-1",
+  move_date: "2026-08-18",
+  destination: "Accra, Ghana",
+  notes: "",
+};
 
 export const familyMembers: FamilyMember[] = [
   { id: "fm-1", full_name: "Ama Mensah", relationship: "Parent", date_of_birth: "1987-03-12", notes: "Primary applicant. Leads housing and shipping decisions." },

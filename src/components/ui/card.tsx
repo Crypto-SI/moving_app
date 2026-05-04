@@ -6,7 +6,7 @@ export function Card({
   children,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("app-card grain-overlay rounded-[28px] p-5", className)} {...props}>{children}</div>;
+  return <div className={cn("app-card grain-overlay min-w-0 rounded-[24px] p-4 sm:rounded-[28px] sm:p-5", className)} {...props}>{children}</div>;
 }
 
 export function CardTitle({
@@ -19,12 +19,12 @@ export function CardTitle({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="mb-4 flex items-start justify-between gap-3">
-      <div>
+    <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+      <div className="min-w-0">
         <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
         {subtitle ? <p className="mt-1 text-sm text-slate-500">{subtitle}</p> : null}
       </div>
-      {action}
+      {action ? <div className="shrink-0">{action}</div> : null}
     </div>
   );
 }

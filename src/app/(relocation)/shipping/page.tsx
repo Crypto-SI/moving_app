@@ -123,7 +123,7 @@ export default function ShippingPage() {
               subtitle={quote.contact_name}
               action={<Badge tone="accent">{quote.leg_quotes.length} of 3 legs</Badge>}
             />
-            <p className="font-serif text-4xl font-semibold">{formatCurrency(getQuoteTotal(quote), quote.currency)}</p>
+            <p className="break-words font-serif text-3xl font-semibold sm:text-4xl">{formatCurrency(getQuoteTotal(quote), quote.currency)}</p>
             <p className="mt-2 text-sm text-slate-500">
               {quote.shipment_type} - Collects {formatDate(quote.collection_date)}
             </p>
@@ -132,13 +132,13 @@ export default function ShippingPage() {
                 const legQuote = getLegQuote(quote, leg.id);
 
                 return (
-                  <div key={leg.id} className="flex items-center justify-between gap-3 rounded-2xl border border-slate-200/80 bg-white/70 px-3 py-2 text-sm">
-                    <div>
+                  <div key={leg.id} className="flex flex-col gap-2 rounded-2xl border border-slate-200/80 bg-white/70 px-3 py-2 text-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+                    <div className="min-w-0">
                       <p className="font-medium text-slate-900">{leg.label}</p>
                       <p className="text-xs text-slate-500">{leg.route}</p>
                     </div>
                     {legQuote ? (
-                      <span className="font-semibold text-slate-900">{formatCurrency(legQuote.amount, quote.currency)}</span>
+                      <span className="break-words font-semibold text-slate-900">{formatCurrency(legQuote.amount, quote.currency)}</span>
                     ) : (
                       <Badge>Not quoted</Badge>
                     )}

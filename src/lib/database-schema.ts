@@ -1,5 +1,9 @@
 export const databaseTableSchemas = [
   {
+    table: "moving_relocations",
+    columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null unique references auth.users(id) on delete cascade", "move_date date", "destination text not null default 'Accra, Ghana'", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
+  },
+  {
     table: "moving_family_members",
     columns: ["id uuid primary key default gen_random_uuid()", "user_id uuid not null references auth.users(id) on delete cascade", "full_name text not null", "relationship text not null", "date_of_birth date", "notes text not null default ''", "created_at timestamptz not null default now()", "updated_at timestamptz not null default now()"],
   },

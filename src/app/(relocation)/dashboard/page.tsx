@@ -54,7 +54,7 @@ export default function DashboardPage() {
         {stats.map((stat) => (
           <Card key={stat.label}>
             <p className="text-sm text-slate-500">{stat.label}</p>
-            <p className="mt-4 font-serif text-4xl font-semibold text-slate-900">{stat.value}</p>
+            <p className="mt-4 break-words font-serif text-3xl font-semibold text-slate-900 sm:text-4xl">{stat.value}</p>
           </Card>
         ))}
       </section>
@@ -65,7 +65,7 @@ export default function DashboardPage() {
           <div className="space-y-4">
             {mockRecentActivity.map((activity) => (
               <div key={activity.id} className="rounded-3xl border border-white/70 bg-white/75 p-4">
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
                   <p className="font-semibold text-slate-900">{activity.title}</p>
                   <Badge tone="accent">{activity.timestamp}</Badge>
                 </div>

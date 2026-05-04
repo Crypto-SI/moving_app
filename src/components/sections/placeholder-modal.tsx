@@ -23,10 +23,10 @@ export function PlaceholderModal({
         {actionLabel}
       </Button>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4" onClick={() => setOpen(false)}>
-          <Card className="w-full max-w-lg p-6" onClick={(event) => event.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/50 px-3 py-4 sm:items-center sm:px-4" onClick={() => setOpen(false)}>
+          <Card className="w-full max-w-lg p-4 sm:p-6" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
-              <div>
+              <div className="min-w-0">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Prototype action</p>
                 <h3 className="mt-2 text-2xl font-semibold text-slate-900">{title}</h3>
               </div>

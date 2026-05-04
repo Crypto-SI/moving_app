@@ -17,15 +17,15 @@ export default function BudgetPage() {
       <section className="grid gap-4 md:grid-cols-3">
         <Card>
           <p className="text-sm text-slate-500">Total planned</p>
-          <p className="mt-4 font-serif text-4xl">{formatCurrency(totalPlanned, "GBP")}</p>
+          <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalPlanned, "GBP")}</p>
         </Card>
         <Card>
           <p className="text-sm text-slate-500">Total actual</p>
-          <p className="mt-4 font-serif text-4xl">{formatCurrency(totalActual, "GBP")}</p>
+          <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalActual, "GBP")}</p>
         </Card>
         <Card>
           <p className="text-sm text-slate-500">Remaining difference</p>
-          <p className="mt-4 font-serif text-4xl">{formatCurrency(totalPlanned - totalActual, "GBP")}</p>
+          <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalPlanned - totalActual, "GBP")}</p>
         </Card>
       </section>
 
@@ -37,7 +37,7 @@ export default function BudgetPage() {
               const fill = item.actual_cost > 0 ? Math.max(8, (item.actual_cost / Math.max(item.planned_cost, 1)) * 100) : 6;
               return (
                 <div key={item.id}>
-                  <div className="mb-2 flex items-center justify-between gap-3 text-sm">
+                  <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
                     <span className="font-semibold text-slate-700">{item.item_name}</span>
                     <span className="text-slate-500">{item.category}</span>
                   </div>
