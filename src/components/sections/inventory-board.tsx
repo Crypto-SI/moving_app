@@ -3,14 +3,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { AddInventoryItemModal } from "@/components/sections/add-inventory-item-modal";
+import { OrganiseRoomsModal } from "@/components/sections/organise-rooms-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useInventoryRooms, useInventoryItems } from "@/lib/data-hooks";
 import { InventoryItem } from "@/lib/types";
 
 export function InventoryBoard() {
-  const { data: rooms, loading: roomsLoading } = useInventoryRooms();
-  const { data: initialItems, loading: itemsLoading } = useInventoryItems();
+  const { data: rooms, loading: roomsLoading, refresh: refreshRooms } = useInventoryRooms();
+  const { data: initialItems, loading: itemsLoading, refresh: refreshItems } = useInventoryItems();
   const [items, setItems] = useState<InventoryItem[]>(initialItems);
   const mounted = useRef(true);
 
@@ -23,8 +24,9 @@ export function InventoryBoard() {
   }, [initialItems]);
 
   const refresh = useCallback(() => {
-    setItems([...initialItems]);
-  }, [initialItems]);
+    refreshRooms();
+    refreshItems();
+  }, [refreshRooms, refreshItems]);
 
   if (roomsLoading || itemsLoading) {
     return (
@@ -43,7 +45,12 @@ export function InventoryBoard() {
       <PageHeader
         title="Household Inventory"
         description="Checklist-driven room grouping makes this section practical for packing, buying locally, and spotting missing essentials early."
-        actions={<AddInventoryItemModal onSuccess={refresh} />}
+        actions={
+          <div className="flex gap-2">
+            <OrganiseRoomsModal onSuccess={refresh} />
+            <AddInventoryItemModal onSuccess={refresh} />
+          </div>
+        }
       />
 
       <div className="grid gap-4 xl:grid-cols-2">
