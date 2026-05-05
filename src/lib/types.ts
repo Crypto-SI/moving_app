@@ -86,6 +86,8 @@ export interface HousingOption {
   shortlisted: boolean;
   decision_status: string;
   notes: string;
+  image_url: string;
+  has_boys_quarters: boolean;
 }
 
 export interface InventoryRoom {
