@@ -44,7 +44,7 @@ export function DocumentPersonCard({ member, documents, onStatusChange }: Props)
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-[28px] border border-white/70 min-h-[320px]",
+        "relative overflow-hidden rounded-[28px] border border-white/70 min-h-[260px] sm:min-h-[320px]",
         "transition hover:-translate-y-1",
       )}
     >

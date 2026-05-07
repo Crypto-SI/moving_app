@@ -145,7 +145,7 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
             </div>
           </div>
         ) : (
-          <div className="mt-5 flex justify-center gap-3">
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
             <Button variant="secondary" onClick={() => fileInputRef.current?.click()} disabled={loading}>
               {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ImagePlus className="mr-2 h-4 w-4" />}
               {photoUrl ? "Change photo" : "Add photo"}

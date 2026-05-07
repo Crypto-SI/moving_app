@@ -34,7 +34,7 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      window.location.href = "/join";
+      window.location.href = "/";
     } else {
       const { error: signupError } = await supabase.auth.signUp({
         email,

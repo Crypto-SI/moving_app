@@ -46,7 +46,7 @@ export function InventoryBoard() {
         title="Household Inventory"
         description="Checklist-driven room grouping makes this section practical for packing, buying locally, and spotting missing essentials early."
         actions={
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <OrganiseRoomsModal onSuccess={refresh} />
             <AddInventoryItemModal onSuccess={refresh} />
           </div>

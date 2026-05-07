@@ -558,7 +558,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
       <main className="lg:pl-[324px]">
         <div className="px-3 pb-8 pt-3 sm:px-4 md:px-6 md:pb-10 lg:px-8">
-          <div className="sticky top-0 z-30 mb-6 space-y-3 rounded-[24px] bg-[rgba(244,239,231,0.78)] py-2 backdrop-blur-xl sm:space-y-4 sm:rounded-[30px]">
+          <div className="sticky top-0 z-30 mb-6 space-y-3 rounded-[24px] bg-[rgba(244,239,231,0.78)] py-2 shadow-sm backdrop-blur-xl sm:space-y-4 sm:rounded-[30px]">
             <div className="app-card flex flex-col gap-4 rounded-[28px] px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
               <div className="flex min-w-0 items-center gap-3">
                 <button className="shrink-0 rounded-2xl border border-white/70 bg-white/85 p-3 text-slate-700 lg:hidden" onClick={() => setOpen(true)}>
@@ -569,7 +569,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                   <h2 className="font-serif text-2xl font-semibold sm:text-3xl">{current?.label ?? "RelocateGH"}</h2>
                 </div>
               </div>
-              <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:justify-end">
+              <div className="flex flex-row flex-wrap items-center gap-2 md:justify-end">
                 <Toggle
                   checked={useMockData}
                   onChange={setUseMockData}

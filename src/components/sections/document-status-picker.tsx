@@ -25,7 +25,7 @@ export function DocumentStatusPicker({ value, onChange }: Props) {
         value={value}
         onChange={(e) => onChange(e.target.value as DocumentStatus)}
         className={cn(
-          "appearance-none rounded-full pl-3 pr-7 py-1.5 text-xs font-semibold cursor-pointer border-0 outline-none",
+          "appearance-none rounded-full pl-3 pr-7 py-2 sm:py-1.5 text-xs font-semibold cursor-pointer border-0 outline-none",
           "bg-white/90 text-slate-700 backdrop-blur-sm",
         )}
       >

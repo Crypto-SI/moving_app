@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Loader2 } from "lucide-react";
@@ -14,6 +14,32 @@ export default function JoinPage() {
   const [newDestination, setNewDestination] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkExistingMembership() {
+      const supabase = createBrowserClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        router.replace("/login");
+        return;
+      }
+
+      const { data: existing } = await supabase
+        .from("moving_move_members")
+        .select("move_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (existing) {
+        router.replace("/dashboard");
+      }
+    }
+
+    checkExistingMembership();
+  }, [router]);
 
   async function handleCreate() {
     setError(null);

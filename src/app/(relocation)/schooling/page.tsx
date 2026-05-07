@@ -83,7 +83,7 @@ export default function SchoolingPage() {
               </div>
               <div className="rounded-[24px] bg-slate-900 p-5 text-white">
                 <p className="text-sm text-slate-300">Fee per year</p>
-                <p className="mt-3 font-serif text-4xl">{formatCurrency(entry.fee_per_year, "USD")}</p>
+                <p className="mt-3 font-serif text-3xl sm:text-4xl">{formatCurrency(entry.fee_per_year, "USD")}</p>
                 <p className="mt-2 text-sm text-slate-300">Distance from home: {entry.distance_from_home}</p>
               </div>
             </div>

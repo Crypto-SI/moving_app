@@ -65,7 +65,7 @@ export default function HousingPage() {
               <img
                 src={home.image_url}
                 alt={home.property_title}
-                className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-6 sm:-mt-6 rounded-t-[1.75rem]"
+                className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-5 sm:-mt-5 rounded-t-[1.75rem]"
               />
             ) : null}
             <div>

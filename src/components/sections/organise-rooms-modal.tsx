@@ -181,7 +181,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
                       className="flex items-center gap-2 rounded-2xl border border-white/70 bg-white/75 p-3"
                     >
                       {editingId === room.id ? (
-                        <>
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                           <Input
                             value={editingName}
                             onChange={(e) => setEditingName(e.target.value)}
@@ -192,17 +192,19 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
                             className="flex-1"
                             autoFocus
                           />
-                          <Button
-                            onClick={() => handleRename(room.id)}
-                            disabled={actionLoading === room.id || !editingName.trim()}
-                            className="shrink-0"
-                          >
-                            {actionLoading === room.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
-                          </Button>
-                          <Button variant="ghost" onClick={cancelEdit} className="shrink-0">
-                            Cancel
-                          </Button>
-                        </>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => handleRename(room.id)}
+                              disabled={actionLoading === room.id || !editingName.trim()}
+                              className="shrink-0"
+                            >
+                              {actionLoading === room.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
+                            </Button>
+                            <Button variant="ghost" onClick={cancelEdit} className="shrink-0">
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
                       ) : (
                         <>
                           <span className="flex-1 text-sm font-medium text-slate-900">{room.room_name}</span>

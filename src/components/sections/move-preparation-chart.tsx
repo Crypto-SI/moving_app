@@ -146,7 +146,7 @@ export function MovePreparationChart({
   return (
     <>
       <Card>
-        <div className="flex items-end justify-between gap-3">
+        <div className="flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
               Move Preparation
