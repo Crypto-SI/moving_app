@@ -152,9 +152,22 @@ export interface MiscNote {
   date_added: string;
 }
 
-export interface Relocation {
+export interface Move {
   id: string;
   move_date: string;
   destination: string;
   notes: string;
+  invite_code: string;
+  created_at: string;
+  updated_at: string;
 }
+
+export interface MoveMember {
+  id: string;
+  move_id: string;
+  user_id: string;
+  role: "owner" | "collaborator";
+  joined_at: string;
+}
+
+export type { Move as Relocation };

@@ -4,6 +4,7 @@ import { Loader2, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
+import { AuthButton } from "@/components/layout/auth-button";
 
 type Mode = "login" | "signup";
 
@@ -33,7 +34,7 @@ export default function LoginPage() {
         setLoading(false);
         return;
       }
-      window.location.href = "/dashboard";
+      window.location.href = "/join";
     } else {
       const { error: signupError } = await supabase.auth.signUp({
         email,
@@ -52,6 +53,9 @@ export default function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4 py-12">
+      <div className="fixed top-4 right-4 z-50">
+        <AuthButton />
+      </div>
       <div className="w-full max-w-[420px] space-y-8">
         <div className="text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500/20 to-amber-500/20">

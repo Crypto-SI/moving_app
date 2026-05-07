@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { getMoveIdForUser } from "@/lib/move-context";
 import { ShippingLeg } from "@/lib/types";
 
 const SHIPPING_LEGS: Array<{ id: ShippingLeg; label: string; route: string }> = [
@@ -136,11 +137,9 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
 
     setLoading(true);
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
-      setError("You must be logged in to add a quote.");
+    const moveId = await getMoveIdForUser();
+    if (!moveId) {
+      setError("You must be in a move to add a quote.");
       setLoading(false);
       return;
     }
@@ -148,7 +147,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
     const { data: quoteData, error: quoteError } = await supabase
       .from("moving_shipping_quotes")
       .insert({
-        user_id: user.id,
+        move_id: moveId,
         company_name: form.company_name.trim(),
         contact_name: form.contact_name.trim(),
         email: form.email.trim(),
@@ -175,7 +174,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
       const { data: containerData, error: containerError } = await supabase
         .from("moving_shipping_containers")
         .insert({
-          user_id: user.id,
+          move_id: moveId,
           shipping_quote_id: quoteId,
           container_label: container.container_label.trim(),
           tracking_number: container.tracking_number.trim(),
@@ -193,7 +192,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
       const enabledLegs = container.leg_quotes.filter((lq) => lq.enabled && lq.amount > 0);
       if (enabledLegs.length > 0) {
         const legInserts = enabledLegs.map((lq) => ({
-          user_id: user.id,
+          move_id: moveId,
           shipping_quote_id: quoteId,
           container_id: containerData.id,
           leg: lq.leg,

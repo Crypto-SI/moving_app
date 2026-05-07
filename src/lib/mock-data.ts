@@ -20,6 +20,9 @@ export const relocation: Relocation = {
   move_date: "2026-08-18",
   destination: "Accra, Ghana",
   notes: "",
+  invite_code: "MOCK1234",
+  created_at: "2026-01-01T00:00:00Z",
+  updated_at: "2026-01-01T00:00:00Z",
 };
 
 export const familyMembers: FamilyMember[] = [

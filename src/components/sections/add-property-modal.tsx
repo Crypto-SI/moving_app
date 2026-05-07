@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Toggle } from "@/components/ui/toggle";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
+import { getMoveIdForUser } from "@/lib/move-context";
 import type { HousingOption } from "@/lib/types";
 
 const CURRENCIES = ["GBP", "USD", "EUR", "GHS"];
@@ -102,12 +103,10 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
 
     setLoading(true);
     const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const moveId = await getMoveIdForUser();
 
-    if (!user) {
-      setError("You must be signed in to add a property.");
+    if (!moveId) {
+      setError("You must be in a move to add a property.");
       setLoading(false);
       return;
     }
@@ -115,6 +114,14 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
     let imageUrl = "";
 
     if (imageFile) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setError("You must be signed in.");
+        setLoading(false);
+        return;
+      }
       const ext = imageFile.name.split(".").pop() ?? "jpg";
       const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error: uploadError } = await supabase.storage
@@ -132,7 +139,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
     }
 
     const { error: insertError } = await supabase.from("moving_housing_options").insert({
-      user_id: user.id,
+      move_id: moveId,
       property_title: form.property_title.trim(),
       location: form.location.trim(),
       advert_link: form.advert_link.trim(),

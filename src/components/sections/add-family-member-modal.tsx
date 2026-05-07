@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
+import { getMoveIdForUser } from "@/lib/move-context";
 
 const RELATIONSHIP_OPTIONS = ["Parent", "Child", "Spouse", "Sibling", "Other"];
 
@@ -60,12 +61,10 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
 
     setLoading(true);
     const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const moveId = await getMoveIdForUser();
 
-    if (!user) {
-      setError("You must be signed in to add a family member.");
+    if (!moveId) {
+      setError("You must be in a move to add a family member.");
       setLoading(false);
       return;
     }
@@ -73,6 +72,14 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
     let profilePhotoUrl: string | null = null;
 
     if (photoFile) {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) {
+        setError("You must be signed in.");
+        setLoading(false);
+        return;
+      }
       const ext = photoFile.name.split(".").pop() ?? "jpg";
       const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const { error: uploadError } = await supabase.storage
@@ -90,7 +97,7 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
     }
 
     const { error: insertError } = await supabase.from("moving_family_members").insert({
-      user_id: user.id,
+      move_id: moveId,
       full_name: form.full_name.trim(),
       relationship: form.relationship,
       date_of_birth: form.date_of_birth || null,

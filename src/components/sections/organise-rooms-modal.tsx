@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { getMoveIdForUser } from "@/lib/move-context";
 
 interface Room {
   id: string;
@@ -25,15 +26,13 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const fetchRooms = useCallback(async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    const moveId = await getMoveIdForUser();
+    if (!moveId) return;
 
     const { data } = await supabase
       .from("moving_inventory_rooms")
       .select("id, room_name, sort_order")
-      .eq("user_id", user.id)
+      .eq("move_id", moveId)
       .order("sort_order");
 
     if (data) setRooms(data);
@@ -54,10 +53,8 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
     setError(null);
     setActionLoading("add");
 
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
+    const moveId = await getMoveIdForUser();
+    if (!moveId) {
       setActionLoading(null);
       return;
     }
@@ -65,7 +62,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
     const maxSort = rooms.length > 0 ? Math.max(...rooms.map((r) => r.sort_order)) : 0;
 
     const { error: insertError } = await supabase.from("moving_inventory_rooms").insert({
-      user_id: user.id,
+      move_id: moveId,
       room_name: name,
       sort_order: maxSort + 1,
     });

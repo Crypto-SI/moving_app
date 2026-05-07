@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/lib/supabase";
+import { getMoveIdForUser } from "@/lib/move-context";
 import { InventoryStatus } from "@/lib/types";
 
 const STATUS_OPTIONS: InventoryStatus[] = ["present", "required", "will purchase in country"];
@@ -59,8 +60,14 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
       return;
     }
     setLoading(true);
+    const moveId = await getMoveIdForUser();
+    if (!moveId) {
+      setError("You must be in a move to add an item.");
+      setLoading(false);
+      return;
+    }
     const { error: insertError } = await supabase.from("moving_inventory_items").insert({
-      user_id: "7d6633d4-f8ca-44b2-a4eb-b7d36bf3b103",
+      move_id: moveId,
       room_id: form.room_id,
       item_name: form.item_name.trim(),
       quantity: form.quantity,

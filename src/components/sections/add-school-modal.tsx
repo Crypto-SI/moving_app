@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
+import { getMoveIdForUser } from "@/lib/move-context";
 import { useFamilyMembers } from "@/lib/data-hooks";
 import type { SchoolEntry } from "@/lib/types";
 
@@ -81,12 +82,10 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
 
     setLoading(true);
     const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const moveId = await getMoveIdForUser();
 
-    if (!user) {
-      setError("You must be signed in to add a school option.");
+    if (!moveId) {
+      setError("You must be in a move to add a school option.");
       setLoading(false);
       return;
     }
@@ -94,7 +93,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
     const { error: insertError } = await supabase
       .from("moving_school_entries")
       .insert({
-        user_id: user.id,
+        move_id: moveId,
         family_member_id: form.family_member_id || null,
         school_name: form.school_name.trim(),
         address: form.address.trim(),

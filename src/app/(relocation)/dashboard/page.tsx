@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { PageHeader } from "@/components/layout/page-header";
+import { MovePreparationChart } from "@/components/sections/move-preparation-chart";
 import { SchemaPanel } from "@/components/sections/schema-panel";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,8 @@ import {
   useFamilyMembers,
   useHealthcareEntries,
   useHousingOptions,
+  useInventoryItems,
+  useInventoryRooms,
   useSchoolEntries,
   useShippingQuotes,
   mockRecentActivity,
@@ -25,6 +28,8 @@ export default function DashboardPage() {
   const { data: schoolEntries } = useSchoolEntries();
   const { data: healthcareEntries } = useHealthcareEntries();
   const { data: budgetItems } = useBudgetItems();
+  const { data: inventoryRooms } = useInventoryRooms();
+  const { data: inventoryItems } = useInventoryItems();
 
   const stats = [
     { label: "Total family members", value: familyMembers.length.toString() },
@@ -45,6 +50,8 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageHeader title="Dashboard" description="A calm overview of the family move, with the critical path, cost signals, and next decisions surfaced immediately." actionLabel="Create task" />
+
+      <MovePreparationChart familyMembers={familyMembers} documents={documents} inventoryRooms={inventoryRooms} inventoryItems={inventoryItems} />
 
       <section className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
         {stats.map((stat) => (

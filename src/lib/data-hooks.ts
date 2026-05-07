@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useMockDataToggle } from "@/lib/data-context";
+import { useCurrentMove, getMoveIdForUser } from "@/lib/move-context";
 import { createClient as createBrowserClient } from "@/lib/supabase/browser";
 import { getMissingDocumentTypes } from "@/lib/document-requirements";
 import {
@@ -44,6 +45,7 @@ interface DataResult<T> {
 
 function useDataFetcher<T>(tableName: string, mockData: T[], orderBy: string = "created_at"): DataResult<T> {
   const { useMockData } = useMockDataToggle();
+  const { moveId } = useCurrentMove();
   const [data, setData] = useState<T[]>(useMockData ? mockData : []);
   const [loading, setLoading] = useState(!useMockData);
   const mounted = useRef(true);
@@ -55,29 +57,26 @@ function useDataFetcher<T>(tableName: string, mockData: T[], orderBy: string = "
       return;
     }
 
-    setLoading(true);
-    const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
+    if (!moveId) {
       setData([]);
       setLoading(false);
       return;
     }
 
+    setLoading(true);
+    const supabase = createBrowserClient();
+
     const { data: rows } = await supabase
       .from(tableName)
       .select("*")
-      .eq("user_id", user.id)
+      .eq("move_id", moveId)
       .order(orderBy);
 
     if (mounted.current) {
       setData(rows ?? []);
       setLoading(false);
     }
-  }, [useMockData, tableName, mockData, orderBy]);
+  }, [useMockData, moveId, tableName, mockData, orderBy]);
 
   useEffect(() => {
     mounted.current = true;
@@ -113,6 +112,7 @@ interface RawContainer {
 
 export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLegs: ShippingQuoteWithLegs[] } {
   const { useMockData } = useMockDataToggle();
+  const { moveId } = useCurrentMove();
   const [data, setData] = useState<ShippingQuote[]>(useMockData ? mockShippingQuotes : []);
   const [quotesWithLegs, setQuotesWithLegs] = useState<ShippingQuoteWithLegs[]>([]);
   const [loading, setLoading] = useState(!useMockData);
@@ -131,23 +131,20 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
       return;
     }
 
-    setLoading(true);
-    const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
+    if (!moveId) {
       setData([]);
       setQuotesWithLegs([]);
       setLoading(false);
       return;
     }
 
+    setLoading(true);
+    const supabase = createBrowserClient();
+
     const [quotesRes, legsRes, containersRes] = await Promise.all([
-      supabase.from("moving_shipping_quotes").select("*").eq("user_id", user.id).order("created_at"),
-      supabase.from("moving_shipping_leg_quotes").select("*").eq("user_id", user.id).order("created_at"),
-      supabase.from("moving_shipping_containers").select("*").eq("user_id", user.id).order("created_at"),
+      supabase.from("moving_shipping_quotes").select("*").eq("move_id", moveId).order("created_at"),
+      supabase.from("moving_shipping_leg_quotes").select("*").eq("move_id", moveId).order("created_at"),
+      supabase.from("moving_shipping_containers").select("*").eq("move_id", moveId).order("created_at"),
     ]);
 
     const quotes = quotesRes.data ?? [];
@@ -196,7 +193,7 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
       setQuotesWithLegs(built);
       setLoading(false);
     }
-  }, [useMockData]);
+  }, [useMockData, moveId]);
 
   useEffect(() => {
     mounted.current = true;
@@ -250,6 +247,7 @@ interface RelocationResult {
 
 export function useRelocation(): RelocationResult {
   const { useMockData } = useMockDataToggle();
+  const { moveId } = useCurrentMove();
   const [relocation, setRelocation] = useState<Relocation | null>(useMockData ? mockRelocation : null);
   const [loading, setLoading] = useState(!useMockData);
   const mounted = useRef(true);
@@ -261,28 +259,26 @@ export function useRelocation(): RelocationResult {
       return;
     }
 
-    setLoading(true);
-    const supabase = createBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) {
+    if (!moveId) {
       setRelocation(null);
       setLoading(false);
       return;
     }
 
+    setLoading(true);
+    const supabase = createBrowserClient();
+
     const { data } = await supabase
-      .from("moving_relocations")
+      .from("moving_moves")
       .select("*")
-      .eq("user_id", user.id)
+      .eq("id", moveId)
       .maybeSingle();
 
     if (mounted.current) {
       setRelocation(data as Relocation | null);
       setLoading(false);
     }
-  }, [useMockData]);
+  }, [useMockData, moveId]);
 
   useEffect(() => {
     mounted.current = true;
@@ -295,39 +291,29 @@ export function useRelocation(): RelocationResult {
   const updateRelocation = useCallback(
     async (updates: Partial<Pick<Relocation, "move_date" | "destination" | "notes">>) => {
       if (useMockData) {
-        setRelocation((prev) => (prev ? { ...prev, ...updates } : { id: "reloc-1", move_date: "", destination: "Accra, Ghana", notes: "", ...updates }));
+        setRelocation((prev) => (prev ? { ...prev, ...updates } : { id: "reloc-1", move_date: "", destination: "", notes: "", invite_code: "", created_at: "", updated_at: "", ...updates }));
         return;
       }
 
-      const supabase = createBrowserClient();
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!moveId) {
+        throw new Error("No move found — cannot save.");
+      }
 
-      const existing = relocation;
-      if (existing?.id) {
-        const { data } = await supabase
-          .from("moving_relocations")
-          .update(updates)
-          .eq("id", existing.id)
-          .select()
-          .single();
-        if (mounted.current && data) {
-          setRelocation(data as Relocation);
-        }
-      } else {
-        const { data } = await supabase
-          .from("moving_relocations")
-          .insert({ user_id: user.id, ...updates })
-          .select()
-          .single();
-        if (mounted.current && data) {
-          setRelocation(data as Relocation);
-        }
+      const supabase = createBrowserClient();
+
+      const { data, error } = await supabase
+        .from("moving_moves")
+        .update(updates)
+        .eq("id", moveId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (mounted.current && data) {
+        setRelocation(data as Relocation);
       }
     },
-    [useMockData, relocation],
+    [useMockData, moveId],
   );
 
   return { relocation, loading, updateRelocation };
@@ -339,14 +325,11 @@ export async function ensureDocuments(
   familyMembers: FamilyMember[],
   existingDocs: RelocationDocument[],
 ): Promise<void> {
-  const supabase = createBrowserClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return;
+  const moveId = await getMoveIdForUser();
+  if (!moveId) return;
 
   const inserts: {
-    user_id: string;
+    move_id: string;
     family_member_id: string;
     document_type: string;
     status: string;
@@ -357,7 +340,7 @@ export async function ensureDocuments(
     const missing = getMissingDocumentTypes(member.relationship, memberDocs);
     for (const docType of missing) {
       inserts.push({
-        user_id: user.id,
+        move_id: moveId,
         family_member_id: member.id,
         document_type: docType,
         status: "not started",
@@ -366,6 +349,7 @@ export async function ensureDocuments(
   }
 
   if (inserts.length > 0) {
+    const supabase = createBrowserClient();
     await supabase.from("moving_documents").insert(inserts);
   }
 }
