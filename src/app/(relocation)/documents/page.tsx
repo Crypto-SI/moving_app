@@ -47,9 +47,9 @@ export default function DocumentsPage() {
           <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
         </div>
       ) : familyMembers.length === 0 ? (
-        <div className="rounded-[28px] border border-white/70 bg-white/80 p-8 text-center">
-          <p className="text-lg font-semibold text-slate-900">No family members yet</p>
-          <p className="mt-2 text-sm text-slate-500">
+        <div className="rounded-[28px] border border-[var(--border)] bg-white/80 dark:bg-white/5 p-8 text-center">
+          <p className="text-lg font-semibold text-[var(--foreground)]">No family members yet</p>
+          <p className="mt-2 text-sm text-[var(--muted)]">
             Add family members first to see their required documents here.
           </p>
         </div>

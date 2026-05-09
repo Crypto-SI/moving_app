@@ -35,7 +35,7 @@ export function InventoryBoard() {
           title="Household Inventory"
           description="Checklist-driven room grouping makes this section practical for packing, buying locally, and spotting missing essentials early."
         />
-        <p className="text-sm text-slate-500">Loading inventory...</p>
+        <p className="text-sm text-[var(--muted)]">Loading inventory...</p>
       </div>
     );
   }
@@ -61,15 +61,15 @@ export function InventoryBoard() {
               <CardTitle title={room.room_name} subtitle={`${roomItems.length} tracked items`} />
               <div className="space-y-3">
                 {roomItems.map((item) => (
-                  <label key={item.id} className="flex gap-3 rounded-3xl border border-white/70 bg-white/75 p-4">
+                  <label key={item.id} className="flex gap-3 rounded-3xl border border-[var(--border)] dark:bg-white/5 p-4">
                     <input type="checkbox" className="mt-1 h-4 w-4 rounded border-slate-300 text-teal-600" defaultChecked={item.status === "present"} />
                     <div className="flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-semibold text-slate-900">{item.item_name}</p>
+                        <p className="font-semibold text-[var(--foreground)]">{item.item_name}</p>
                         <Badge tone={item.status === "present" ? "success" : item.status === "required" ? "warning" : "accent"}>{item.status}</Badge>
                       </div>
-                      <p className="mt-2 text-sm text-slate-500">Qty {item.quantity}</p>
-                      <p className="mt-1 text-sm text-slate-600">{item.notes}</p>
+                      <p className="mt-2 text-sm text-[var(--muted)]">Qty {item.quantity}</p>
+                      <p className="mt-1 text-sm text-[var(--muted)]">{item.notes}</p>
                     </div>
                   </label>
                 ))}

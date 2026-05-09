@@ -34,14 +34,14 @@ export function AuthButton({ className }: { className?: string }) {
     return (
       <div className={`flex items-center gap-2 ${className ?? ""}`}>
         <div className="hidden items-center gap-1.5 sm:flex">
-          <User className="h-3.5 w-3.5 text-slate-500" />
-          <span className="max-w-[140px] truncate text-xs text-slate-500">{email}</span>
+          <User className="h-3.5 w-3.5 text-[var(--muted)]" />
+          <span className="max-w-[140px] truncate text-xs text-[var(--muted)]">{email}</span>
         </div>
         <button
           type="button"
           onClick={handleLogout}
           disabled={loading}
-          className="flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-60 cursor-pointer"
+          className="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)] disabled:opacity-60 cursor-pointer"
         >
           <LogOut className="h-3.5 w-3.5" />
           Log out
@@ -53,7 +53,7 @@ export function AuthButton({ className }: { className?: string }) {
   return (
     <Link
       href="/login"
-      className={`flex items-center gap-1.5 rounded-full bg-[var(--foreground)] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700 ${className ?? ""}`}
+      className={`flex items-center gap-1.5 rounded-full bg-[var(--foreground)] px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-slate-700 dark:hover:bg-slate-500 ${className ?? ""}`}
     >
       <LogIn className="h-3.5 w-3.5" />
       Log in

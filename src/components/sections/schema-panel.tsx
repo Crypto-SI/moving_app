@@ -10,9 +10,9 @@ export function SchemaPanel() {
       />
       <div className="space-y-4">
         {databaseTableSchemas.map((schema) => (
-          <div key={schema.table} className="rounded-3xl border border-white/70 bg-white/75 p-4">
-            <p className="font-mono text-sm font-semibold text-slate-900">{schema.table}</p>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{schema.columns.join(" • ")}</p>
+          <div key={schema.table} className="rounded-3xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-4">
+            <p className="font-mono text-sm font-semibold text-[var(--foreground)]">{schema.table}</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{schema.columns.join(" • ")}</p>
           </div>
         ))}
       </div>

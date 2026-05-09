@@ -16,8 +16,8 @@ export function PageHeader({
     <div className="mb-6 flex min-w-0 flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="min-w-0">
         <Badge tone="accent" className="mb-3">RelocateGH prototype</Badge>
-        <h1 className="font-serif text-3xl font-semibold text-slate-900 sm:text-4xl">{title}</h1>
-        <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{description}</p>
+        <h1 className="font-serif text-3xl font-semibold text-[var(--foreground)] sm:text-4xl">{title}</h1>
+        <p className="mt-2 max-w-3xl text-sm leading-6 text-[var(--muted)]">{description}</p>
       </div>
       <div className="w-full md:w-auto">
         {actions === undefined ? <Button className="w-full md:w-auto">{actionLabel}</Button> : actions}

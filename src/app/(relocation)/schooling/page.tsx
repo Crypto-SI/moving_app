@@ -21,7 +21,7 @@ function EditButton({
     <button
       type="button"
       onClick={() => onEdit(entry)}
-      className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+      className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 hover:text-slate-600 transition"
       title="Edit school option"
     >
       <Pencil className="h-3.5 w-3.5" />
@@ -73,18 +73,18 @@ export default function SchoolingPage() {
             />
             <div className="grid gap-4 xl:grid-cols-[1fr,1fr,0.8fr]">
               <div>
-                <p className="text-sm font-semibold text-slate-700">School details</p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{entry.address}</p>
-                <p className="mt-2 text-sm text-slate-500">{entry.contact_name} • {entry.contact_details}</p>
+                <p className="text-sm font-semibold text-[var(--foreground)]">School details</p>
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{entry.address}</p>
+                <p className="mt-2 text-sm text-[var(--muted)]">{entry.contact_name} • {entry.contact_details}</p>
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-700">Notes</p>
-                <p className="mt-2 text-sm leading-6 text-slate-600">{entry.notes}</p>
+                <p className="text-sm font-semibold text-[var(--foreground)]">Notes</p>
+                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{entry.notes}</p>
               </div>
               <div className="rounded-[24px] bg-slate-900 p-5 text-white">
-                <p className="text-sm text-slate-300">Fee per year</p>
+                <p className="text-sm text-[var(--muted)]">Fee per year</p>
                 <p className="mt-3 font-serif text-3xl sm:text-4xl">{formatCurrency(entry.fee_per_year, "USD")}</p>
-                <p className="mt-2 text-sm text-slate-300">Distance from home: {entry.distance_from_home}</p>
+                <p className="mt-2 text-sm text-[var(--muted)]">Distance from home: {entry.distance_from_home}</p>
               </div>
             </div>
           </Card>

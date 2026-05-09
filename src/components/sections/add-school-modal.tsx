@@ -133,15 +133,15 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
                   Schooling
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">
+                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">
                   Add school option
                 </h3>
               </div>
               <button
-                className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+                className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10"
                 onClick={handleClose}
               >
                 <X className="h-5 w-5" />
@@ -150,13 +150,13 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Child
                 </label>
                 <select
                   value={form.family_member_id}
                   onChange={(e) => update("family_member_id", e.target.value)}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                 >
                   <option value="">Select a child</option>
                   {children.map((child) => (
@@ -168,7 +168,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   School name *
                 </label>
                 <Input
@@ -179,7 +179,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Address
                 </label>
                 <Input
@@ -191,7 +191,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Contact name
                   </label>
                   <Input
@@ -201,7 +201,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Contact details
                   </label>
                   <Input
@@ -214,7 +214,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Fee per year
                   </label>
                   <Input
@@ -229,13 +229,13 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Application status
                   </label>
                   <select
                     value={form.application_status}
                     onChange={(e) => update("application_status", e.target.value)}
-                    className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                    className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   >
                     {APPLICATION_STATUSES.map((s) => (
                       <option key={s} value={s}>
@@ -248,7 +248,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Year group
                   </label>
                   <Input
@@ -258,7 +258,7 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Distance from home
                   </label>
                   <Input
@@ -270,14 +270,14 @@ export function AddSchoolModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Notes
                 </label>
                 <textarea
                   value={form.notes}
                   onChange={(e) => update("notes", e.target.value)}
                   rows={3}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   placeholder="Optional notes about this school"
                 />
               </div>
@@ -386,15 +386,15 @@ export function EditSchoolModal({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
               Schooling
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-slate-900">
+            <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">
               Edit school option
             </h3>
           </div>
           <button
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+            className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10"
             onClick={onClose}
           >
             <X className="h-5 w-5" />
@@ -403,13 +403,13 @@ export function EditSchoolModal({
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               Child
             </label>
             <select
               value={form.family_member_id}
               onChange={(e) => update("family_member_id", e.target.value)}
-              className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+              className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
             >
               <option value="">Select a child</option>
               {children.map((child) => (
@@ -421,7 +421,7 @@ export function EditSchoolModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               School name *
             </label>
             <Input
@@ -432,7 +432,7 @@ export function EditSchoolModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               Address
             </label>
             <Input
@@ -444,7 +444,7 @@ export function EditSchoolModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Contact name
               </label>
               <Input
@@ -454,7 +454,7 @@ export function EditSchoolModal({
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Contact details
               </label>
               <Input
@@ -467,7 +467,7 @@ export function EditSchoolModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Fee per year
               </label>
               <Input
@@ -482,13 +482,13 @@ export function EditSchoolModal({
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Application status
               </label>
               <select
                 value={form.application_status}
                 onChange={(e) => update("application_status", e.target.value)}
-                className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               >
                 {APPLICATION_STATUSES.map((s) => (
                   <option key={s} value={s}>
@@ -501,7 +501,7 @@ export function EditSchoolModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Year group
               </label>
               <Input
@@ -511,7 +511,7 @@ export function EditSchoolModal({
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Distance from home
               </label>
               <Input
@@ -523,14 +523,14 @@ export function EditSchoolModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               Notes
             </label>
             <textarea
               value={form.notes}
               onChange={(e) => update("notes", e.target.value)}
               rows={3}
-              className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+              className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               placeholder="Optional notes about this school"
             />
           </div>

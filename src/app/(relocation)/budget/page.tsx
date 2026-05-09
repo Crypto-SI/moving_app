@@ -16,15 +16,15 @@ export default function BudgetPage() {
 
       <section className="grid gap-4 md:grid-cols-3">
         <Card>
-          <p className="text-sm text-slate-500">Total planned</p>
+          <p className="text-sm text-[var(--muted)]">Total planned</p>
           <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalPlanned, "GBP")}</p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-500">Total actual</p>
+          <p className="text-sm text-[var(--muted)]">Total actual</p>
           <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalActual, "GBP")}</p>
         </Card>
         <Card>
-          <p className="text-sm text-slate-500">Remaining difference</p>
+          <p className="text-sm text-[var(--muted)]">Remaining difference</p>
           <p className="mt-4 break-words font-serif text-3xl sm:text-4xl">{formatCurrency(totalPlanned - totalActual, "GBP")}</p>
         </Card>
       </section>
@@ -38,10 +38,10 @@ export default function BudgetPage() {
               return (
                 <div key={item.id}>
                   <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
-                    <span className="font-semibold text-slate-700">{item.item_name}</span>
-                    <span className="text-slate-500">{item.category}</span>
+                    <span className="font-semibold text-[var(--foreground)]">{item.item_name}</span>
+                    <span className="text-[var(--muted)]">{item.category}</span>
                   </div>
-                  <div className="h-3 rounded-full bg-white/70">
+                  <div className="h-3 rounded-full dark:bg-white/10">
                     <div className="h-3 rounded-full bg-gradient-to-r from-teal-600 to-amber-400" style={{ width: `${Math.min(fill, 100)}%` }} />
                   </div>
                 </div>
@@ -54,12 +54,12 @@ export default function BudgetPage() {
           <CardTitle title="Budget detail" subtitle="Planned cost, actual cost, status, due date, and notes." />
           <div className="grid gap-3 md:hidden">
             {budgetItems.map((item) => (
-              <div key={item.id} className="rounded-[28px] border border-white/70 bg-white/80 p-4">
+              <div key={item.id} className="rounded-[28px] border border-[var(--border)] dark:bg-white/5 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <p className="font-semibold text-slate-900">{item.item_name}</p>
-                  <span className="text-sm capitalize text-slate-500">{item.status}</span>
+                  <p className="font-semibold text-[var(--foreground)]">{item.item_name}</p>
+                  <span className="text-sm capitalize text-[var(--muted)]">{item.status}</span>
                 </div>
-                <div className="mt-3 grid gap-2 text-sm text-slate-600">
+                <div className="mt-3 grid gap-2 text-sm text-[var(--muted)]">
                   <p className="capitalize">{item.category}</p>
                   <p>Planned: {formatCurrency(item.planned_cost, item.currency)}</p>
                   <p>Actual: {formatCurrency(item.actual_cost, item.currency)}</p>
@@ -71,7 +71,7 @@ export default function BudgetPage() {
           </div>
           <div className="overflow-x-auto">
             <table className="hidden min-w-full text-left text-sm md:table">
-              <thead className="text-slate-500">
+              <thead className="text-[var(--muted)]">
                 <tr>
                   <th className="px-3 py-3 font-medium">Category</th>
                   <th className="px-3 py-3 font-medium">Item</th>
@@ -83,11 +83,11 @@ export default function BudgetPage() {
               </thead>
               <tbody>
                 {budgetItems.map((item) => (
-                  <tr key={item.id} className="border-t border-white/70">
+                  <tr key={item.id} className="border-t border-[var(--border)]">
                     <td className="px-3 py-4 capitalize">{item.category}</td>
                     <td className="px-3 py-4">
-                      <p className="font-semibold text-slate-900">{item.item_name}</p>
-                      <p className="text-slate-500">{item.notes}</p>
+                      <p className="font-semibold text-[var(--foreground)]">{item.item_name}</p>
+                      <p className="text-[var(--muted)]">{item.notes}</p>
                     </td>
                     <td className="px-3 py-4">{formatCurrency(item.planned_cost, item.currency)}</td>
                     <td className="px-3 py-4">{formatCurrency(item.actual_cost, item.currency)}</td>

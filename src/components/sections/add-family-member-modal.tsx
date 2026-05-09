@@ -127,22 +127,22 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
           <Card className="w-full max-w-lg p-4 sm:p-6" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Family members</p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">Add family member</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Family members</p>
+                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Add family member</h3>
               </div>
-              <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100" onClick={() => setOpen(false)}>
+              <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Profile photo</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Profile photo</label>
                 <div className="flex items-center gap-4">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
+                    className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition hover:border-teal-400 hover:text-teal-500 dark:border-slate-600 dark:bg-white/5"
                   >
                     {photoPreview ? (
                       <img src={photoPreview} alt="Preview" className="h-16 w-16 rounded-full object-cover" />
@@ -150,7 +150,7 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
                       <ImagePlus className="h-6 w-6" />
                     )}
                   </button>
-                  <span className="text-sm text-slate-500">
+                  <span className="text-sm text-[var(--muted)]">
                     {photoFile ? photoFile.name : "Click to upload a photo"}
                   </span>
                   <input
@@ -164,16 +164,16 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Full name</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Full name</label>
                 <Input value={form.full_name} onChange={(e) => update("full_name", e.target.value)} placeholder="e.g. Ama Mensah" />
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Relationship</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Relationship</label>
                 <select
                   value={form.relationship}
                   onChange={(e) => update("relationship", e.target.value)}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                 >
                   <option value="">Select relationship</option>
                   {RELATIONSHIP_OPTIONS.map((r) => (
@@ -185,17 +185,17 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Date of birth</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Date of birth</label>
                 <Input type="date" value={form.date_of_birth} onChange={(e) => update("date_of_birth", e.target.value)} />
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Notes</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
                 <textarea
                   value={form.notes}
                   onChange={(e) => update("notes", e.target.value)}
                   rows={3}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   placeholder="Optional notes about this family member"
                 />
               </div>

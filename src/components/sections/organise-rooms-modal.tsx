@@ -146,10 +146,10 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
           <Card className="w-full max-w-lg max-h-[80vh] flex flex-col p-4 sm:p-6" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Manage rooms</p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">Organise rooms</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Manage rooms</p>
+                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Organise rooms</h3>
               </div>
-              <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100" onClick={() => setOpen(false)}>
+              <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -170,15 +170,15 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               {loading ? (
-                <p className="py-4 text-center text-sm text-slate-500">Loading rooms...</p>
+                <p className="py-4 text-center text-sm text-[var(--muted)]">Loading rooms...</p>
               ) : rooms.length === 0 ? (
-                <p className="py-4 text-center text-sm text-slate-500">No rooms yet. Add your first room above.</p>
+                <p className="py-4 text-center text-sm text-[var(--muted)]">No rooms yet. Add your first room above.</p>
               ) : (
                 <ul className="space-y-2">
                   {rooms.map((room) => (
                     <li
                       key={room.id}
-                      className="flex items-center gap-2 rounded-2xl border border-white/70 bg-white/75 p-3"
+                      className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-3"
                     >
                       {editingId === room.id ? (
                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -207,16 +207,16 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
                         </div>
                       ) : (
                         <>
-                          <span className="flex-1 text-sm font-medium text-slate-900">{room.room_name}</span>
+                          <span className="flex-1 text-sm font-medium text-[var(--foreground)]">{room.room_name}</span>
                           <button
-                            className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
+                            className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-300"
                             onClick={() => startEdit(room)}
                             disabled={actionLoading !== null}
                           >
                             <Pencil className="h-4 w-4" />
                           </button>
                           <button
-                            className="rounded-full p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600"
+                            className="rounded-full p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/30"
                             onClick={() => setConfirmDeleteId(room.id)}
                             disabled={actionLoading !== null}
                           >
@@ -234,11 +234,11 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
               )}
 
               {confirmDeleteId ? (
-                <div className="rounded-2xl border border-rose-200 bg-rose-50 p-4">
-                  <p className="text-sm font-medium text-slate-900">
+                <div className="rounded-2xl border border-rose-200 bg-rose-50 dark:border-rose-800/40 dark:bg-rose-900/20 p-4">
+                  <p className="text-sm font-medium text-[var(--foreground)]">
                     Delete &ldquo;{rooms.find((r) => r.id === confirmDeleteId)?.room_name}&rdquo; and all its items?
                   </p>
-                  <p className="mt-1 text-xs text-slate-500">This action cannot be undone.</p>
+                  <p className="mt-1 text-xs text-[var(--muted)]">This action cannot be undone.</p>
                   <div className="mt-3 flex justify-end gap-2">
                     <Button variant="secondary" onClick={() => setConfirmDeleteId(null)}>
                       Cancel

@@ -101,10 +101,10 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
       <Card className="w-full max-w-sm p-5 sm:p-6" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Profile photo</p>
-            <h3 className="mt-1 text-lg font-semibold text-slate-900 truncate">{member.full_name}</h3>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Profile photo</p>
+            <h3 className="mt-1 text-lg font-semibold text-[var(--foreground)] truncate">{member.full_name}</h3>
           </div>
-          <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100" onClick={onClose}>
+          <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={onClose}>
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -114,10 +114,10 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
             <img
               src={photoUrl}
               alt={member.full_name}
-              className="h-40 w-40 rounded-full object-cover border-2 border-white/70"
+              className="h-40 w-40 rounded-full object-cover border-2 border-[var(--border)]"
             />
           ) : (
-            <div className="flex h-40 w-40 items-center justify-center rounded-full bg-slate-100">
+            <div className="flex h-40 w-40 items-center justify-center rounded-full bg-slate-100 dark:bg-white/10">
               <User className="h-20 w-20 text-slate-300" strokeWidth={1.5} />
             </div>
           )}
@@ -127,7 +127,7 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
 
         {confirmDelete ? (
           <div className="mt-5 space-y-3">
-            <p className="text-center text-sm text-slate-600">
+            <p className="text-center text-sm text-[var(--muted)]">
               Delete <span className="font-semibold">{member.full_name}</span>? This cannot be undone.
             </p>
             <div className="flex justify-center gap-3">
@@ -152,7 +152,7 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
             </Button>
             <Button
               variant="ghost"
-              className="text-rose-600 hover:bg-rose-50 hover:text-rose-700"
+              className="text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-700"
               onClick={() => setConfirmDelete(true)}
               disabled={loading}
             >

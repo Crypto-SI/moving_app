@@ -137,34 +137,34 @@ function InviteCodeModal({ onClose, inviteCode }: { onClose: () => void; inviteC
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4" onClick={onClose}>
-      <div className="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+      <div className="w-full max-w-sm rounded-[28px] bg-[var(--surface)] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Invite</p>
-            <h3 className="mt-2 text-2xl font-semibold text-slate-900">Share invite code</h3>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Invite</p>
+            <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Share invite code</h3>
           </div>
-          <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100" onClick={onClose}>
+          <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={onClose}>
             <X className="h-5 w-5" />
           </button>
         </div>
-        <p className="mt-3 text-sm text-slate-500">
+        <p className="mt-3 text-sm text-[var(--muted)]">
           Share this code with family members so they can join your move.
         </p>
-        <div className="mt-4 flex items-center gap-3 rounded-2xl border-2 border-dashed border-teal-300 bg-teal-50 px-4 py-3">
-          <span className="font-mono text-2xl font-bold tracking-[0.3em] text-teal-700">{inviteCode}</span>
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border-2 border-dashed border-teal-300 dark:border-teal-600 bg-teal-50 dark:bg-teal-900/20 px-4 py-3">
+          <span className="font-mono text-2xl font-bold tracking-[0.3em] text-teal-700 dark:text-teal-300">{inviteCode}</span>
         </div>
         <div className="mt-4 flex gap-3">
           <button
             type="button"
             onClick={handleCopy}
-            className="flex-1 rounded-full bg-[var(--foreground)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+            className="flex-1 rounded-full bg-[var(--foreground)] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700 dark:hover:bg-slate-500"
           >
             {copied ? "Copied!" : "Copy code"}
           </button>
           <button
             type="button"
             onClick={handleShare}
-            className="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="flex-1 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)]"
           >
             Share
           </button>
@@ -253,15 +253,15 @@ function SettingsPanel({
   return (
     <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
       <div
-        className="h-full w-full max-w-[400px] overflow-y-auto rounded-l-[32px] border-l border-white/60 bg-white p-6 shadow-2xl"
+        className="h-full w-full max-w-[400px] overflow-y-auto rounded-l-[32px] border-l border-[var(--border)] bg-[var(--surface)] p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Settings</p>
-            <h3 className="mt-1 text-2xl font-semibold text-slate-900">Preferences</h3>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Settings</p>
+            <h3 className="mt-1 text-2xl font-semibold text-[var(--foreground)]">Preferences</h3>
           </div>
-          <button className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-600" onClick={onClose}>
+          <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10 dark:hover:text-slate-300" onClick={onClose}>
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -270,9 +270,9 @@ function SettingsPanel({
           <button
             type="button"
             onClick={cycleTheme}
-            className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3.5 text-sm text-[var(--foreground)] transition hover:bg-slate-100 dark:hover:bg-white/10"
           >
-            <ThemeIcon className="h-5 w-5 text-slate-500" />
+            <ThemeIcon className="h-5 w-5 text-[var(--muted)]" />
             <span className="flex-1 text-left font-medium">
               {theme === "system"
                 ? `System (${resolved})`
@@ -280,15 +280,15 @@ function SettingsPanel({
                   ? "Dark mode"
                   : "Light mode"}
             </span>
-            <span className="text-xs text-slate-400">Theme</span>
+            <span className="text-xs text-[var(--muted)]">Theme</span>
           </button>
 
           <button
             type="button"
             onClick={onInvite}
-            className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3.5 text-sm text-[var(--foreground)] transition hover:bg-slate-100 dark:hover:bg-white/10"
           >
-            <UserPlus className="h-5 w-5 text-slate-500" />
+            <UserPlus className="h-5 w-5 text-[var(--muted)]" />
             <span className="flex-1 text-left font-medium">Invite</span>
           </button>
 
@@ -296,21 +296,21 @@ function SettingsPanel({
             type="button"
             onClick={handleInstallClick}
             disabled={isStandalone}
-            className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3.5 text-sm text-[var(--foreground)] transition hover:bg-slate-100 dark:hover:bg-white/10 disabled:opacity-50"
           >
-            <Download className="h-5 w-5 text-slate-500" />
+            <Download className="h-5 w-5 text-[var(--muted)]" />
             <span className="flex-1 text-left font-medium">{isStandalone ? "App installed" : "Download app"}</span>
           </button>
 
           {showIosHint && (
-            <p className="px-4 py-2 text-xs text-slate-400">
+            <p className="px-4 py-2 text-xs text-[var(--muted)]">
               Tap the share icon (<Share2 className="inline h-3 w-3" />) then
               &quot;Add to Home Screen&quot; to install.
             </p>
           )}
 
           {showFallbackHint && (
-            <p className="px-4 py-2 text-xs text-slate-400">
+            <p className="px-4 py-2 text-xs text-[var(--muted)]">
               Open your browser menu (⋮) and tap &quot;Install app&quot; or &quot;Add to Home Screen&quot;.
             </p>
           )}
@@ -319,9 +319,9 @@ function SettingsPanel({
             type="button"
             onClick={handleUpdateApp}
             disabled={updating}
-            className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3.5 text-sm text-[var(--foreground)] transition hover:bg-slate-100 dark:hover:bg-white/10 disabled:opacity-50"
           >
-            <svg className="h-5 w-5 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg className="h-5 w-5 text-[var(--muted)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
               <path d="M3 3v5h5" />
               <path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" />
@@ -330,22 +330,22 @@ function SettingsPanel({
             <span className="flex-1 text-left font-medium">{updating ? "Updating…" : "Update app"}</span>
           </button>
 
-          <div className="my-2 border-t border-slate-100" />
+          <div className="my-2 border-t border-[var(--border)]" />
 
           <button
             type="button"
             onClick={handleLogout}
             disabled={loggingOut}
-            className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+            className="flex w-full items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3.5 text-sm text-[var(--foreground)] transition hover:bg-slate-100 dark:hover:bg-white/10 disabled:opacity-50"
           >
-            <LogOut className="h-5 w-5 text-slate-500" />
+            <LogOut className="h-5 w-5 text-[var(--muted)]" />
             <span className="flex-1 text-left font-medium">{loggingOut ? "Logging out…" : "Log out"}</span>
           </button>
 
           <button
             type="button"
             onClick={onLeave}
-            className="flex w-full items-center gap-3 rounded-2xl border border-rose-100 bg-rose-50/50 px-4 py-3.5 text-sm text-rose-600 transition hover:bg-rose-100"
+            className="flex w-full items-center gap-3 rounded-2xl border border-rose-100 dark:border-rose-900/40 bg-rose-50/50 dark:bg-rose-900/20 px-4 py-3.5 text-sm text-rose-600 dark:text-rose-400 transition hover:bg-rose-100 dark:hover:bg-rose-900/30"
           >
             <LogOut className="h-5 w-5" />
             <span className="flex-1 text-left font-medium">Leave move</span>
@@ -462,7 +462,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden text-slate-900">
+    <div className="min-h-screen overflow-x-hidden text-[var(--foreground)]">
       <aside className="fixed inset-y-4 left-4 z-40 hidden w-[288px] overflow-y-auto rounded-[32px] border border-white/60 bg-slate-950/92 p-5 text-white shadow-2xl lg:block">
         <div className="mb-8 flex items-center gap-3">
           <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={44} height={44} className="rounded-2xl object-contain" />
@@ -490,8 +490,8 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className="app-card mt-8 rounded-[28px] p-4 text-slate-800">
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Current move</p>
+        <div className="app-card mt-8 rounded-[28px] p-4 text-[var(--foreground)]">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Current move</p>
           {editingDestination ? (
             <div className="mt-2 space-y-2">
               <input
@@ -499,7 +499,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                 value={editDestination}
                 onChange={(e) => setEditDestination(e.target.value)}
                 placeholder="e.g. Accra, Ghana"
-                className="w-full rounded-xl border border-white/70 bg-white/85 px-3 py-2 text-sm text-slate-700 outline-none focus:border-teal-300"
+                className="w-full rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
               />
               <div className="flex gap-2">
                 {saveDestinationError && (
@@ -517,7 +517,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                   type="button"
                   onClick={handleCancelEditingDestination}
                   disabled={savingDestination}
-                  className="rounded-xl border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-white disabled:opacity-50"
+                  className="rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-1.5 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)] disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -538,7 +538,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
             </>
           )}
           {role && (
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-[var(--muted)]">
               {role === "owner" ? "Owner" : "Collaborator"}
               {inviteCode && (
                 <> &middot; Code: <span className="font-mono font-semibold">{inviteCode}</span></>
@@ -600,15 +600,15 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
       <main className="lg:pl-[324px]">
         <div className="px-3 pb-8 pt-3 sm:px-4 md:px-6 md:pb-10 lg:px-8">
-          <div className="sticky top-0 z-30 mb-6 space-y-3 rounded-[24px] bg-[rgba(244,239,231,0.78)] py-2 shadow-sm backdrop-blur-xl sm:space-y-4 sm:rounded-[30px]">
+          <div className="sticky top-0 z-30 mb-6 space-y-3 rounded-[24px] bg-[var(--header-bg)] py-2 shadow-sm backdrop-blur-xl sm:space-y-4 sm:rounded-[30px]">
             <div className="app-card flex flex-col gap-4 rounded-[28px] px-4 py-4 md:flex-row md:items-center md:justify-between md:px-6">
               <div className="flex min-w-0 items-center gap-3">
-                <button className="shrink-0 rounded-2xl border border-white/70 bg-white/85 p-3 text-slate-700 lg:hidden" onClick={() => setOpen(true)}>
+                <button className="shrink-0 rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] p-3 text-[var(--foreground)] lg:hidden" onClick={() => setOpen(true)}>
                   <Menu className="h-5 w-5" />
                 </button>
                 <div className="min-w-0">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Current section</p>
-                  <h2 className="font-serif text-2xl font-semibold sm:text-3xl">{current?.label ?? "RelocateGH"}</h2>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Current section</p>
+                  <h2 className="font-serif text-2xl font-semibold text-[var(--foreground)] sm:text-3xl">{current?.label ?? "RelocateGH"}</h2>
                 </div>
               </div>
               <div className="flex flex-row flex-wrap items-center gap-2 md:justify-end">
@@ -629,12 +629,12 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
               >
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-                    <span className="text-sm font-semibold text-slate-700">Move date countdown</span>
-                    {moveDate && <span className="text-sm text-slate-500">{getDaysRemaining(moveDate)} days left</span>}
+                    <span className="text-sm font-semibold text-[var(--foreground)]">Move date countdown</span>
+                    {moveDate && <span className="text-sm text-[var(--muted)]">{getDaysRemaining(moveDate)} days left</span>}
                   </div>
                 </div>
                 <div className="flex min-w-0 items-center justify-between gap-3 sm:justify-end">
-                  <span className="text-sm text-slate-500">
+                  <span className="text-sm text-[var(--muted)]">
                     {moveDate ? formatDateShort(moveDate) : "\u2014"}
                   </span>
                   {editingDates ? null : (
@@ -653,12 +653,12 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                 <div className="pt-4">
                   <div className="space-y-2">
                     <div>
-                      <label className="text-xs text-slate-500">Move date</label>
+                      <label className="text-xs text-[var(--muted)]">Move date</label>
                       <input
                         type="date"
                         value={editMoveDate}
                         onChange={(e) => setEditMoveDate(e.target.value)}
-                        className="w-full rounded-xl border border-white/70 bg-white/85 px-3 py-2 text-sm text-slate-700 outline-none focus:border-teal-300"
+                        className="w-full rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-2 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
                       />
                     </div>
                     <div className="flex gap-2">
@@ -677,7 +677,7 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
                         type="button"
                         onClick={handleCancelEditing}
                         disabled={savingDate}
-                        className="rounded-xl border border-white/70 bg-white/85 px-3 py-1.5 text-xs font-semibold text-slate-600 transition hover:bg-white disabled:opacity-50"
+                  className="rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] px-3 py-1.5 text-xs font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)] disabled:opacity-50"
                       >
                         Cancel
                       </button>
@@ -709,16 +709,16 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
 
       {showLeaveConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4" onClick={() => setShowLeaveConfirm(false)}>
-          <div className="w-full max-w-sm rounded-[28px] bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-2xl font-semibold text-slate-900">Leave move?</h3>
-            <p className="mt-2 text-sm text-slate-500">
+          <div className="w-full max-w-sm rounded-[28px] bg-[var(--surface)] p-6 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-semibold text-[var(--foreground)]">Leave move?</h3>
+            <p className="mt-2 text-sm text-[var(--muted)]">
               You will lose access to all data in this move. You can create or join a different move afterwards.
             </p>
             <div className="mt-5 flex gap-3">
               <button
                 type="button"
                 onClick={() => setShowLeaveConfirm(false)}
-                className="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                className="flex-1 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)]"
               >
                 Cancel
               </button>

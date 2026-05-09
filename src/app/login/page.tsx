@@ -61,10 +61,10 @@ export default function LoginPage() {
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500/20 to-amber-500/20">
             <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={64} height={64} className="rounded-[16px] object-contain" />
           </div>
-          <h1 className="font-serif text-4xl font-bold tracking-tight text-slate-900">
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-[var(--foreground)]">
             RelocateGH
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-slate-500">
+          <p className="mt-3 text-base leading-relaxed text-[var(--muted)]">
             Your family relocation command centre. Organise documents, shipping,
             housing, schooling and every detail of your move to Ghana in one
             place.
@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         <div className="app-card grain-overlay rounded-[28px] p-6">
-          <div className="mb-5 flex gap-1 rounded-2xl bg-slate-100/80 p-1">
+          <div className="mb-5 flex gap-1 rounded-2xl bg-slate-100/80 p-1 dark:bg-white/10">
             <button
               type="button"
               onClick={() => {
@@ -82,8 +82,8 @@ export default function LoginPage() {
               }}
               className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                 mode === "login"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-[var(--surface)] text-[var(--foreground)] shadow-sm"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               Log in
@@ -97,8 +97,8 @@ export default function LoginPage() {
               }}
               className={`flex-1 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                 mode === "signup"
-                  ? "bg-white text-slate-900 shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
+                  ? "bg-[var(--surface)] text-[var(--foreground)] shadow-sm"
+                  : "text-[var(--muted)] hover:text-[var(--foreground)]"
               }`}
             >
               Sign up
@@ -107,7 +107,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
                 Email
               </label>
               <input
@@ -116,12 +116,12 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               />
             </div>
 
             <div>
-              <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
                 Password
               </label>
               <input
@@ -131,18 +131,18 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 minLength={6}
-                className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               />
             </div>
 
             {error ? (
-              <p className="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600">
+              <p className="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600 dark:bg-rose-900/20 dark:text-rose-400">
                 {error}
               </p>
             ) : null}
 
             {success ? (
-              <p className="rounded-xl bg-emerald-50 px-4 py-2.5 text-sm text-emerald-700">
+              <p className="rounded-xl bg-emerald-50 px-4 py-2.5 text-sm text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-400">
                 {success}
               </p>
             ) : null}
@@ -150,7 +150,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 disabled:opacity-60 cursor-pointer"
+              className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 dark:hover:bg-slate-500 disabled:opacity-60 cursor-pointer"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
@@ -163,18 +163,18 @@ export default function LoginPage() {
         </div>
 
         <div className="text-center space-y-2">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-[var(--muted)]">
             Built by{" "}
             <a
               href="https://webarastudio.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-teal-700 underline decoration-teal-300 underline-offset-2 transition hover:text-teal-600"
+              className="font-semibold text-teal-700 dark:text-teal-400 underline decoration-teal-300 dark:decoration-teal-600 underline-offset-2 transition hover:text-teal-600 dark:hover:text-teal-300"
             >
               WebAra Studio
             </a>
           </p>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[var(--muted)]">
             A cryptoSI DAO project
           </p>
         </div>

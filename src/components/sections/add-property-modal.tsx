@@ -180,13 +180,13 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
                   Housing
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">Add property</h3>
+                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Add property</h3>
               </div>
               <button
-                className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+                className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10"
                 onClick={handleClose}
               >
                 <X className="h-5 w-5" />
@@ -195,14 +195,14 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Property photo
                 </label>
                 <div className="flex items-center gap-4">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
+                    className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
                   >
                     {imagePreview ? (
                       <img
@@ -214,7 +214,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                       <ImagePlus className="h-6 w-6" />
                     )}
                   </button>
-                  <span className="text-sm text-slate-500">
+                  <span className="text-sm text-[var(--muted)]">
                     {imageFile ? imageFile.name : "Click to upload a photo"}
                   </span>
                   <input
@@ -228,7 +228,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Property title *
                 </label>
                 <Input
@@ -239,7 +239,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Location *
                 </label>
                 <Input
@@ -250,7 +250,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Advert link
                 </label>
                 <Input
@@ -263,7 +263,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Number of rooms *
                   </label>
                   <Input
@@ -276,7 +276,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Boys quarters
                   </label>
                   <div className="mt-2">
@@ -292,7 +292,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">Rent</label>
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Rent</label>
                   <Input
                     type="number"
                     min={0}
@@ -303,13 +303,13 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-sm font-medium text-slate-700">
+                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                     Currency
                   </label>
                   <select
                     value={form.currency}
                     onChange={(e) => update("currency", e.target.value)}
-                    className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                    className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   >
                     {CURRENCIES.map((c) => (
                       <option key={c} value={c}>
@@ -320,11 +320,11 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 space-y-4">
-                <p className="text-sm font-semibold text-slate-900">Agent details</p>
+              <div className="rounded-2xl border border-[var(--border)] bg-white/70 dark:bg-white/5 p-4 space-y-4">
+                <p className="text-sm font-semibold text-[var(--foreground)]">Agent details</p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                       Agent / landlord name
                     </label>
                     <Input
@@ -334,7 +334,7 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                       Contact details
                     </label>
                     <Input
@@ -347,12 +347,12 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Notes</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
                 <textarea
                   value={form.notes}
                   onChange={(e) => update("notes", e.target.value)}
                   rows={3}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   placeholder="Optional notes about this property"
                 />
               </div>
@@ -484,13 +484,13 @@ export function EditPropertyModal({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
               Housing
             </p>
-            <h3 className="mt-2 text-2xl font-semibold text-slate-900">Edit property</h3>
+            <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Edit property</h3>
           </div>
           <button
-            className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+            className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10"
             onClick={onClose}
           >
             <X className="h-5 w-5" />
@@ -499,14 +499,14 @@ export function EditPropertyModal({
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               Property photo
             </label>
             <div className="flex items-center gap-4">
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
+                className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
               >
                 {imagePreview ? (
                   <img
@@ -518,7 +518,7 @@ export function EditPropertyModal({
                   <ImagePlus className="h-6 w-6" />
                 )}
               </button>
-              <span className="text-sm text-slate-500">
+              <span className="text-sm text-[var(--muted)]">
                 {imageFile ? imageFile.name : "Click to change photo"}
               </span>
               <input
@@ -532,7 +532,7 @@ export function EditPropertyModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
               Property title *
             </label>
             <Input
@@ -543,7 +543,7 @@ export function EditPropertyModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Location *</label>
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Location *</label>
             <Input
               value={form.location}
               onChange={(e) => update("location", e.target.value)}
@@ -552,7 +552,7 @@ export function EditPropertyModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Advert link</label>
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Advert link</label>
             <Input
               type="url"
               value={form.advert_link}
@@ -563,7 +563,7 @@ export function EditPropertyModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Number of rooms *
               </label>
               <Input
@@ -576,7 +576,7 @@ export function EditPropertyModal({
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                 Boys quarters
               </label>
               <div className="mt-2">
@@ -592,7 +592,7 @@ export function EditPropertyModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Rent</label>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Rent</label>
               <Input
                 type="number"
                 min={0}
@@ -603,11 +603,11 @@ export function EditPropertyModal({
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Currency</label>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Currency</label>
               <select
                 value={form.currency}
                 onChange={(e) => update("currency", e.target.value)}
-                className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               >
                 {CURRENCIES.map((c) => (
                   <option key={c} value={c}>
@@ -618,11 +618,11 @@ export function EditPropertyModal({
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 space-y-4">
-            <p className="text-sm font-semibold text-slate-900">Agent details</p>
+          <div className="rounded-2xl border border-[var(--border)] bg-white/70 dark:bg-white/5 p-4 space-y-4">
+            <p className="text-sm font-semibold text-[var(--foreground)]">Agent details</p>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Agent / landlord name
                 </label>
                 <Input
@@ -632,7 +632,7 @@ export function EditPropertyModal({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">
                   Contact details
                 </label>
                 <Input
@@ -646,7 +646,7 @@ export function EditPropertyModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Viewed</label>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Viewed</label>
               <div className="mt-2">
                 <Toggle
                   checked={form.viewed}
@@ -657,7 +657,7 @@ export function EditPropertyModal({
               </div>
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-slate-700">Shortlisted</label>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Shortlisted</label>
               <div className="mt-2">
                 <Toggle
                   checked={form.shortlisted}
@@ -670,12 +670,12 @@ export function EditPropertyModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700">Notes</label>
+            <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
             <textarea
               value={form.notes}
               onChange={(e) => update("notes", e.target.value)}
               rows={3}
-              className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+              className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
               placeholder="Optional notes about this property"
             />
           </div>

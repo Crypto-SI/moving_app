@@ -130,7 +130,7 @@ export function MovePreparationChart({
   if (activeCategories.length === 0) {
     return (
       <Card>
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-[var(--muted)]">
           Add family members, documents, rooms, or furniture to start tracking
           move preparation progress.
         </p>
@@ -148,10 +148,10 @@ export function MovePreparationChart({
       <Card>
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
               Move Preparation
             </p>
-            <p className="mt-1 font-serif text-3xl font-semibold text-slate-900">
+            <p className="mt-1 font-serif text-3xl font-semibold text-[var(--foreground)]">
               {totalPercentage}%
             </p>
           </div>
@@ -174,7 +174,7 @@ export function MovePreparationChart({
                 key={cat.key}
                 className={cn(
                   "h-5 first:rounded-l-full last:rounded-r-full",
-                  cat.isComplete ? cat.color : "bg-slate-200",
+                  cat.isComplete ? cat.color : "bg-slate-200 dark:bg-slate-700",
                 )}
                 style={{ width: `${width}%` }}
                 title={`${cat.label}: ${cat.isComplete ? "Complete" : "Incomplete"}`}
@@ -192,14 +192,14 @@ export function MovePreparationChart({
                   cat.dotColor,
                 )}
               />
-              <span className="text-xs font-medium text-slate-600">
+              <span className="text-xs font-medium text-[var(--muted)]">
                 {cat.label}
               </span>
             </div>
           ))}
         </div>
 
-        <p className="mt-3 text-xs text-slate-400">
+        <p className="mt-3 text-xs text-[var(--muted)]">
           Click the bar to see a detailed breakdown
         </p>
       </Card>
@@ -215,15 +215,15 @@ export function MovePreparationChart({
           >
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">
                   Preparation Breakdown
                 </p>
-                <h3 className="mt-2 text-2xl font-semibold text-slate-900">
+                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">
                   Move Preparation — {totalPercentage}% Complete
                 </h3>
               </div>
               <button
-                className="rounded-full p-2 text-slate-500 hover:bg-slate-100"
+                className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10"
                 onClick={() => setModalOpen(false)}
               >
                 <X className="h-5 w-5" />
@@ -236,7 +236,7 @@ export function MovePreparationChart({
                   key={cat.key}
                   className={cn(
                     "h-3 first:rounded-l-full last:rounded-r-full",
-                    cat.isComplete ? cat.color : "bg-slate-200",
+                    cat.isComplete ? cat.color : "bg-slate-200 dark:bg-slate-700",
                   )}
                   style={{ width: `${categoryShare}%` }}
                 />
@@ -248,7 +248,7 @@ export function MovePreparationChart({
                 <div
                   key={cat.key}
                   className={cn(
-                    "rounded-3xl border border-white/70 p-4",
+                    "rounded-3xl border border-[var(--border)] p-4",
                     cat.bgColor,
                   )}
                 >
@@ -259,7 +259,7 @@ export function MovePreparationChart({
                         cat.dotColor,
                       )}
                     />
-                    <h4 className="font-semibold text-slate-900">
+                    <h4 className="font-semibold text-[var(--foreground)]">
                       {cat.label}
                     </h4>
                     <Badge tone={cat.isComplete ? "success" : "warning"}>
@@ -277,14 +277,14 @@ export function MovePreparationChart({
                           {cat.completedItems.map((item, i) => (
                             <li
                               key={i}
-                              className="text-sm leading-5 text-slate-700"
+                              className="text-sm leading-5 text-[var(--foreground)]"
                             >
                               {item}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="mt-1.5 text-sm text-slate-400">None yet</p>
+                        <p className="mt-1.5 text-sm text-[var(--muted)]">None yet</p>
                       )}
                     </div>
 
@@ -297,14 +297,14 @@ export function MovePreparationChart({
                           {cat.remainingItems.map((item, i) => (
                             <li
                               key={i}
-                              className="text-sm leading-5 text-slate-700"
+                              className="text-sm leading-5 text-[var(--foreground)]"
                             >
                               {item}
                             </li>
                           ))}
                         </ul>
                       ) : (
-                        <p className="mt-1.5 text-sm text-slate-400">
+                        <p className="mt-1.5 text-sm text-[var(--muted)]">
                           All done
                         </p>
                       )}

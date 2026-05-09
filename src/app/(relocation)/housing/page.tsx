@@ -22,7 +22,7 @@ function EditButton({
     <button
       type="button"
       onClick={() => onEdit(property)}
-      className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+      className="rounded-full p-1.5 text-slate-400 dark:hover:bg-white/10 hover:text-slate-600 transition"
       title="Edit property"
     >
       <Pencil className="h-3.5 w-3.5" />
@@ -69,22 +69,22 @@ export default function HousingPage() {
               />
             ) : null}
             <div>
-              <h3 className="text-xl font-semibold text-slate-900">{home.property_title}</h3>
-              <p className="mt-1 text-sm text-slate-500">{home.location}{home.postcode ? ` • ${home.postcode}` : ""}</p>
+              <h3 className="text-xl font-semibold text-[var(--foreground)]">{home.property_title}</h3>
+              <p className="mt-1 text-sm text-[var(--muted)]">{home.location}{home.postcode ? ` • ${home.postcode}` : ""}</p>
             </div>
             <p className="mt-4 break-words font-serif text-3xl font-semibold sm:text-4xl">{formatCurrency(home.rent, home.currency)}</p>
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-[var(--muted)]">
               {home.number_of_rooms} rooms • Boys quarters: {home.has_boys_quarters ? "Yes" : "No"}
               {home.furnished_status ? ` • ${home.furnished_status}` : ""}
             </p>
             {(home.distance_to_school || home.distance_to_hospital) && (
-              <div className="mt-4 grid gap-3 text-sm text-slate-600 sm:grid-cols-2">
-                {home.distance_to_school ? <div className="rounded-2xl bg-white/70 p-3">School: {home.distance_to_school}</div> : null}
-                {home.distance_to_hospital ? <div className="rounded-2xl bg-white/70 p-3">Hospital: {home.distance_to_hospital}</div> : null}
+              <div className="mt-4 grid gap-3 text-sm text-[var(--muted)] sm:grid-cols-2">
+                {home.distance_to_school ? <div className="rounded-2xl bg-white/70 dark:bg-white/10 p-3">School: {home.distance_to_school}</div> : null}
+                {home.distance_to_hospital ? <div className="rounded-2xl bg-white/70 dark:bg-white/10 p-3">Hospital: {home.distance_to_hospital}</div> : null}
               </div>
             )}
-            {home.landlord_or_agent_name && <p className="mt-4 text-sm text-slate-600">{home.landlord_or_agent_name}</p>}
-            {home.notes && <p className="mt-3 text-sm leading-6 text-slate-600">{home.notes}</p>}
+            {home.landlord_or_agent_name && <p className="mt-4 text-sm text-[var(--muted)]">{home.landlord_or_agent_name}</p>}
+            {home.notes && <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{home.notes}</p>}
           </Card>
         ))}
       </div>
@@ -93,9 +93,9 @@ export default function HousingPage() {
         <CardTitle title="Property comparison" subtitle="Advert links, contact details, shortlist state, and decision status remain easy to scan." />
         <div className="grid gap-3 md:hidden">
           {housingOptions.map((home) => (
-            <div key={home.id} className="rounded-[28px] border border-white/70 bg-white/80 p-4">
+            <div key={home.id} className="rounded-[28px] border border-[var(--border)] bg-white/80 dark:bg-white/5 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-semibold text-slate-900">{home.property_title}</p>
+                <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
                 <div className="flex items-center gap-2">
                   <EditButton property={home} onEdit={setEditProperty} />
                   <Badge tone={home.decision_status === "accepted" ? "success" : home.shortlisted ? "accent" : "neutral"}>{home.decision_status}</Badge>
@@ -104,7 +104,7 @@ export default function HousingPage() {
               {home.image_url ? (
                 <img src={home.image_url} alt={home.property_title} className="mt-3 w-full h-40 object-cover rounded-2xl" />
               ) : null}
-              <div className="mt-3 grid gap-2 text-sm text-slate-600">
+              <div className="mt-3 grid gap-2 text-sm text-[var(--muted)]">
                 <p>{home.location} • {home.postcode}</p>
                 <p>Rent {formatCurrency(home.rent, home.currency)} • Deposit {formatCurrency(home.deposit_amount, home.currency)}</p>
                 <p>{home.number_of_rooms} rooms • Boys quarters: {home.has_boys_quarters ? "Yes" : "No"}</p>
@@ -118,7 +118,7 @@ export default function HousingPage() {
         </div>
         <div className="overflow-x-auto">
           <table className="hidden min-w-full text-left text-sm md:table">
-            <thead className="text-slate-500">
+            <thead className="text-[var(--muted)]">
               <tr>
                 <th className="px-3 py-3 font-medium">Property</th>
                 <th className="px-3 py-3 font-medium">Rent</th>
@@ -134,15 +134,15 @@ export default function HousingPage() {
             </thead>
             <tbody>
               {housingOptions.map((home) => (
-                <tr key={home.id} className="border-t border-white/70">
+                <tr key={home.id} className="border-t border-[var(--border)]">
                   <td className="px-3 py-4">
                     <div className="flex items-center gap-3">
                       {home.image_url ? (
                         <img src={home.image_url} alt={home.property_title} className="h-10 w-10 rounded-xl object-cover" />
                       ) : null}
                       <div>
-                        <p className="font-semibold text-slate-900">{home.property_title}</p>
-                        <p className="text-slate-500">{home.location} • {home.postcode}</p>
+                <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
+                        <p className="text-[var(--muted)]">{home.location} • {home.postcode}</p>
                       </div>
                     </div>
                   </td>
@@ -150,7 +150,7 @@ export default function HousingPage() {
                   <td className="px-3 py-4">{formatCurrency(home.deposit_amount, home.currency)}</td>
                   <td className="px-3 py-4">{home.number_of_rooms}</td>
                   <td className="px-3 py-4">{home.has_boys_quarters ? "Yes" : "No"}</td>
-                  <td className="px-3 py-4 text-slate-600">{home.landlord_or_agent_name}<br />{home.contact_details}</td>
+                  <td className="px-3 py-4 text-[var(--muted)]">{home.landlord_or_agent_name}<br />{home.contact_details}</td>
                   <td className="px-3 py-4">{home.viewed ? "Yes" : "No"}</td>
                   <td className="px-3 py-4">{home.shortlisted ? "Yes" : "No"}</td>
                   <td className="px-3 py-4">

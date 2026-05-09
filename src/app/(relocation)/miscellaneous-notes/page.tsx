@@ -19,8 +19,8 @@ export default function MiscellaneousNotesPage() {
         <CardTitle title="Search and filters" subtitle="Placeholder controls for later live note filtering." />
         <div className="grid gap-4 lg:grid-cols-3">
           <Input placeholder="Search title, note body, or linked section" />
-          <div className="rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-500">All categories</div>
-          <div className="rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-500">All priorities</div>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--muted)]">All categories</div>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--muted)]">All priorities</div>
         </div>
       </Card>
 
@@ -30,14 +30,14 @@ export default function MiscellaneousNotesPage() {
             <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-xl font-semibold text-slate-900">{note.title}</h3>
+                  <h3 className="text-xl font-semibold text-[var(--foreground)]">{note.title}</h3>
                   <Badge tone={note.priority === "urgent" ? "danger" : note.priority === "high" ? "warning" : "accent"}>{note.priority}</Badge>
                 </div>
-                <p className="mt-2 text-sm text-slate-500">{note.category} • Linked to {note.linked_section} • Added {formatDate(note.date_added)}</p>
+                <p className="mt-2 text-sm text-[var(--muted)]">{note.category} • Linked to {note.linked_section} • Added {formatDate(note.date_added)}</p>
               </div>
               <Badge tone="neutral">{familyMembers.find((person) => person.id === note.linked_family_member_id)?.full_name ?? "General note"}</Badge>
             </div>
-            <p className="mt-4 text-sm leading-7 text-slate-600">{note.note_body}</p>
+            <p className="mt-4 text-sm leading-7 text-[var(--muted)]">{note.note_body}</p>
           </Card>
         ))}
       </div>

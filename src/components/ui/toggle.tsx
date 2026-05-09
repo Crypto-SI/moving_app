@@ -21,7 +21,7 @@ export function Toggle({
       onClick={() => onChange(!checked)}
       className="flex items-center gap-2 rounded-full text-sm font-medium transition"
     >
-      <span className="text-slate-600">{checked ? (labelOn ?? "Demo data") : (labelOff ?? "Live data")}</span>
+      <span className="text-[var(--muted)]">{checked ? (labelOn ?? "Demo data") : (labelOff ?? "Live data")}</span>
       <span
         className={cn(
           "relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200",

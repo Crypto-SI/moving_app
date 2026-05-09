@@ -243,20 +243,20 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
           <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 my-4 sm:my-8" onClick={(event) => event.stopPropagation()}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500">Add shipping quote</p>
-                <h3 className="mt-2 text-xl font-semibold text-slate-900 sm:text-2xl">New quote</h3>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Add shipping quote</p>
+                <h3 className="mt-2 text-xl font-semibold text-[var(--foreground)] sm:text-2xl">New quote</h3>
               </div>
-              <button className="rounded-full p-2 text-slate-500 hover:bg-slate-100" onClick={() => setOpen(false)}>
+              <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-5">
-              <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 space-y-4">
-                <p className="text-sm font-semibold text-slate-900">Shipper details</p>
+              <div className="rounded-2xl border border-[var(--border)] bg-white/70 dark:bg-white/5 p-4 space-y-4">
+                <p className="text-sm font-semibold text-[var(--foreground)]">Shipper details</p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Company name *</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Company name *</label>
                     <Input
                       value={form.company_name}
                       onChange={(e) => updateForm("company_name", e.target.value)}
@@ -264,7 +264,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Contact name</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Contact name</label>
                     <Input
                       value={form.contact_name}
                       onChange={(e) => updateForm("contact_name", e.target.value)}
@@ -272,7 +272,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Email</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Email</label>
                     <Input
                       type="email"
                       value={form.email}
@@ -281,7 +281,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Phone</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Phone</label>
                     <Input
                       type="tel"
                       value={form.phone}
@@ -292,15 +292,15 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 space-y-4">
-                <p className="text-sm font-semibold text-slate-900">Quote details</p>
+              <div className="rounded-2xl border border-[var(--border)] bg-white/70 dark:bg-white/5 p-4 space-y-4">
+                <p className="text-sm font-semibold text-[var(--foreground)]">Quote details</p>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Currency</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Currency</label>
                     <select
                       value={form.currency}
                       onChange={(e) => updateForm("currency", e.target.value)}
-                      className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                      className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                     >
                       {CURRENCIES.map((c) => (
                         <option key={c} value={c}>
@@ -310,7 +310,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Shipment type</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Shipment type</label>
                     <Input
                       value={form.shipment_type}
                       onChange={(e) => updateForm("shipment_type", e.target.value)}
@@ -318,7 +318,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Collection date</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Collection date</label>
                     <Input
                       type="date"
                       value={form.collection_date}
@@ -326,7 +326,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-slate-700">Estimated delivery</label>
+                    <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Estimated delivery</label>
                     <Input
                       type="date"
                       value={form.estimated_delivery_date}
@@ -334,7 +334,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     />
                   </div>
                 </div>
-                <label className="flex items-center gap-2 text-sm text-slate-700">
+                <label className="flex items-center gap-2 text-sm text-[var(--foreground)]">
                   <input
                     type="checkbox"
                     checked={form.insurance_included}
@@ -347,7 +347,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <p className="text-sm font-semibold text-slate-900">Containers</p>
+                  <p className="text-sm font-semibold text-[var(--foreground)]">Containers</p>
                   <Button variant="secondary" type="button" onClick={addContainer} className="text-xs px-3 py-1.5">
                     <Plus className="mr-1 h-3.5 w-3.5" />
                     Add container
@@ -357,15 +357,15 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                 {form.containers.map((container, ci) => (
                   <div
                     key={ci}
-                    className="rounded-2xl border border-slate-200/80 bg-white/70 p-4 space-y-4"
+                    className="rounded-2xl border border-[var(--border)] bg-white/70 dark:bg-white/5 p-4 space-y-4"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <p className="text-sm font-semibold text-slate-900">{container.container_label}</p>
+                      <p className="text-sm font-semibold text-[var(--foreground)]">{container.container_label}</p>
                       {form.containers.length > 1 && (
                         <button
                           type="button"
                           onClick={() => removeContainer(ci)}
-                          className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-500"
+                          className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 dark:hover:bg-rose-900/30 hover:text-rose-500"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -374,7 +374,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
 
                     <div className="grid gap-3 sm:grid-cols-3">
                       <div>
-                        <label className="mb-1 block text-sm font-medium text-slate-700">Label</label>
+                        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Label</label>
                         <Input
                           value={container.container_label}
                           onChange={(e) => updateContainer(ci, { container_label: e.target.value })}
@@ -382,7 +382,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-sm font-medium text-slate-700">Tracking number</label>
+                        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Tracking number</label>
                         <Input
                           value={container.tracking_number}
                           onChange={(e) => updateContainer(ci, { tracking_number: e.target.value })}
@@ -390,11 +390,11 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                         />
                       </div>
                       <div>
-                        <label className="mb-1 block text-sm font-medium text-slate-700">Type</label>
+                        <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Type</label>
                         <select
                           value={container.container_type}
                           onChange={(e) => updateContainer(ci, { container_type: e.target.value })}
-                          className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition focus:border-teal-300 focus:bg-white"
+                          className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                         >
                           {CONTAINER_TYPES.map((t) => (
                             <option key={t} value={t}>
@@ -406,10 +406,10 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                     </div>
 
                     <div className="space-y-3">
-                      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-slate-500">Leg pricing</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.15em] text-[var(--muted)]">Leg pricing</p>
                       {container.leg_quotes.map((lq, li) => (
-                        <div key={lq.leg} className="rounded-xl border border-slate-100 bg-white/50 p-3 space-y-3">
-                          <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                        <div key={lq.leg} className="rounded-xl border border-slate-100 dark:border-slate-700 bg-white/50 dark:bg-white/5 p-3 space-y-3">
+                          <label className="flex items-center gap-2 text-sm font-medium text-[var(--foreground)]">
                             <input
                               type="checkbox"
                               checked={lq.enabled}
@@ -421,7 +421,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                           {lq.enabled && (
                             <div className="grid gap-3 sm:grid-cols-3 pl-0 sm:pl-6">
                               <div>
-                                <label className="mb-1 block text-xs font-medium text-slate-500">Amount</label>
+                                <label className="mb-1 block text-xs font-medium text-[var(--muted)]">Amount</label>
                                 <Input
                                   type="number"
                                   min={0}
@@ -434,7 +434,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                                 />
                               </div>
                               <div>
-                                <label className="mb-1 block text-xs font-medium text-slate-500">Route</label>
+                                <label className="mb-1 block text-xs font-medium text-[var(--muted)]">Route</label>
                                 <Input
                                   value={lq.route}
                                   onChange={(e) => updateLegQuote(ci, li, { route: e.target.value })}
@@ -442,7 +442,7 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
                                 />
                               </div>
                               <div>
-                                <label className="mb-1 block text-xs font-medium text-slate-500">Notes</label>
+                                <label className="mb-1 block text-xs font-medium text-[var(--muted)]">Notes</label>
                                 <Input
                                   value={lq.notes}
                                   onChange={(e) => updateLegQuote(ci, li, { notes: e.target.value })}
@@ -459,12 +459,12 @@ export function AddShippingQuoteModal({ onSuccess }: { onSuccess: () => void }) 
               </div>
 
               <div>
-                <label className="mb-1 block text-sm font-medium text-slate-700">Notes</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
                 <textarea
                   value={form.notes}
                   onChange={(e) => updateForm("notes", e.target.value)}
                   rows={3}
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                   placeholder="Any additional notes about this quote"
                 />
               </div>

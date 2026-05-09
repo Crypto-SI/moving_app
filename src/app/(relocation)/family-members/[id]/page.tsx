@@ -35,7 +35,7 @@ export default function FamilyMemberProfilePage() {
               <img
                 src={member.profile_photo_url}
                 alt={member.full_name}
-                className="h-20 w-20 rounded-full object-cover border-2 border-white/70"
+                className="h-20 w-20 rounded-full object-cover border-2 border-[var(--border)]"
               />
             ) : (
               <div className="flex h-20 w-20 items-center justify-center rounded-full bg-teal-50 text-teal-600 text-2xl font-semibold">
@@ -43,10 +43,10 @@ export default function FamilyMemberProfilePage() {
               </div>
             )}
           </div>
-          <div className="space-y-3 text-sm text-slate-600">
-            <p><span className="font-semibold text-slate-900">Relationship:</span> {member.relationship}</p>
-            <p><span className="font-semibold text-slate-900">Date of birth:</span> {formatDate(member.date_of_birth)}</p>
-            <p><span className="font-semibold text-slate-900">Notes:</span> {member.notes}</p>
+          <div className="space-y-3 text-sm text-[var(--muted)]">
+            <p><span className="font-semibold text-[var(--foreground)]">Relationship:</span> {member.relationship}</p>
+            <p><span className="font-semibold text-[var(--foreground)]">Date of birth:</span> {formatDate(member.date_of_birth)}</p>
+            <p><span className="font-semibold text-[var(--foreground)]">Notes:</span> {member.notes}</p>
           </div>
         </Card>
 
@@ -54,17 +54,17 @@ export default function FamilyMemberProfilePage() {
           <CardTitle title="Linked documents" subtitle="Document readiness for this family member." />
           <div className="space-y-3">
             {memberDocuments.map((item) => (
-              <div key={item.id} className="rounded-3xl border border-white/70 bg-white/75 p-4">
+              <div key={item.id} className="rounded-3xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-4">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="font-semibold text-slate-900 capitalize">{item.document_type}</p>
+                  <p className="font-semibold text-[var(--foreground)] capitalize">{item.document_type}</p>
                   <Badge tone={item.status === "approved" ? "success" : item.status === "expired" ? "danger" : item.status === "in progress" ? "warning" : "accent"}>{item.status}</Badge>
                 </div>
-                <p className="mt-2 text-sm text-slate-600">Issue {formatDate(item.issue_date)} • Expiry {formatDate(item.expiry_date)} • Ref {item.reference_number}</p>
-                <p className="mt-1 text-sm text-slate-500">Original: {item.original_available ? "Yes" : "No"} • Copy: {item.copy_available ? "Yes" : "No"}</p>
+                <p className="mt-2 text-sm text-[var(--muted)]">Issue {formatDate(item.issue_date)} • Expiry {formatDate(item.expiry_date)} • Ref {item.reference_number}</p>
+                <p className="mt-1 text-sm text-[var(--muted)]">Original: {item.original_available ? "Yes" : "No"} • Copy: {item.copy_available ? "Yes" : "No"}</p>
               </div>
             ))}
             {memberDocuments.length === 0 && (
-              <p className="text-sm text-slate-500">No documents tracked yet. Visit the Documents page to auto-generate required documents.</p>
+              <p className="text-sm text-[var(--muted)]">No documents tracked yet. Visit the Documents page to auto-generate required documents.</p>
             )}
           </div>
         </Card>
@@ -74,10 +74,10 @@ export default function FamilyMemberProfilePage() {
         <CardTitle title="Healthcare links" subtitle="Providers associated with this family member." />
         <div className="grid gap-4 lg:grid-cols-2">
           {memberHealthcare.map((item) => (
-            <div key={item.id} className="rounded-3xl border border-white/70 bg-white/75 p-4">
-              <p className="font-semibold text-slate-900">{item.doctor_name}</p>
-              <p className="mt-2 text-sm text-slate-600">{item.address}</p>
-              <p className="mt-2 text-sm text-slate-500">{item.contact_details}</p>
+            <div key={item.id} className="rounded-3xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-4">
+              <p className="font-semibold text-[var(--foreground)]">{item.doctor_name}</p>
+              <p className="mt-2 text-sm text-[var(--muted)]">{item.address}</p>
+              <p className="mt-2 text-sm text-[var(--muted)]">{item.contact_details}</p>
             </div>
           ))}
         </div>

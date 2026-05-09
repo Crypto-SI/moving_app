@@ -46,8 +46,8 @@ export default function DashboardPage() {
       <section className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
         {stats.map((stat) => (
           <Card key={stat.label}>
-            <p className="text-sm text-slate-500">{stat.label}</p>
-            <p className="mt-4 break-words font-serif text-3xl font-semibold text-slate-900 sm:text-4xl">{stat.value}</p>
+            <p className="text-sm text-[var(--muted)]">{stat.label}</p>
+            <p className="mt-4 break-words font-serif text-3xl font-semibold text-[var(--foreground)] sm:text-4xl">{stat.value}</p>
           </Card>
         ))}
       </section>

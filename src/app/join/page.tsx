@@ -161,10 +161,10 @@ export default function JoinPage() {
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-[20px] bg-gradient-to-br from-teal-500/20 to-amber-500/20">
             <Image src="/Relocateghlogo.png" alt="RelocateGH logo" width={64} height={64} className="rounded-[16px] object-contain" />
           </div>
-          <h1 className="font-serif text-4xl font-bold tracking-tight text-slate-900">
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-[var(--foreground)]">
             RelocateGH
           </h1>
-          <p className="mt-3 text-base leading-relaxed text-slate-500">
+          <p className="mt-3 text-base leading-relaxed text-[var(--muted)]">
             Join or create a move to start collaborating with your family.
           </p>
         </div>
@@ -173,7 +173,7 @@ export default function JoinPage() {
           {mode === "choose" && (
             <div className="space-y-3">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
+                <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
                   Where are you moving to?
                 </label>
                 <input
@@ -181,29 +181,29 @@ export default function JoinPage() {
                   value={newDestination}
                   onChange={(e) => setNewDestination(e.target.value)}
                   placeholder="e.g. Accra, Ghana"
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                 />
               </div>
               <button
                 type="button"
                 onClick={handleCreate}
                 disabled={loading || !newDestination.trim()}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 disabled:opacity-60 cursor-pointer"
+                className="flex w-full items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 dark:hover:bg-slate-500 disabled:opacity-60 cursor-pointer"
               >
                 {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                 Create a new move
               </button>
 
               <div className="flex items-center gap-3 py-2">
-                <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-xs font-medium text-slate-400">or</span>
-                <div className="h-px flex-1 bg-slate-200" />
+                <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
+                <span className="text-xs font-medium text-[var(--muted)]">or</span>
+                <div className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
               </div>
 
               <button
                 type="button"
                 onClick={() => setMode("join")}
-                className="flex w-full items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition duration-200 hover:bg-slate-50 disabled:opacity-60 cursor-pointer"
+                className="flex w-full items-center justify-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition duration-200 hover:bg-[var(--surface-strong)] disabled:opacity-60 cursor-pointer"
               >
                 Join an existing move
               </button>
@@ -213,7 +213,7 @@ export default function JoinPage() {
           {mode === "join" && (
             <form onSubmit={handleJoin} className="space-y-4">
               <div>
-                <label className="mb-1.5 block text-sm font-medium text-slate-700">
+                <label className="mb-1.5 block text-sm font-medium text-[var(--foreground)]">
                   Invite code
                 </label>
                 <input
@@ -222,12 +222,12 @@ export default function JoinPage() {
                   value={inviteCode}
                   onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
                   placeholder="e.g. A1B2C3D4"
-                  className="w-full rounded-2xl border border-white/70 bg-white/85 px-4 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-teal-300 focus:bg-white"
+                  className="w-full rounded-2xl border border-[var(--input-border)] bg-[var(--input-bg)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                 />
               </div>
 
               {error ? (
-                <p className="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600">
+                <p className="rounded-xl bg-rose-50 px-4 py-2.5 text-sm text-rose-600 dark:bg-rose-900/20 dark:text-rose-400">
                   {error}
                 </p>
               ) : null}
@@ -236,14 +236,14 @@ export default function JoinPage() {
                 <button
                   type="button"
                   onClick={() => { setMode("choose"); setError(null); }}
-                  className="flex-1 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 cursor-pointer"
+                  className="flex-1 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-semibold text-[var(--foreground)] transition hover:bg-[var(--surface-strong)] cursor-pointer"
                 >
                   Back
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 disabled:opacity-60 cursor-pointer"
+                  className="flex-1 flex items-center justify-center gap-2 rounded-full bg-[var(--foreground)] px-4 py-3 text-sm font-semibold text-white transition duration-200 hover:bg-slate-700 dark:hover:bg-slate-500 disabled:opacity-60 cursor-pointer"
                 >
                   {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
                   Join move
