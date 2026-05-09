@@ -3,33 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCallback, useState } from "react";
-import { Pencil } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
-import { AddPropertyModal, EditPropertyModal } from "@/components/sections/add-property-modal";
+import { AddPropertyModal } from "@/components/sections/property/add-property-modal";
+import { EditPropertyModal } from "@/components/sections/property/edit-property-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { EditButton } from "@/components/ui/edit-button";
 import { useHousingOptions } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 import type { HousingOption } from "@/lib/types";
-
-function EditButton({
-  property,
-  onEdit,
-}: {
-  property: HousingOption;
-  onEdit: (p: HousingOption) => void;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={() => onEdit(property)}
-      className="rounded-full p-1.5 text-slate-400 dark:hover:bg-white/10 hover:text-slate-600 transition"
-      title="Edit property"
-    >
-      <Pencil className="h-3.5 w-3.5" />
-    </button>
-  );
-}
 
 export default function HousingPage() {
   const { data: housingOptions, refresh } = useHousingOptions();
@@ -46,11 +28,7 @@ export default function HousingPage() {
   return (
     <div className="space-y-6">
       {editProperty ? (
-        <EditPropertyModal
-          property={editProperty}
-          onSuccess={handleRefresh}
-          onClose={handleEditClose}
-        />
+        <EditPropertyModal property={editProperty} onSuccess={handleRefresh} onClose={handleEditClose} />
       ) : null}
 
       <PageHeader
@@ -63,14 +41,7 @@ export default function HousingPage() {
         {housingOptions.map((home) => (
           <Card key={home.id}>
             {home.image_url ? (
-              <Image
-                src={home.image_url}
-                alt={home.property_title}
-                width={640}
-                height={360}
-                unoptimized
-                className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-5 sm:-mt-5 rounded-t-[1.75rem]"
-              />
+              <Image src={home.image_url} alt={home.property_title} width={640} height={360} unoptimized className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-5 sm:-mt-5 rounded-t-[1.75rem]" />
             ) : null}
             <div>
               <h3 className="text-xl font-semibold text-[var(--foreground)]">{home.property_title}</h3>
@@ -101,7 +72,7 @@ export default function HousingPage() {
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
                 <div className="flex items-center gap-2">
-                  <EditButton property={home} onEdit={setEditProperty} />
+                  <EditButton item={home} onEdit={setEditProperty} title="Edit property" />
                   <Badge tone={home.decision_status === "accepted" ? "success" : home.shortlisted ? "accent" : "neutral"}>{home.decision_status}</Badge>
                 </div>
               </div>
@@ -145,7 +116,7 @@ export default function HousingPage() {
                         <Image src={home.image_url} alt={home.property_title} width={40} height={40} unoptimized className="h-10 w-10 rounded-xl object-cover" />
                       ) : null}
                       <div>
-                <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
+                        <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
                         <p className="text-[var(--muted)]">{home.location} • {home.postcode}</p>
                       </div>
                     </div>
@@ -158,12 +129,10 @@ export default function HousingPage() {
                   <td className="px-3 py-4">{home.viewed ? "Yes" : "No"}</td>
                   <td className="px-3 py-4">{home.shortlisted ? "Yes" : "No"}</td>
                   <td className="px-3 py-4">
-                    <Link href={home.advert_link} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-700 underline underline-offset-4">
-                      View advert
-                    </Link>
+                    <Link href={home.advert_link} target="_blank" rel="noopener noreferrer" className="font-semibold text-teal-700 underline underline-offset-4">View advert</Link>
                   </td>
                   <td className="px-3 py-4">
-                    <EditButton property={home} onEdit={setEditProperty} />
+                    <EditButton item={home} onEdit={setEditProperty} title="Edit property" />
                   </td>
                 </tr>
               ))}

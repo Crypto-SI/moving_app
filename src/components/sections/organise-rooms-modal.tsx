@@ -1,11 +1,11 @@
 "use client";
 
-import { Loader2, Pencil, Plus, Trash2, X } from "lucide-react";
+import { Loader2, Pencil, Plus, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabase";
+import { ModalOverlay } from "@/components/ui/modal-overlay";
+import { createClient as createBrowserClient } from "@/lib/supabase/browser";
 import { getMoveIdForUser } from "@/lib/move-context";
 
 interface Room {
@@ -29,7 +29,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
     const moveId = await getMoveIdForUser();
     if (!moveId) return;
 
-    const { data } = await supabase
+    const { data } = await createBrowserClient()
       .from("moving_inventory_rooms")
       .select("id, room_name, sort_order")
       .eq("move_id", moveId)
@@ -63,7 +63,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
 
     const maxSort = rooms.length > 0 ? Math.max(...rooms.map((r) => r.sort_order)) : 0;
 
-    const { error: insertError } = await supabase.from("moving_inventory_rooms").insert({
+    const { error: insertError } = await createBrowserClient().from("moving_inventory_rooms").insert({
       move_id: moveId,
       room_name: name,
       sort_order: maxSort + 1,
@@ -87,7 +87,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
     setError(null);
     setActionLoading(id);
 
-    const { error: updateError } = await supabase
+    const { error: updateError } = await createBrowserClient()
       .from("moving_inventory_rooms")
       .update({ room_name: name })
       .eq("id", id);
@@ -109,7 +109,7 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
     setError(null);
     setActionLoading(`del-${id}`);
 
-    const { error: deleteError } = await supabase.from("moving_inventory_rooms").delete().eq("id", id);
+    const { error: deleteError } = await createBrowserClient().from("moving_inventory_rooms").delete().eq("id", id);
 
     if (deleteError) {
       setError(deleteError.message);
@@ -141,133 +141,123 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
         Organise rooms
       </Button>
       {open ? (
-        <div
-          className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/50 px-3 py-4 sm:items-center sm:px-4"
-          onClick={() => setOpen(false)}
+        <ModalOverlay
+          label="Manage rooms"
+          title="Organise rooms"
+          onClose={() => setOpen(false)}
+          className="max-h-[80vh] flex flex-col"
         >
-          <Card className="w-full max-w-lg max-h-[80vh] flex flex-col p-4 sm:p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Manage rooms</p>
-                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">Organise rooms</h3>
-              </div>
-              <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            <div className="mt-5 space-y-4 overflow-y-auto flex-1 min-h-0">
-              <div className="flex gap-2">
-                <Input
-                  value={newRoomName}
-                  onChange={(e) => setNewRoomName(e.target.value)}
-                  placeholder="New room name"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") handleAdd();
-                  }}
-                />
-                <Button onClick={handleAdd} disabled={actionLoading === "add" || !newRoomName.trim()} className="shrink-0">
-                  {actionLoading === "add" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
-                </Button>
-              </div>
-
-              {loading ? (
-                <p className="py-4 text-center text-sm text-[var(--muted)]">Loading rooms...</p>
-              ) : rooms.length === 0 ? (
-                <p className="py-4 text-center text-sm text-[var(--muted)]">No rooms yet. Add your first room above.</p>
-              ) : (
-                <ul className="space-y-2">
-                  {rooms.map((room) => (
-                    <li
-                      key={room.id}
-                      className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-3"
-                    >
-                      {editingId === room.id ? (
-                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-                          <Input
-                            value={editingName}
-                            onChange={(e) => setEditingName(e.target.value)}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter") handleRename(room.id);
-                              if (e.key === "Escape") cancelEdit();
-                            }}
-                            className="flex-1"
-                            autoFocus
-                          />
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => handleRename(room.id)}
-                              disabled={actionLoading === room.id || !editingName.trim()}
-                              className="shrink-0"
-                            >
-                              {actionLoading === room.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
-                            </Button>
-                            <Button variant="ghost" onClick={cancelEdit} className="shrink-0">
-                              Cancel
-                            </Button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <span className="flex-1 text-sm font-medium text-[var(--foreground)]">{room.room_name}</span>
-                          <button
-                            className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-300"
-                            onClick={() => startEdit(room)}
-                            disabled={actionLoading !== null}
-                          >
-                            <Pencil className="h-4 w-4" />
-                          </button>
-                          <button
-                            className="rounded-full p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/30"
-                            onClick={() => setConfirmDeleteId(room.id)}
-                            disabled={actionLoading !== null}
-                          >
-                            {actionLoading === `del-${room.id}` ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
-                            )}
-                          </button>
-                        </>
-                      )}
-                    </li>
-                  ))}
-                </ul>
-              )}
-
-              {confirmDeleteId ? (
-                <div className="rounded-2xl border border-rose-200 bg-rose-50 dark:border-rose-800/40 dark:bg-rose-900/20 p-4">
-                  <p className="text-sm font-medium text-[var(--foreground)]">
-                    Delete &ldquo;{rooms.find((r) => r.id === confirmDeleteId)?.room_name}&rdquo; and all its items?
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--muted)]">This action cannot be undone.</p>
-                  <div className="mt-3 flex justify-end gap-2">
-                    <Button variant="secondary" onClick={() => setConfirmDeleteId(null)}>
-                      Cancel
-                    </Button>
-                    <Button
-                      className="bg-rose-600 text-white hover:bg-rose-700"
-                      onClick={() => {
-                        handleDelete(confirmDeleteId);
-                        setConfirmDeleteId(null);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </div>
-              ) : null}
-
-              {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-            </div>
-
-            <div className="mt-5 flex justify-end">
-              <Button variant="secondary" onClick={() => setOpen(false)}>
-                Done
+          <div className="mt-5 space-y-4 overflow-y-auto flex-1 min-h-0">
+            <div className="flex gap-2">
+              <Input
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+                placeholder="New room name"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleAdd();
+                }}
+              />
+              <Button onClick={handleAdd} disabled={actionLoading === "add" || !newRoomName.trim()} className="shrink-0">
+                {actionLoading === "add" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               </Button>
             </div>
-          </Card>
-        </div>
+
+            {loading ? (
+              <p className="py-4 text-center text-sm text-[var(--muted)]">Loading rooms...</p>
+            ) : rooms.length === 0 ? (
+              <p className="py-4 text-center text-sm text-[var(--muted)]">No rooms yet. Add your first room above.</p>
+            ) : (
+              <ul className="space-y-2">
+                {rooms.map((room) => (
+                  <li
+                    key={room.id}
+                    className="flex items-center gap-2 rounded-2xl border border-[var(--border)] bg-white/75 dark:bg-white/5 p-3"
+                  >
+                    {editingId === room.id ? (
+                      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                        <Input
+                          value={editingName}
+                          onChange={(e) => setEditingName(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") handleRename(room.id);
+                            if (e.key === "Escape") cancelEdit();
+                          }}
+                          className="flex-1"
+                          autoFocus
+                        />
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => handleRename(room.id)}
+                            disabled={actionLoading === room.id || !editingName.trim()}
+                            className="shrink-0"
+                          >
+                            {actionLoading === room.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save"}
+                          </Button>
+                          <Button variant="ghost" onClick={cancelEdit} className="shrink-0">
+                            Cancel
+                          </Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="flex-1 text-sm font-medium text-[var(--foreground)]">{room.room_name}</span>
+                        <button
+                          className="rounded-full p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 dark:hover:text-slate-300"
+                          onClick={() => startEdit(room)}
+                          disabled={actionLoading !== null}
+                        >
+                          <Pencil className="h-4 w-4" />
+                        </button>
+                        <button
+                          className="rounded-full p-2 text-slate-400 transition hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-900/30"
+                          onClick={() => setConfirmDeleteId(room.id)}
+                          disabled={actionLoading !== null}
+                        >
+                          {actionLoading === `del-${room.id}` ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </button>
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {confirmDeleteId ? (
+              <div className="rounded-2xl border border-rose-200 bg-rose-50 dark:border-rose-800/40 dark:bg-rose-900/20 p-4">
+                <p className="text-sm font-medium text-[var(--foreground)]">
+                  Delete &ldquo;{rooms.find((r) => r.id === confirmDeleteId)?.room_name}&rdquo; and all its items?
+                </p>
+                <p className="mt-1 text-xs text-[var(--muted)]">This action cannot be undone.</p>
+                <div className="mt-3 flex justify-end gap-2">
+                  <Button variant="secondary" onClick={() => setConfirmDeleteId(null)}>
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-rose-600 text-white hover:bg-rose-700"
+                    onClick={() => {
+                      handleDelete(confirmDeleteId);
+                      setConfirmDeleteId(null);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+
+            {error ? <p className="text-sm text-rose-600">{error}</p> : null}
+          </div>
+
+          <div className="mt-5 flex justify-end">
+            <Button variant="secondary" onClick={() => setOpen(false)}>
+              Done
+            </Button>
+          </div>
+        </ModalOverlay>
       ) : null}
     </>
   );

@@ -1,11 +1,11 @@
 "use client";
 
-import { Loader2, Plus, X } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/lib/supabase";
+import { ModalOverlay } from "@/components/ui/modal-overlay";
+import { createClient as createBrowserClient } from "@/lib/supabase/browser";
 import { getMoveIdForUser } from "@/lib/move-context";
 import { InventoryStatus } from "@/lib/types";
 
@@ -39,7 +39,7 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
 
   useEffect(() => {
     if (!open) return;
-    supabase
+    createBrowserClient()
       .from("moving_inventory_rooms")
       .select("id, room_name")
       .order("sort_order")
@@ -66,7 +66,7 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
       setLoading(false);
       return;
     }
-    const { error: insertError } = await supabase.from("moving_inventory_items").insert({
+    const { error: insertError } = await createBrowserClient().from("moving_inventory_items").insert({
       move_id: moveId,
       room_id: form.room_id,
       item_name: form.item_name.trim(),
@@ -91,86 +91,74 @@ export function AddInventoryItemModal({ onSuccess }: { onSuccess: () => void }) 
         Add inventory item
       </Button>
       {open ? (
-        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-slate-950/50 px-3 py-4 sm:items-center sm:px-4" onClick={() => setOpen(false)}>
-          <Card className="w-full max-w-lg p-4 sm:p-6" onClick={(event) => event.stopPropagation()}>
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--muted)]">Add inventory item</p>
-                <h3 className="mt-2 text-2xl font-semibold text-[var(--foreground)]">New item</h3>
-              </div>
-              <button className="rounded-full p-2 text-[var(--muted)] hover:bg-slate-100 dark:hover:bg-white/10" onClick={() => setOpen(false)}>
-                <X className="h-5 w-5" />
-              </button>
+        <ModalOverlay label="Add inventory item" title="New item" onClose={() => setOpen(false)}>
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Room</label>
+              <select
+                value={form.room_id}
+                onChange={(e) => update("room_id", e.target.value)}
+                className="w-full rounded-2xl border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--foreground)] px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
+              >
+                <option value="">Select a room</option>
+                {rooms.map((r) => (
+                  <option key={r.id} value={r.id}>
+                    {r.room_name}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Item name</label>
+              <Input value={form.item_name} onChange={(e) => update("item_name", e.target.value)} placeholder="e.g. Standing desk" />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Room</label>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Quantity</label>
+                <Input type="number" min={1} value={form.quantity} onChange={(e) => update("quantity", Math.max(1, Number(e.target.value)))} />
+              </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Status</label>
                 <select
-                  value={form.room_id}
-                  onChange={(e) => update("room_id", e.target.value)}
+                  value={form.status}
+                  onChange={(e) => update("status", e.target.value as InventoryStatus)}
                   className="w-full rounded-2xl border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--foreground)] px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
                 >
-                  <option value="">Select a room</option>
-                  {rooms.map((r) => (
-                    <option key={r.id} value={r.id}>
-                      {r.room_name}
+                  {STATUS_OPTIONS.map((s) => (
+                    <option key={s} value={s}>
+                      {s.charAt(0).toUpperCase() + s.slice(1)}
                     </option>
                   ))}
                 </select>
               </div>
+            </div>
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Item name</label>
-                <Input value={form.item_name} onChange={(e) => update("item_name", e.target.value)} placeholder="e.g. Standing desk" />
-              </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
+              <textarea
+                value={form.notes}
+                onChange={(e) => update("notes", e.target.value)}
+                rows={3}
+                className="w-full rounded-2xl border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--foreground)] px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
+                placeholder="Optional notes about this item"
+              />
+            </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Quantity</label>
-                  <Input type="number" min={1} value={form.quantity} onChange={(e) => update("quantity", Math.max(1, Number(e.target.value)))} />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Status</label>
-                  <select
-                    value={form.status}
-                    onChange={(e) => update("status", e.target.value as InventoryStatus)}
-                    className="w-full rounded-2xl border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--foreground)] px-4 py-3 text-sm outline-none transition focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
-                  >
-                    {STATUS_OPTIONS.map((s) => (
-                      <option key={s} value={s}>
-                        {s.charAt(0).toUpperCase() + s.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+            {error ? <p className="text-sm text-rose-600">{error}</p> : null}
 
-              <div>
-                <label className="mb-1 block text-sm font-medium text-[var(--foreground)]">Notes</label>
-                <textarea
-                  value={form.notes}
-                  onChange={(e) => update("notes", e.target.value)}
-                  rows={3}
-                  className="w-full rounded-2xl border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--foreground)] px-4 py-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[var(--accent)] focus:bg-[var(--surface-strong)]"
-                  placeholder="Optional notes about this item"
-                />
-              </div>
-
-              {error ? <p className="text-sm text-rose-600">{error}</p> : null}
-
-              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
-                <Button variant="secondary" type="button" onClick={() => setOpen(false)}>
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={loading}>
-                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  Add item
-                </Button>
-              </div>
-            </form>
-          </Card>
-        </div>
+            <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+              <Button variant="secondary" type="button" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                Add item
+              </Button>
+            </div>
+          </form>
+        </ModalOverlay>
       ) : null}
     </>
   );
