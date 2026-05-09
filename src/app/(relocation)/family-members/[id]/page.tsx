@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
 import { PageHeader } from "@/components/layout/page-header";
@@ -32,9 +33,12 @@ export default function FamilyMemberProfilePage() {
           <CardTitle title="Profile summary" subtitle="Personal details and photo." />
           <div className="flex items-center gap-4 mb-4">
             {member.profile_photo_url ? (
-              <img
+              <Image
                 src={member.profile_photo_url}
                 alt={member.full_name}
+                width={80}
+                height={80}
+                unoptimized
                 className="h-20 w-20 rounded-full object-cover border-2 border-[var(--border)]"
               />
             ) : (

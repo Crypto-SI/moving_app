@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { User } from "lucide-react";
 import { useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
@@ -41,9 +42,12 @@ export default function FamilyMembersPage() {
                     className="shrink-0 cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-teal-400"
                   >
                     {member.profile_photo_url ? (
-                      <img
+                      <Image
                         src={member.profile_photo_url}
                         alt={member.full_name}
+                        width={48}
+                        height={48}
+                        unoptimized
                         className="h-12 w-12 rounded-full object-cover border-2 border-[var(--border)]"
                       />
                     ) : (

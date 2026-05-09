@@ -1,27 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback } from "react";
 import { PageHeader } from "@/components/layout/page-header";
 import { AddInventoryItemModal } from "@/components/sections/add-inventory-item-modal";
 import { OrganiseRoomsModal } from "@/components/sections/organise-rooms-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { useInventoryRooms, useInventoryItems } from "@/lib/data-hooks";
-import { InventoryItem } from "@/lib/types";
 
 export function InventoryBoard() {
   const { data: rooms, loading: roomsLoading, refresh: refreshRooms } = useInventoryRooms();
-  const { data: initialItems, loading: itemsLoading, refresh: refreshItems } = useInventoryItems();
-  const [items, setItems] = useState<InventoryItem[]>(initialItems);
-  const mounted = useRef(true);
-
-  useEffect(() => {
-    mounted.current = true;
-    setItems(initialItems);
-    return () => {
-      mounted.current = false;
-    };
-  }, [initialItems]);
+  const { data: items, loading: itemsLoading, refresh: refreshItems } = useInventoryItems();
 
   const refresh = useCallback(() => {
     refreshRooms();

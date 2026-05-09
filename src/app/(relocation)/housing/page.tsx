@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCallback, useState } from "react";
 import { Pencil } from "lucide-react";
 import { PageHeader } from "@/components/layout/page-header";
@@ -62,9 +63,12 @@ export default function HousingPage() {
         {housingOptions.map((home) => (
           <Card key={home.id}>
             {home.image_url ? (
-              <img
+              <Image
                 src={home.image_url}
                 alt={home.property_title}
+                width={640}
+                height={360}
+                unoptimized
                 className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-5 sm:-mt-5 rounded-t-[1.75rem]"
               />
             ) : null}
@@ -102,7 +106,7 @@ export default function HousingPage() {
                 </div>
               </div>
               {home.image_url ? (
-                <img src={home.image_url} alt={home.property_title} className="mt-3 w-full h-40 object-cover rounded-2xl" />
+                <Image src={home.image_url} alt={home.property_title} width={640} height={320} unoptimized className="mt-3 w-full h-40 object-cover rounded-2xl" />
               ) : null}
               <div className="mt-3 grid gap-2 text-sm text-[var(--muted)]">
                 <p>{home.location} • {home.postcode}</p>
@@ -138,7 +142,7 @@ export default function HousingPage() {
                   <td className="px-3 py-4">
                     <div className="flex items-center gap-3">
                       {home.image_url ? (
-                        <img src={home.image_url} alt={home.property_title} className="h-10 w-10 rounded-xl object-cover" />
+                        <Image src={home.image_url} alt={home.property_title} width={40} height={40} unoptimized className="h-10 w-10 rounded-xl object-cover" />
                       ) : null}
                       <div>
                 <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>

@@ -1,6 +1,6 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseConfig } from "@/lib/supabase/env";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const { url, anonKey } = getSupabaseConfig();
 
-export const supabase = createBrowserClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createBrowserClient(url, anonKey);

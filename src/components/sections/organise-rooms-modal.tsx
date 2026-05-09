@@ -40,11 +40,13 @@ export function OrganiseRoomsModal({ onSuccess }: { onSuccess: () => void }) {
 
   useEffect(() => {
     if (!open) return;
-    setLoading(true);
-    setError(null);
-    setNewRoomName("");
-    setEditingId(null);
-    fetchRooms().finally(() => setLoading(false));
+    void Promise.resolve().then(() => {
+      setLoading(true);
+      setError(null);
+      setNewRoomName("");
+      setEditingId(null);
+      return fetchRooms().finally(() => setLoading(false));
+    });
   }, [open, fetchRooms]);
 
   async function handleAdd() {

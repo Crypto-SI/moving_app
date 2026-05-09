@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ImagePlus, Loader2, Plus, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -145,7 +146,7 @@ export function AddFamilyMemberModal({ onSuccess }: { onSuccess: () => void }) {
                     className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 transition hover:border-teal-400 hover:text-teal-500 dark:border-slate-600 dark:bg-white/5"
                   >
                     {photoPreview ? (
-                      <img src={photoPreview} alt="Preview" className="h-16 w-16 rounded-full object-cover" />
+                      <Image src={photoPreview} alt="Preview" width={64} height={64} unoptimized className="h-16 w-16 rounded-full object-cover" />
                     ) : (
                       <ImagePlus className="h-6 w-6" />
                     )}

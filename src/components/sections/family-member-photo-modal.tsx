@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ImagePlus, Loader2, Trash2, User, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -111,9 +112,12 @@ export function FamilyMemberPhotoModal({ member, onClose, onUpdated, onDeleted }
 
         <div className="mt-5 flex justify-center">
           {photoUrl ? (
-            <img
+            <Image
               src={photoUrl}
               alt={member.full_name}
+              width={160}
+              height={160}
+              unoptimized
               className="h-40 w-40 rounded-full object-cover border-2 border-[var(--border)]"
             />
           ) : (

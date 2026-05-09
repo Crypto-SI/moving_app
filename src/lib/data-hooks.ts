@@ -80,7 +80,7 @@ function useDataFetcher<T>(tableName: string, mockData: T[], orderBy: string = "
 
   useEffect(() => {
     mounted.current = true;
-    fetchData();
+    void Promise.resolve().then(fetchData);
     return () => {
       mounted.current = false;
     };
@@ -197,7 +197,7 @@ export function useShippingQuotes(): DataResult<ShippingQuote> & { quotesWithLeg
 
   useEffect(() => {
     mounted.current = true;
-    fetchData();
+    void Promise.resolve().then(fetchData);
     return () => {
       mounted.current = false;
     };
@@ -282,7 +282,7 @@ export function useRelocation(): RelocationResult {
 
   useEffect(() => {
     mounted.current = true;
-    fetchRelocation();
+    void Promise.resolve().then(fetchRelocation);
     return () => {
       mounted.current = false;
     };

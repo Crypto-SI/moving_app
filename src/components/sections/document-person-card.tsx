@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { CheckCircle, Clock, Loader2, User } from "lucide-react";
 import { useCallback, useState } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -63,9 +64,12 @@ export function DocumentPersonCard({ member, documents, onStatusChange }: Props)
           <div className="flex items-center gap-3">
             <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm text-white">
               {member.profile_photo_url ? (
-                <img
+                <Image
                   src={member.profile_photo_url}
                   alt={member.full_name}
+                  width={48}
+                  height={48}
+                  unoptimized
                   className="h-12 w-12 rounded-full object-cover"
                 />
               ) : (

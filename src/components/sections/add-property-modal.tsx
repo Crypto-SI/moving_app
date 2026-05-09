@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ImagePlus, Loader2, Plus, X } from "lucide-react";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -205,9 +206,12 @@ export function AddPropertyModal({ onSuccess }: { onSuccess: () => void }) {
                     className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
                   >
                     {imagePreview ? (
-                      <img
+                      <Image
                         src={imagePreview}
                         alt="Preview"
+                        width={80}
+                        height={80}
+                        unoptimized
                         className="h-20 w-20 rounded-2xl object-cover"
                       />
                     ) : (
@@ -509,9 +513,12 @@ export function EditPropertyModal({
                 className="flex h-20 w-20 items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-white/5 text-slate-400 transition hover:border-teal-400 hover:text-teal-500"
               >
                 {imagePreview ? (
-                  <img
+                  <Image
                     src={imagePreview}
                     alt="Preview"
+                    width={80}
+                    height={80}
+                    unoptimized
                     className="h-20 w-20 rounded-2xl object-cover"
                   />
                 ) : (
@@ -696,5 +703,4 @@ export function EditPropertyModal({
     </div>
   );
 }
-
 

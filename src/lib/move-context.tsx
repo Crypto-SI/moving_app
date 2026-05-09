@@ -62,7 +62,7 @@ export function MoveProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     mounted.current = true;
-    fetchMove();
+    void Promise.resolve().then(fetchMove);
     return () => {
       mounted.current = false;
     };
