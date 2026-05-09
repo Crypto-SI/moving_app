@@ -42,6 +42,49 @@ interface BeforeInstallPromptEvent extends Event {
   userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
 }
 
+let deferredPrompt: BeforeInstallPromptEvent | null = null;
+let promptListeners: Array<() => void> = [];
+
+if (typeof window !== "undefined") {
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e as BeforeInstallPromptEvent;
+    promptListeners.forEach((fn) => fn());
+    promptListeners = [];
+  });
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").catch(() => {});
+  }
+}
+
+function useDeferredPrompt() {
+  const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(
+    deferredPrompt,
+  );
+
+  useEffect(() => {
+    if (deferredPrompt) {
+      setPrompt(deferredPrompt);
+      return;
+    }
+    const fn = () => setPrompt(deferredPrompt);
+    promptListeners.push(fn);
+    return () => {
+      promptListeners = promptListeners.filter((l) => l !== fn);
+    };
+  }, []);
+
+  const consume = useCallback(async () => {
+    if (!deferredPrompt) return;
+    await deferredPrompt.prompt();
+    deferredPrompt = null;
+    setPrompt(null);
+  }, []);
+
+  return { prompt, consume };
+}
+
 const iconMap = {
   "/dashboard": LayoutDashboard,
   "/family-members": Users,
@@ -151,6 +194,7 @@ function SettingsPanel({
   const [updating, setUpdating] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [showIosHint, setShowIosHint] = useState(false);
+  const [showFallbackHint, setShowFallbackHint] = useState(false);
 
   const handleInstallClick = useCallback(() => {
     const isIOS =
@@ -158,6 +202,10 @@ function SettingsPanel({
       !(window as unknown as { MSStream?: unknown }).MSStream;
     if (isIOS && !installPrompt) {
       setShowIosHint(true);
+      return;
+    }
+    if (!installPrompt) {
+      setShowFallbackHint(true);
       return;
     }
     onInstall();
@@ -261,6 +309,12 @@ function SettingsPanel({
             </p>
           )}
 
+          {showFallbackHint && (
+            <p className="px-4 py-2 text-xs text-slate-400">
+              Open your browser menu (⋮) and tap &quot;Install app&quot; or &quot;Add to Home Screen&quot;.
+            </p>
+          )}
+
           <button
             type="button"
             onClick={handleUpdateApp}
@@ -324,34 +378,12 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   const [editMoveDate, setEditMoveDate] = useState(moveDate);
   const [editDestination, setEditDestination] = useState(destination);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
-  const [installPrompt, setInstallPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
+  const { prompt: installPrompt, consume: handleInstall } = useDeferredPrompt();
   const [isStandalone] = useState(() =>
     typeof window !== "undefined"
       ? window.matchMedia("(display-mode: standalone)").matches
       : false,
   );
-
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    }
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  const handleInstall = useCallback(async () => {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    setInstallPrompt(null);
-  }, [installPrompt]);
 
   useEffect(() => { setEditMoveDate(moveDate); }, [moveDate]);
   useEffect(() => { if (!editingDestination) setEditDestination(destination); }, [destination, editingDestination]);
