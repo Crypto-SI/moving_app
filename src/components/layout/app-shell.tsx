@@ -135,40 +135,24 @@ function SettingsPanel({
   onClose,
   onInvite,
   onLeave,
+  installPrompt,
+  onInstall,
+  isStandalone,
 }: {
   onClose: () => void;
   onInvite: () => void;
   onLeave: () => void;
+  installPrompt: BeforeInstallPromptEvent | null;
+  onInstall: () => void;
+  isStandalone: boolean;
 }) {
   const router = useRouter();
   const { theme, setTheme, resolved } = useTheme();
-  const [installPrompt, setInstallPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
-  const [isStandalone] = useState(() =>
-    typeof window !== "undefined"
-      ? window.matchMedia("(display-mode: standalone)").matches
-      : false,
-  );
-  const [showIosHint, setShowIosHint] = useState(false);
   const [updating, setUpdating] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [showIosHint, setShowIosHint] = useState(false);
 
-  useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e as BeforeInstallPromptEvent);
-    };
-    window.addEventListener("beforeinstallprompt", handler);
-    return () => window.removeEventListener("beforeinstallprompt", handler);
-  }, []);
-
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    }
-  }, []);
-
-  const handleInstall = useCallback(async () => {
+  const handleInstallClick = useCallback(() => {
     const isIOS =
       /iPad|iPhone|iPod/.test(navigator.userAgent) &&
       !(window as unknown as { MSStream?: unknown }).MSStream;
@@ -176,10 +160,8 @@ function SettingsPanel({
       setShowIosHint(true);
       return;
     }
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    setInstallPrompt(null);
-  }, [installPrompt]);
+    onInstall();
+  }, [installPrompt, onInstall]);
 
   const handleUpdateApp = useCallback(async () => {
     if (!("serviceWorker" in navigator)) return;
@@ -264,7 +246,7 @@ function SettingsPanel({
 
           <button
             type="button"
-            onClick={handleInstall}
+            onClick={handleInstallClick}
             disabled={isStandalone}
             className="flex w-full items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
           >
@@ -342,6 +324,34 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
   const [editMoveDate, setEditMoveDate] = useState(moveDate);
   const [editDestination, setEditDestination] = useState(destination);
   const [inviteCode, setInviteCode] = useState<string | null>(null);
+  const [installPrompt, setInstallPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
+  const [isStandalone] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(display-mode: standalone)").matches
+      : false,
+  );
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstall = useCallback(async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    setInstallPrompt(null);
+  }, [installPrompt]);
 
   useEffect(() => { setEditMoveDate(moveDate); }, [moveDate]);
   useEffect(() => { if (!editingDestination) setEditDestination(destination); }, [destination, editingDestination]);
@@ -655,6 +665,9 @@ function AppShellInner({ children }: { children: React.ReactNode }) {
           onClose={() => setShowSettings(false)}
           onInvite={() => { setShowSettings(false); setShowInvite(true); }}
           onLeave={() => { setShowSettings(false); setShowLeaveConfirm(true); }}
+          installPrompt={installPrompt}
+          onInstall={handleInstall}
+          isStandalone={isStandalone}
         />
       )}
 
