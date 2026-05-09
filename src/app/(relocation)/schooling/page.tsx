@@ -7,6 +7,7 @@ import { EditSchoolModal } from "@/components/sections/school/edit-school-modal"
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { EditButton } from "@/components/ui/edit-button";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { useFamilyMembers, useSchoolEntries } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 import type { SchoolEntry } from "@/lib/types";
@@ -49,6 +50,7 @@ export default function SchoolingPage() {
               action={
                 <div className="flex items-center gap-2">
                   <EditButton item={entry} onEdit={setEditEntry} title="Edit school option" />
+                  <DeleteButton tableName="moving_school_entries" itemId={entry.id} label="school" onSuccess={handleRefresh} />
                   <Badge tone="accent">{entry.application_status}</Badge>
                 </div>
               }

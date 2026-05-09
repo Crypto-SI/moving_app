@@ -3,19 +3,33 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useParams } from "next/navigation";
+import { useCallback, useState } from "react";
 import { PageHeader } from "@/components/layout/page-header";
+import { EditFamilyMemberModal } from "@/components/sections/edit-family-member-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { useDocuments, useFamilyMembers, useHealthcareEntries } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
+import type { FamilyMember } from "@/lib/types";
 
 export default function FamilyMemberProfilePage() {
   const { id } = useParams<{ id: string }>();
-  const { data: familyMembers } = useFamilyMembers();
-  const { data: documents } = useDocuments();
+  const { data: familyMembers, refresh: refreshMembers } = useFamilyMembers();
+  const { data: documents, refresh: refreshDocs } = useDocuments();
   const { data: healthcareEntries } = useHealthcareEntries();
+  const [editMember, setEditMember] = useState<FamilyMember | null>(null);
 
   const member = familyMembers.find((item) => item.id === id);
+
+  const handleEditClose = useCallback(() => {
+    setEditMember(null);
+  }, []);
+
+  const handleEditSuccess = useCallback(() => {
+    refreshMembers();
+    refreshDocs();
+  }, [refreshMembers, refreshDocs]);
 
   if (!member) {
     notFound();
@@ -26,7 +40,31 @@ export default function FamilyMemberProfilePage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader title={member.full_name} description="Member profile view tying together personal details, document readiness, and healthcare planning." actionLabel="Edit profile" />
+      {editMember ? (
+        <EditFamilyMemberModal member={editMember} onSuccess={handleEditSuccess} onClose={handleEditClose} />
+      ) : null}
+
+      <PageHeader
+        title={member.full_name}
+        description="Member profile view tying together personal details, document readiness, and healthcare planning."
+        actions={
+          <div className="flex items-center gap-2">
+            <DeleteButton
+              tableName="moving_family_members"
+              itemId={member.id}
+              label="member"
+              onSuccess={() => window.location.href = "/family-members"}
+            />
+            <button
+              type="button"
+              onClick={() => setEditMember(member)}
+              className="inline-flex min-w-0 items-center justify-center rounded-full px-4 py-2 text-center text-sm font-semibold leading-5 transition duration-200 cursor-pointer bg-[var(--foreground)] text-white hover:bg-slate-700 dark:hover:bg-slate-500"
+            >
+              Edit profile
+            </button>
+          </div>
+        }
+      />
 
       <section className="grid gap-6 xl:grid-cols-[0.85fr,1.15fr]">
         <Card>

@@ -3,13 +3,14 @@
 import { PageHeader } from "@/components/layout/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { Input } from "@/components/ui/input";
 import { useFamilyMembers, useMiscNotes } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 
 export default function MiscellaneousNotesPage() {
   const { data: familyMembers } = useFamilyMembers();
-  const { data: miscNotes } = useMiscNotes();
+  const { data: miscNotes, refresh } = useMiscNotes();
 
   return (
     <div className="space-y-6">
@@ -32,6 +33,7 @@ export default function MiscellaneousNotesPage() {
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="text-xl font-semibold text-[var(--foreground)]">{note.title}</h3>
                   <Badge tone={note.priority === "urgent" ? "danger" : note.priority === "high" ? "warning" : "accent"}>{note.priority}</Badge>
+                  <DeleteButton tableName="moving_misc_notes" itemId={note.id} label="note" onSuccess={refresh} />
                 </div>
                 <p className="mt-2 text-sm text-[var(--muted)]">{note.category} • Linked to {note.linked_section} • Added {formatDate(note.date_added)}</p>
               </div>

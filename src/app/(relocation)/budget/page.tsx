@@ -2,11 +2,12 @@
 
 import { PageHeader } from "@/components/layout/page-header";
 import { Card, CardTitle } from "@/components/ui/card";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { useBudgetItems } from "@/lib/data-hooks";
 import { formatCurrency, formatDate } from "@/lib/utils";
 
 export default function BudgetPage() {
-  const { data: budgetItems } = useBudgetItems();
+  const { data: budgetItems, refresh } = useBudgetItems();
   const totalPlanned = budgetItems.reduce((total, item) => total + item.planned_cost, 0);
   const totalActual = budgetItems.reduce((total, item) => total + item.actual_cost, 0);
 
@@ -39,7 +40,10 @@ export default function BudgetPage() {
                 <div key={item.id}>
                   <div className="mb-2 flex flex-wrap items-center justify-between gap-2 text-sm">
                     <span className="font-semibold text-[var(--foreground)]">{item.item_name}</span>
-                    <span className="text-[var(--muted)]">{item.category}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[var(--muted)]">{item.category}</span>
+                      <DeleteButton tableName="moving_budget_items" itemId={item.id} label="item" onSuccess={refresh} />
+                    </div>
                   </div>
                   <div className="h-3 rounded-full dark:bg-white/10">
                     <div className="h-3 rounded-full bg-gradient-to-r from-teal-600 to-amber-400" style={{ width: `${Math.min(fill, 100)}%` }} />
@@ -57,7 +61,10 @@ export default function BudgetPage() {
               <div key={item.id} className="rounded-[28px] border border-[var(--border)] dark:bg-white/5 p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-semibold text-[var(--foreground)]">{item.item_name}</p>
-                  <span className="text-sm capitalize text-[var(--muted)]">{item.status}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm capitalize text-[var(--muted)]">{item.status}</span>
+                    <DeleteButton tableName="moving_budget_items" itemId={item.id} label="item" onSuccess={refresh} />
+                  </div>
                 </div>
                 <div className="mt-3 grid gap-2 text-sm text-[var(--muted)]">
                   <p className="capitalize">{item.category}</p>
@@ -79,6 +86,7 @@ export default function BudgetPage() {
                   <th className="px-3 py-3 font-medium">Actual</th>
                   <th className="px-3 py-3 font-medium">Status</th>
                   <th className="px-3 py-3 font-medium">Due date</th>
+                  <th className="px-3 py-3 font-medium"></th>
                 </tr>
               </thead>
               <tbody>
@@ -93,6 +101,9 @@ export default function BudgetPage() {
                     <td className="px-3 py-4">{formatCurrency(item.actual_cost, item.currency)}</td>
                     <td className="px-3 py-4 capitalize">{item.status}</td>
                     <td className="px-3 py-4">{formatDate(item.due_date)}</td>
+                    <td className="px-3 py-4">
+                      <DeleteButton tableName="moving_budget_items" itemId={item.id} label="item" onSuccess={refresh} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

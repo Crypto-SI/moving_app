@@ -9,6 +9,7 @@ import { AddFamilyMemberModal } from "@/components/sections/add-family-member-mo
 import { FamilyMemberPhotoModal } from "@/components/sections/family-member-photo-modal";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { useFamilyMembers, useHealthcareEntries, useDocuments } from "@/lib/data-hooks";
 import { formatDate } from "@/lib/utils";
 import type { FamilyMember } from "@/lib/types";
@@ -61,7 +62,10 @@ export default function FamilyMembersPage() {
                     <p className="mt-1 text-sm text-[var(--muted)]">{member.relationship}{member.date_of_birth ? ` • Born ${formatDate(member.date_of_birth)}` : ""}</p>
                   </div>
                 </div>
-                <Badge tone="accent">{documents.filter((doc) => doc.family_member_id === member.id).length} docs</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge tone="accent">{documents.filter((doc) => doc.family_member_id === member.id).length} docs</Badge>
+                  <DeleteButton tableName="moving_family_members" itemId={member.id} label="member" onSuccess={refreshFamilyMembers} />
+                </div>
               </div>
               <p className="mt-4 text-sm leading-6 text-[var(--muted)]">{member.notes}</p>
               <div className="mt-4 flex flex-wrap gap-2">

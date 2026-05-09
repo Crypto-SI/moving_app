@@ -4,6 +4,7 @@ import type { ShippingQuote } from "@/lib/types";
 import { formatCurrency, formatDate, cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
+import { DeleteButton } from "@/components/ui/delete-button";
 import {
   shippingLegs,
   getQuoteTotal,
@@ -62,7 +63,7 @@ export function PreferredQuotesCard({ shippingQuotes }: { shippingQuotes: Shippi
   );
 }
 
-export function ShippingQuoteCards({ shippingQuotes }: { shippingQuotes: ShippingQuote[] }) {
+export function ShippingQuoteCards({ shippingQuotes, onDelete }: { shippingQuotes: ShippingQuote[]; onDelete: (id: string) => void }) {
   return (
     <div className="grid gap-4 xl:grid-cols-3">
       {shippingQuotes.map((quote) => (
@@ -70,7 +71,12 @@ export function ShippingQuoteCards({ shippingQuotes }: { shippingQuotes: Shippin
           <CardTitle
             title={quote.company_name}
             subtitle={quote.contact_name}
-            action={<Badge tone="accent">{quote.leg_quotes.length} of 3 legs</Badge>}
+            action={
+              <div className="flex items-center gap-1">
+                <Badge tone="accent">{quote.leg_quotes.length} of 3 legs</Badge>
+                <DeleteButton tableName="moving_shipping_quotes" itemId={quote.id} label="quote" onSuccess={() => onDelete(quote.id)} />
+              </div>
+            }
           />
           <p className="break-words font-serif text-3xl font-semibold sm:text-4xl">{formatCurrency(getQuoteTotal(quote), quote.currency)}</p>
           <p className="mt-2 text-sm text-[var(--muted)]">
@@ -106,7 +112,7 @@ export function ShippingQuoteCards({ shippingQuotes }: { shippingQuotes: Shippin
   );
 }
 
-export function ShippingComparisonTable({ shippingQuotes }: { shippingQuotes: ShippingQuote[] }) {
+export function ShippingComparisonTable({ shippingQuotes, onDelete }: { shippingQuotes: ShippingQuote[]; onDelete: (id: string) => void }) {
   return (
     <Card>
       <CardTitle title="Quote comparison" subtitle="Each column shows whether the shipper is definitely quoting that section of the trip." />
@@ -164,6 +170,7 @@ export function ShippingComparisonTable({ shippingQuotes }: { shippingQuotes: Sh
               <th className="px-3 py-3 font-medium">Total quoted</th>
               <th className="px-3 py-3 font-medium">Dates</th>
               <th className="px-3 py-3 font-medium">Insurance</th>
+              <th className="px-3 py-3 font-medium"></th>
             </tr>
           </thead>
           <tbody>
@@ -203,6 +210,9 @@ export function ShippingComparisonTable({ shippingQuotes }: { shippingQuotes: Sh
                 <td className="px-3 py-4 font-semibold text-[var(--foreground)]">{formatCurrency(getQuoteTotal(quote), quote.currency)}</td>
                 <td className="px-3 py-4 text-[var(--muted)]">{formatDate(quote.collection_date)}<br />{formatDate(quote.estimated_delivery_date)}</td>
                 <td className="px-3 py-4">{quote.insurance_included ? "Included" : "Not included"}</td>
+                <td className="px-3 py-4">
+                  <DeleteButton tableName="moving_shipping_quotes" itemId={quote.id} label="quote" onSuccess={() => onDelete(quote.id)} />
+                </td>
               </tr>
             ))}
           </tbody>

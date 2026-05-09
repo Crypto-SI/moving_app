@@ -22,8 +22,8 @@ export default function ShippingPage() {
       />
 
       <PreferredQuotesCard shippingQuotes={shippingQuotes} />
-      <ShippingQuoteCards shippingQuotes={shippingQuotes} />
-      <ShippingComparisonTable shippingQuotes={shippingQuotes} />
+      <ShippingQuoteCards shippingQuotes={shippingQuotes} onDelete={handleRefresh} />
+      <ShippingComparisonTable shippingQuotes={shippingQuotes} onDelete={handleRefresh} />
     </div>
   );
 }

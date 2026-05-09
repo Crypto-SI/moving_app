@@ -9,6 +9,7 @@ import { EditPropertyModal } from "@/components/sections/property/edit-property-
 import { Badge } from "@/components/ui/badge";
 import { Card, CardTitle } from "@/components/ui/card";
 import { EditButton } from "@/components/ui/edit-button";
+import { DeleteButton } from "@/components/ui/delete-button";
 import { useHousingOptions } from "@/lib/data-hooks";
 import { formatCurrency } from "@/lib/utils";
 import type { HousingOption } from "@/lib/types";
@@ -44,7 +45,10 @@ export default function HousingPage() {
               <Image src={home.image_url} alt={home.property_title} width={640} height={360} unoptimized className="w-full h-48 object-cover rounded-t-2xl -mt-4 -mx-4 mb-4 sm:-mx-5 sm:-mt-5 rounded-t-[1.75rem]" />
             ) : null}
             <div>
-              <h3 className="text-xl font-semibold text-[var(--foreground)]">{home.property_title}</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-xl font-semibold text-[var(--foreground)]">{home.property_title}</h3>
+                <DeleteButton tableName="moving_housing_options" itemId={home.id} label="property" onSuccess={handleRefresh} />
+              </div>
               <p className="mt-1 text-sm text-[var(--muted)]">{home.location}{home.postcode ? ` • ${home.postcode}` : ""}</p>
             </div>
             <p className="mt-4 break-words font-serif text-3xl font-semibold sm:text-4xl">{formatCurrency(home.rent, home.currency)}</p>
@@ -73,6 +77,7 @@ export default function HousingPage() {
                 <p className="font-semibold text-[var(--foreground)]">{home.property_title}</p>
                 <div className="flex items-center gap-2">
                   <EditButton item={home} onEdit={setEditProperty} title="Edit property" />
+                  <DeleteButton tableName="moving_housing_options" itemId={home.id} label="property" onSuccess={handleRefresh} />
                   <Badge tone={home.decision_status === "accepted" ? "success" : home.shortlisted ? "accent" : "neutral"}>{home.decision_status}</Badge>
                 </div>
               </div>
@@ -104,6 +109,7 @@ export default function HousingPage() {
                 <th className="px-3 py-3 font-medium">Viewed</th>
                 <th className="px-3 py-3 font-medium">Shortlisted</th>
                 <th className="px-3 py-3 font-medium">Advert</th>
+                <th className="px-3 py-3 font-medium">Edit</th>
                 <th className="px-3 py-3 font-medium"></th>
               </tr>
             </thead>
@@ -133,6 +139,9 @@ export default function HousingPage() {
                   </td>
                   <td className="px-3 py-4">
                     <EditButton item={home} onEdit={setEditProperty} title="Edit property" />
+                  </td>
+                  <td className="px-3 py-4">
+                    <DeleteButton tableName="moving_housing_options" itemId={home.id} label="property" onSuccess={handleRefresh} />
                   </td>
                 </tr>
               ))}
